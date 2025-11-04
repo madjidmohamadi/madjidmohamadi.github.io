@@ -46,6 +46,15 @@
     footer{margin-top:clamp(28px,6vw,64px); padding:24px 0 40px; color:var(--muted); border-top:1px solid color-mix(in oklab, var(--fg) 10%, transparent)}
     .footer-grid{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px}
     .social a{color:var(--muted)}
+    .card img{cursor:zoom-in}
+    .card a.zoom{display:block}
+
+    /* Lightbox overlay (mobile + desktop) */
+    .lightbox{position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:9999}
+    .lightbox.open{display:flex}
+    .lightbox img{max-width:90vw; max-height:90vh; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); display:block}
+    .lightbox .close{position:absolute; top:20px; right:20px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.3); color:#fff; padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:700}
+    body.no-scroll{overflow:hidden}
 
     /* Lightbox overlay (mobile + desktop) */
     .lightbox{position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:9999}
@@ -268,7 +277,7 @@
     // Copyright year
     const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
 
-    // Simple lightbox (with preload for mobile)
+    // Simple lightbox (mobile‑robust with fallback)
     (function(){
       const lb = document.querySelector('.lightbox');
       if (!lb) return;
@@ -278,13 +287,16 @@
       function openLightbox(src){
         document.body.classList.add('no-scroll');
         lb.classList.add('open');
-        // Preload image for mobile reliability
         lbImg.src = '';
         const pre = new Image();
         pre.onload = () => { lbImg.src = src; };
-        pre.src = src;
-        // Fallback: if image errors, still try to show
         pre.onerror = () => { lbImg.src = src; };
+        pre.src = src;
+        // Fallback for mobile: if overlay didn't show, open the image URL directly
+        setTimeout(() => {
+          const shown = getComputedStyle(lb).display !== 'none' && lbImg.src;
+          if (!shown) window.location.href = src;
+        }, 500);
       }
 
       function close(){
@@ -293,11 +305,28 @@
         document.body.classList.remove('no-scroll');
       }
 
-      // Click / tap on any portfolio image
+      // Ensure each image is wrapped in a link for native fallback
       document.querySelectorAll('.card img').forEach(img => {
-        const handler = (e) => { e.preventDefault(); openLightbox(img.src); };
-        img.addEventListener('click', handler, { passive:false });
-        img.addEventListener('touchend', handler, { passive:false });
+        if (!img.parentElement || !img.parentElement.matches('a.zoom')){
+          const a = document.createElement('a');
+          a.href = img.src;
+          a.className = 'zoom';
+          img.replaceWith(a); a.appendChild(img);
+        }
+      });
+
+      // Click / tap / pointer on image or its link
+      const handler = (e) => {
+        e.preventDefault();
+        const target = e.currentTarget.querySelector('img') || e.currentTarget;
+        const src = target.src || e.currentTarget.href;
+        openLightbox(src);
+      };
+
+      document.querySelectorAll('.card a.zoom').forEach(a => {
+        a.addEventListener('click', handler, { passive:false });
+        a.addEventListener('pointerup', handler, { passive:false });
+        a.addEventListener('touchend', handler, { passive:false });
       });
 
       closeBtn.addEventListener('click', close);
