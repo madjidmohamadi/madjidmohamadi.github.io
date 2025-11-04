@@ -346,5 +346,131 @@ b')==='a%0Ab', 'T2b fail');
   }); }
 })();
 </script>
+<script>
+(function(){
+  // helpers (no regex to avoid CSP/old engines)
+  function q(sel,ctx){return (ctx||document).querySelector(sel);} 
+  function qa(sel,ctx){return Array.prototype.slice.call((ctx||document).querySelectorAll(sel));}
+  function encodeMailBody(s){ s=String(s); s=s.split('
+').join('
+'); s=s.split('
+').join('
+'); return encodeURIComponent(s); }
+  function toast(msg){ var t=q('#toast'); if(!t){ t=document.createElement('div'); t.id='toast'; t.className='toast'; document.body.appendChild(t);} t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },2200); }
+
+  var yearEl=q('#year'); if(yearEl){ yearEl.textContent=(new Date()).getFullYear(); }
+
+  var lb=q('.lightbox'); var lbImg=lb? q('img',lb):null; var visitModal=q('#visitModal');
+  function openLB(src){ if(!lb||!lbImg) return; document.body.classList.add('no-scroll'); lb.classList.add('open'); lbImg.src=src; }
+  function closeLB(){ if(!lb||!lbImg) return; lb.classList.remove('open'); lbImg.src=''; document.body.classList.remove('no-scroll'); }
+  function openVisit(){ if(visitModal) visitModal.classList.add('open'); }
+  function closeVisit(){ if(visitModal) visitModal.classList.remove('open'); }
+
+  // pre-store titles on thumbs
+  qa('#work .card').forEach(function(fig){
+    var img=q('img', fig); if(!img) return;
+    var cap=q('.cap', fig); var t=(cap?cap.textContent:img.alt||'').trim();
+    var idx=t.indexOf('Space:'); if(idx>-1){ t=t.substring(0, idx).trim(); }
+    img.dataset.title=t || 'Untitled';
+  });
+
+  // delegate clicks
+  document.addEventListener('click', function(ev){
+    var target=ev.target;
+    // open lightbox
+    var thumb = target.closest ? target.closest('#work .card img') : null;
+    if(thumb){ ev.preventDefault(); openLB(thumb.currentSrc||thumb.src); return; }
+    // close lightbox
+    if(target.closest && (target.closest('.lightbox .close'))){ ev.preventDefault(); closeLB(); return; }
+    if(lb && target===lb){ ev.preventDefault(); closeLB(); return; }
+    // open visit
+    if(target.closest && target.closest('#visitOpenBtn')){ ev.preventDefault(); openVisit(); return; }
+    // close visit
+    if(target.closest && target.closest('#visitCloseBtn')){ ev.preventDefault(); closeVisit(); return; }
+    if(visitModal && target===visitModal){ ev.preventDefault(); closeVisit(); return; }
+  }, true);
+
+  // touch support for Android Chrome/iOS Safari
+  document.addEventListener('touchend', function(ev){
+    var target=ev.target; var thumb = target.closest ? target.closest('#work .card img') : null;
+    if(thumb){ ev.preventDefault(); openLB(thumb.currentSrc||thumb.src); }
+  }, {passive:false});
+
+  // esc to close
+  window.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeLB(); closeVisit(); }});
+
+  // Quote modal
+  var quoteModal=q('#quoteModal');
+  var quoteOpen=q('#orderOpenBtn');
+  var quoteClose=q('#quoteCloseBtn');
+  var quotePreview=q('#quotePreview');
+  var quoteTitle=q('#quoteTitle');
+  var quoteEmail=q('#quoteEmail');
+  var quoteNotes=q('#quoteNotes');
+  var quoteSend=q('#quoteSendBtn');
+
+  function currentTitle(){
+    if(!lbImg||!lbImg.src) return 'Untitled';
+    var thumbs=qa('#work .card img');
+    for(var i=0;i<thumbs.length;i++){ if((thumbs[i].currentSrc||thumbs[i].src)===lbImg.src){ return thumbs[i].dataset.title||thumbs[i].alt||'Untitled'; } }
+    return 'Untitled';
+  }
+
+  function openQuote(){ if(!quoteModal) return; if(quotePreview) quotePreview.src=lbImg?lbImg.src:''; if(quoteTitle) quoteTitle.textContent=currentTitle(); quoteModal.classList.add('open'); }
+  function closeQuote(){ if(quoteModal) quoteModal.classList.remove('open'); }
+
+  if(quoteOpen){ quoteOpen.addEventListener('click', function(e){ e.preventDefault(); openQuote(); }); }
+  if(quoteClose){ quoteClose.addEventListener('click', function(){ closeQuote(); }); }
+  if(quoteModal){ quoteModal.addEventListener('click', function(e){ if(e.target===quoteModal) closeQuote(); }); }
+
+  if(quoteSend){ quoteSend.addEventListener('click', function(){
+    var email=(quoteEmail&&quoteEmail.value||'').trim();
+    var sizes=qa('.q-size:checked').map(function(x){return x.value;});
+    if(!email){ toast('Please enter your email.'); return; }
+    if(!sizes.length){ toast('Select at least one size.'); return; }
+    var lines=[
+      'Quote request from: '+email,
+      'Photo: '+currentTitle(),
+      'Preview: '+(lbImg?lbImg.src:''),
+      'Sizes: '+sizes.join(', '),
+      '',
+      'Notes: '+(quoteNotes&&quoteNotes.value||'')
+    ];
+    var subject=encodeURIComponent('Quote request — '+currentTitle());
+    var body=encodeMailBody(lines.join('
+'));
+    window.location.href='mailto:madjid.mohamadi@gmail.com?cc='+encodeURIComponent(email)+'&subject='+subject+'&body='+body;
+    closeQuote(); toast('Your quote request was sent.');
+  }); }
+
+  // Visit form
+  var vEmail=q('#visitEmail');
+  var vAddr=q('#visitAddress');
+  var vPhone=q('#visitPhone');
+  var vNotes=q('#visitNotes');
+  var vSend=q('#visitSendBtn');
+  if(vSend){ vSend.addEventListener('click', function(){
+    var email=(vEmail&&vEmail.value||'').trim();
+    var addr=(vAddr&&vAddr.value||'').trim();
+    var phone=(vPhone&&vPhone.value||'').trim();
+    if(!email){ toast('Please enter your email.'); return; }
+    if(!addr){ toast('Please enter your full address.'); return; }
+    if(!phone){ toast('Please enter your phone number.'); return; }
+    var lines=[
+      'On-site visit request',
+      'Email: '+email,
+      'Address: '+addr,
+      'Phone: '+phone,
+      '',
+      'Availability/Notes: '+(vNotes&&vNotes.value||'')
+    ];
+    var subject=encodeURIComponent('On-site Consultation Request');
+    var body=encodeMailBody(lines.join('
+'));
+    window.location.href='mailto:madjid.mohamadi@gmail.com?cc='+encodeURIComponent(email)+'&subject='+subject+'&body='+body;
+    closeVisit(); toast('Your visit request was sent.');
+  }); }
+})();
+</script>
 </body>
 </html>
