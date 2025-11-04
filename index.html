@@ -34,7 +34,6 @@
     a:hover{opacity:.9}
     .wrap{max-width:var(--maxw); margin-inline:auto; padding:clamp(16px,4vw,32px)}
 
-    /* Header */
     header{position:sticky; top:0; backdrop-filter:saturate(180%) blur(12px); background:color-mix(in oklab, var(--bg) 90%, transparent); z-index:20; border-bottom:1px solid color-mix(in oklab, var(--fg) 12%, transparent)}
     .nav{display:flex; align-items:center; justify-content:space-between}
     .brand{display:flex; align-items:baseline; gap:10px}
@@ -43,7 +42,6 @@
     .links{display:flex; gap:18px}
     .links a{color:var(--muted); font-weight:600; font-size:.92rem}
 
-    /* Hero */
     .hero{display:grid; grid-template-columns:1.2fr .8fr; gap:var(--gap); align-items:center; padding-block:clamp(28px,6vw,64px)}
     .hero-card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; min-height:280px; position:relative}
     .hero-card img{width:100%; height:100%; object-fit:cover; display:block}
@@ -52,34 +50,22 @@
     .hero-copy p{color:var(--muted); margin:0 0 14px}
     .cta{display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700}
 
-    @media (max-width: 900px){
-      .hero{grid-template-columns:1fr;}
-    }
+    @media (max-width: 900px){.hero{grid-template-columns:1fr;}}
 
-    /* Grid */
     .grid{display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gap)}
     .card{grid-column: span 6; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative}
-    .card.tall{grid-column: span 6}
     .card img{width:100%; height:100%; display:block; object-fit:cover; aspect-ratio: 4/3}
     .card .cap{position:absolute; inset:auto 0 0 0; padding:12px 14px; background:linear-gradient(180deg, transparent, rgba(0,0,0,.65)); color:#fff; font-size:.95rem}
     .chip{display:inline-block; padding:.25rem .6rem; border:1px solid color-mix(in oklab, #fff 35%, transparent); border-radius:999px; font-size:.72rem; opacity:.9}
 
-    @media (min-width: 1100px){
-      .card:nth-child(3n){grid-column: span 7}
-      .card:nth-child(3n) img{aspect-ratio: 3/4}
-      .card:nth-child(4n){grid-column: span 5}
-    }
-    @media (max-width: 720px){
-      .card{grid-column: span 12}
-    }
+    @media (min-width: 1100px){.card:nth-child(3n){grid-column: span 7}.card:nth-child(3n) img{aspect-ratio: 3/4}.card:nth-child(4n){grid-column: span 5}}
+    @media (max-width: 720px){.card{grid-column: span 12}}
 
-    /* Lightbox */
     .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.8); display:none; align-items:center; justify-content:center; z-index:100}
     .lightbox.open{display:flex}
     .lightbox img{max-width:92vw; max-height:86vh; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6)}
     .lightbox .close{position:absolute; top:16px; right:16px; background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.3); border-radius:999px; padding:8px 12px; cursor:pointer}
 
-    /* Footer */
     footer{margin-top:clamp(28px,6vw,64px); padding:24px 0 40px; color:var(--muted); border-top:1px solid color-mix(in oklab, var(--fg) 10%, transparent)}
     .footer-grid{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px}
     .social a{color:var(--muted)}
@@ -101,11 +87,9 @@
   </header>
 
   <main class="wrap">
-    <!-- HERO -->
     <section class="hero" id="home">
       <figure class="hero-card" aria-label="Featured photograph">
-        <!-- Replace /images/hero.jpg with one of your photos placed in an /images folder -->
-        <img src="images/hero.jpg" alt="Featured fine art photograph By Majid" loading="eager">
+        <img src="images/hero.jpg" alt="Featured fine art photograph by Majid" loading="eager">
       </figure>
       <div class="hero-copy">
         <h2>Quiet light. Honest places.</h2>
@@ -114,10 +98,8 @@
       </div>
     </section>
 
-    <!-- PORTFOLIO GRID -->
     <section id="work" aria-label="Portfolio">
       <div class="grid">
-        <!-- Tip: place your JPEGs into /images and update paths below. Keep names simple. -->
         <figure class="card"><img src="images/01.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Coast</span> Tidal Glass</figcaption></figure>
         <figure class="card"><img src="images/02.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Forest</span> Reverie</figcaption></figure>
         <figure class="card"><img src="images/03.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: City</span> Rain Script</figcaption></figure>
@@ -129,7 +111,6 @@
       </div>
     </section>
 
-    <!-- ABOUT -->
     <section id="about" style="margin-top: clamp(28px,6vw,64px);">
       <div class="grid" style="grid-template-columns:repeat(12,1fr); gap:var(--gap)">
         <div style="grid-column:span 7; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden">
@@ -143,13 +124,42 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
+    <section id="awards" style="margin-top: clamp(28px,6vw,64px);">
+      <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 12px">Awards &amp; Honors</h3>
+      <ul style="list-style: none; padding:0; margin:0; display:grid; gap:10px">
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>Fine Art Photography Awards</strong> — Majid Mohamadi 1st Prize Winner in Travel. 
+          <a href="https://fineartphotoawards.com/winners-gallery/fapa-2019-2020/amateur/travel/gold-award/" target="_blank" rel="noopener">View</a>
+        </li>
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>FIAP Honor Ribbon</strong>, 41st Trophy Torretes of Photography (Spain) 2018 — Recognized for excellence in international photography. 
+          <a href="https://www.festimatge.org/el-festival-2/" target="_blank" rel="noopener">View</a>
+        </li>
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>LensCulture Art Photography Awards 2022</strong> — Featured and nominated for outstanding work in art photography. 
+          <a href="https://www.lensculture.com/photo-competitions/art-photography-awards/2022" target="_blank" rel="noopener">View</a>
+        </li>
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>Kimia Photo Festival (Iran) 2019</strong> — Won first prize for creative photography. 
+          <a href="https://www.mehrnews.com/news/4463154/%D8%A7%D8%B9%D9%84%D8%A7%D9%85-%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B9%DA%A9%D8%B3-%D9%85%D8%B9%D8%AF%D9%86-%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D8%B3%D9%84%D8%A7%D9%85%DB%8C-%D8%B1%D8%A7%D8%AF-%D9%86%D8%B4%D8%A7%D9%86-%DA%A9%DB%8C%D9%85%DB%8C%D8%A7" target="_blank" rel="noopener">View</a>
+        </li>
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>Blank Wall Gallery (Greece)</strong> — Received an honor diploma in 2020 for excellence in fine art photography. 
+          <a href="https://www.blankwallgallery.com/majid-mohammadi-iran-untitled/" target="_blank" rel="noopener">View</a>
+        </li>
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>Focus Iran 2 — Craft and Folk Art Museum of Los Angeles (USA)</strong> — Honor diploma for artistic achievements in 2019. 
+          <a href="https://farhang.org/programs/focus-iran" target="_blank" rel="noopener">View</a>
+        </li>
+      </ul>
+    </section>
+
     <section id="contact" style="margin-top: clamp(28px,6vw,64px);">
       <div class="grid" style="align-items:center">
         <div style="grid-column: span 8; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
           <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin-top:0">Contact</h3>
           <p style="color:var(--muted); margin:0 0 12px">For print inquiries, commissions, or exhibitions:</p>
-          <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:madjid.mohamadi@gmail.com">hello@bymajid.com</a></p>
+          <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:hello@bymajid.com">hello@bymajid.com</a></p>
           <p style="margin:0 0 6px"><strong>Instagram:</strong> <a href="https://www.instagram.com/madjidmohamadi" target="_blank" rel="noopener">@madjidmohamadi</a></p>
         </div>
         <div style="grid-column: span 4; text-align:center; color:var(--muted)">
@@ -162,7 +172,7 @@
   <footer>
     <div class="wrap footer-grid">
       <div class="social" aria-label="Social links">
-        <a href="#" aria-label="Instagram" title="Instagram">Instagram</a>
+        <a href="https://www.instagram.com/madjidmohamadi" aria-label="Instagram" title="Instagram">Instagram</a>
         <span aria-hidden="true"> · </span>
         <a href="#" aria-label="Prints" title="Prints">Prints</a>
       </div>
@@ -174,24 +184,3 @@
     <button class="close" aria-label="Close">Close ✕</button>
     <img src="" alt="Expanded view" />
   </div>
-
-  <script>
-    // Copyright year
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Simple lightbox
-    const lb = document.querySelector('.lightbox');
-    const lbImg = lb.querySelector('img');
-    const closeBtn = lb.querySelector('.close');
-    document.querySelectorAll('.card img').forEach(img => {
-      img.addEventListener('click', () => {
-        lbImg.src = img.src; lb.classList.add('open');
-      });
-    });
-    const close = () => { lb.classList.remove('open'); lbImg.src=''; };
-    closeBtn.addEventListener('click', close);
-    lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
-    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') close(); });
-  </script>
-</body>
-</html>
