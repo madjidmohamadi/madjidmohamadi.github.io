@@ -1,20 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>by Majid | Fine Art Photography</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>by Majid — Fine Art Photography</title>
+  <meta name="description" content="by Majid — Fine Art Photography portfolio" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin-top: 20vh; background: #f8f8f8; color: #333; }
-    h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-    p { font-size: 1.2rem; color: #666; }
-    a { color: #333; text-decoration: none; font-weight: bold; }
+    :root {
+      --bg: #0e0e10;
+      --fg: #e9e9ec;
+      --muted: #b6b6bd;
+      --accent: #c3a56a;
+      --card: #151518;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+      --gap: clamp(12px, 2vw, 20px);
+      --maxw: 1200px;
+    }
+    @media (prefers-color-scheme: light) {
+      :root { --bg:#fafafa; --fg:#151518; --muted:#6b6b74; --card:#ffffff; --shadow:0 10px 30px rgba(0,0,0,.08); }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--fg);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+      line-height:1.6;
+    }
+    a{color:var(--fg); text-decoration:none}
+    a:hover{opacity:.9}
+    .wrap{max-width:var(--maxw); margin-inline:auto; padding:clamp(16px,4vw,32px)}
+
+    /* Header */
+    header{position:sticky; top:0; backdrop-filter:saturate(180%) blur(12px); background:color-mix(in oklab, var(--bg) 90%, transparent); z-index:20; border-bottom:1px solid color-mix(in oklab, var(--fg) 12%, transparent)}
+    .nav{display:flex; align-items:center; justify-content:space-between}
+    .brand{display:flex; align-items:baseline; gap:10px}
+    .brand h1{font-family:"Playfair Display", serif; font-weight:700; letter-spacing:.5px; margin:0; font-size:clamp(18px,2.4vw,26px)}
+    .brand small{color:var(--muted); letter-spacing:2px; text-transform:uppercase; font-size:.72rem}
+    .links{display:flex; gap:18px}
+    .links a{color:var(--muted); font-weight:600; font-size:.92rem}
+
+    /* Hero */
+    .hero{display:grid; grid-template-columns:1.2fr .8fr; gap:var(--gap); align-items:center; padding-block:clamp(28px,6vw,64px)}
+    .hero-card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; min-height:280px; position:relative}
+    .hero-card img{width:100%; height:100%; object-fit:cover; display:block}
+    .hero-copy{padding: clamp(16px,3vw,28px)}
+    .hero-copy h2{font-family:"Playfair Display", serif; font-size:clamp(26px,4vw,46px); margin:0 0 6px}
+    .hero-copy p{color:var(--muted); margin:0 0 14px}
+    .cta{display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700}
+
+    @media (max-width: 900px){
+      .hero{grid-template-columns:1fr;}
+    }
+
+    /* Grid */
+    .grid{display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gap)}
+    .card{grid-column: span 6; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative}
+    .card.tall{grid-column: span 6}
+    .card img{width:100%; height:100%; display:block; object-fit:cover; aspect-ratio: 4/3}
+    .card .cap{position:absolute; inset:auto 0 0 0; padding:12px 14px; background:linear-gradient(180deg, transparent, rgba(0,0,0,.65)); color:#fff; font-size:.95rem}
+    .chip{display:inline-block; padding:.25rem .6rem; border:1px solid color-mix(in oklab, #fff 35%, transparent); border-radius:999px; font-size:.72rem; opacity:.9}
+
+    @media (min-width: 1100px){
+      .card:nth-child(3n){grid-column: span 7}
+      .card:nth-child(3n) img{aspect-ratio: 3/4}
+      .card:nth-child(4n){grid-column: span 5}
+    }
+    @media (max-width: 720px){
+      .card{grid-column: span 12}
+    }
+
+    /* Lightbox */
+    .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.8); display:none; align-items:center; justify-content:center; z-index:100}
+    .lightbox.open{display:flex}
+    .lightbox img{max-width:92vw; max-height:86vh; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6)}
+    .lightbox .close{position:absolute; top:16px; right:16px; background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.3); border-radius:999px; padding:8px 12px; cursor:pointer}
+
+    /* Footer */
+    footer{margin-top:clamp(28px,6vw,64px); padding:24px 0 40px; color:var(--muted); border-top:1px solid color-mix(in oklab, var(--fg) 10%, transparent)}
+    .footer-grid{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px}
+    .social a{color:var(--muted)}
   </style>
 </head>
 <body>
-  <h1>by Majid</h1>
-  <p>Fine Art Photography – Coming Soon</p>
-  <p><a href="https://www.instagram.com/madjidmohamadi">Follow on Instagram</a></p>
-  <p><a href="mailto:hello@bymajid.com">Contact</a></p>
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <h1>by Majid</h1>
+        <small>Fine Art Photography</small>
+      </div>
+      <nav class="links" aria-label="Primary">
+        <a href="#work">Portfolio</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <figure class="hero-card" aria-label="Featured photograph">
+        <!-- Replace /images/hero.jpg with one of your photos placed in an /images folder -->
+        <img src="images/hero.jpg" alt="Featured fine art photograph by Majid" loading="eager">
+      </figure>
+      <div class="hero-copy">
+        <h2>Quiet light. Honest places.</h2>
+        <p>Fine‑art photography exploring stillness, reflection, and the silent drama of the Pacific Northwest and beyond.</p>
+        <a class="cta" href="#work">View Portfolio →</a>
+      </div>
+    </section>
+
+    <!-- PORTFOLIO GRID -->
+    <section id="work" aria-label="Portfolio">
+      <div class="grid">
+        <!-- Tip: place your JPEGs into /images and update paths below. Keep names simple. -->
+        <figure class="card"><img src="images/01.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Coast</span> Tidal Glass</figcaption></figure>
+        <figure class="card"><img src="images/02.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Forest</span> Reverie</figcaption></figure>
+        <figure class="card"><img src="images/03.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: City</span> Rain Script</figcaption></figure>
+        <figure class="card"><img src="images/04.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Desert</span> Dune Whisper</figcaption></figure>
+        <figure class="card"><img src="images/05.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Sky</span> After Storm</figcaption></figure>
+        <figure class="card"><img src="images/06.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Forest</span> Green Chapel</figcaption></figure>
+        <figure class="card"><img src="images/07.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Coast</span> Low Tide Lines</figcaption></figure>
+        <figure class="card"><img src="images/08.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Night</span> Mercury</figcaption></figure>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" style="margin-top: clamp(28px,6vw,64px);">
+      <div class="grid" style="grid-template-columns:repeat(12,1fr); gap:var(--gap)">
+        <div style="grid-column:span 7; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden">
+          <img src="images/about.jpg" alt="Majid in the field with camera" style="width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:3/2" loading="lazy">
+        </div>
+        <div style="grid-column:span 5; display:flex; flex-direction:column; justify-content:center; gap:10px">
+          <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0">About</h3>
+          <p style="color:var(--muted); margin:0">Majid Mohammadi is a Vancouver‑based fine‑art photographer and pilot. His work blends disciplined observation with cinematic stillness—capturing the moment where light, weather, and terrain align.</p>
+          <p style="color:var(--muted); margin:0">Prints are available in gallery editions. Commissions and licensing by request.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" style="margin-top: clamp(28px,6vw,64px);">
+      <div class="grid" style="align-items:center">
+        <div style="grid-column: span 8; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
+          <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin-top:0">Contact</h3>
+          <p style="color:var(--muted); margin:0 0 12px">For print inquiries, commissions, or exhibitions:</p>
+          <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:hello@bymajid.com">hello@bymajid.com</a></p>
+          <p style="margin:0 0 6px"><strong>Instagram:</strong> <a href="https://www.instagram.com/your_instagram_here" target="_blank" rel="noopener">@your_instagram_here</a></p>
+        </div>
+        <div style="grid-column: span 4; text-align:center; color:var(--muted)">
+          <p style="margin:6px 0 0">© <span id="year"></span> by Majid. All rights reserved.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-grid">
+      <div class="social" aria-label="Social links">
+        <a href="#" aria-label="Instagram" title="Instagram">Instagram</a>
+        <span aria-hidden="true"> · </span>
+        <a href="#" aria-label="Prints" title="Prints">Prints</a>
+      </div>
+      <div>Built on GitHub Pages</div>
+    </div>
+  </footer>
+
+  <div class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="close" aria-label="Close">Close ✕</button>
+    <img src="" alt="Expanded view" />
+  </div>
+
+  <script>
+    // Copyright year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Simple lightbox
+    const lb = document.querySelector('.lightbox');
+    const lbImg = lb.querySelector('img');
+    const closeBtn = lb.querySelector('.close');
+    document.querySelectorAll('.card img').forEach(img => {
+      img.addEventListener('click', () => {
+        lbImg.src = img.src; lb.classList.add('open');
+      });
+    });
+    const close = () => { lb.classList.remove('open'); lbImg.src=''; };
+    closeBtn.addEventListener('click', close);
+    lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') close(); });
+  </script>
 </body>
 </html>
