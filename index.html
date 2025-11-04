@@ -250,98 +250,26 @@
       </ul>
     </section>
 
-    <!-- INTERIOR CONSULTATION -->
-    <section id="consult" style="margin-top: clamp(28px,6vw,64px);">
-      <div class="grid" style="align-items:start; gap: var(--gap);">
-        <div style="grid-column: span 7; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
-          <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 8px">Free Interior Sizing &amp; Mockup</h3>
-          <p style="color:var(--muted); margin:0 0 12px">Send a photo of your wall and a few details. I’ll suggest the best photograph and frame size for your space — and provide a quick mockup.</p>
-
-          <form id="consultForm" style="display:grid; gap:12px">
-            <label>
-              <span style="display:block; font-weight:600; margin-bottom:4px">Your Name</span>
-              <input name="name" required placeholder="Full name" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
-            </label>
-            <label>
-              <span style="display:block; font-weight:600; margin-bottom:4px">Email</span>
-              <input name="email" type="email" required placeholder="you@example.com" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
-            </label>
-            <div class="grid" style="grid-template-columns:repeat(12,1fr); gap:var(--gap)">
-              <label style="grid-column:span 6">
-                <span style="display:block; font-weight:600; margin-bottom:4px">Room</span>
-                <select name="room" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
-                  <option>Living room</option>
-                  <option>Bedroom</option>
-                  <option>Dining</option>
-                  <option>Office/Reception</option>
-                  <option>Hallway</option>
-                  <option>Spa/Wellness</option>
-                  <option>Other</option>
-                </select>
-              </label>
-              <label style="grid-column:span 3">
-                <span style="display:block; font-weight:600; margin-bottom:4px">Wall width</span>
-                <input name="wall" placeholder="e.g., 320 cm / 126 in" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
-              </label>
-              <label style="grid-column:span 3">
-                <span style="display:block; font-weight:600; margin-bottom:4px">Ceiling height</span>
-                <input name="ceiling" placeholder="e.g., 260 cm / 102 in" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
-              </label>
-            </div>
-            <div class="grid" style="grid-template-columns:repeat(12,1fr); gap:var(--gap)">
-              <label style="grid-column:span 6">
-                <span style="display:block; font-weight:600; margin-bottom:4px">Preferred orientation</span>
-                <select name="orientation" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
-                  <option>Any</option>
-                  <option>Horizontal (landscape)</option>
-                  <option>Vertical (portrait)</option>
-                  <option>Square</option>
-                </select>
-              </label>
-              <label style="grid-column:span 6">
-                <span style="display:block; font-weight:600; margin-bottom:4px">Frame colour</span>
-                <select name="frame" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
-                  <option>Let me suggest</option>
-                  <option>Black</option>
-                  <option>White</option>
-                  <option>Natural wood</option>
-                  <option>Metal</option>
-                </select>
-              </label>
-            </div>
-            <label>
-              <span style="display:block; font-weight:600; margin-bottom:4px">Link to your room photo(s)</span>
-              <input name="link" type="url" placeholder="Dropbox / Google Drive / iCloud link" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
-            </label>
-            <label>
-              <span style="display:block; font-weight:600; margin-bottom:4px">Notes</span>
-              <textarea name="notes" rows="4" placeholder="Style, colours, budget, favourite photos from my portfolio…" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)"></textarea>
-            </label>
-            <button type="submit" class="cta" style="width:max-content">Send details →</button>
-            <small style="color:var(--muted)">You can also email me directly at <a href="mailto:hello@bymajid.com">hello@bymajid.com</a> with your photos attached.</small>
-
-          <div style="margin-top:18px; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px; color:var(--muted);">
-            <strong style="color:var(--fg)">Prefer a personal visit?</strong><br>
-            As an alternative, you can book an on-site consultation. I’ll visit your location, take measurements and reference photos, and prepare detailed illustrations with suggested photographs and framing options.<br><br>
-            There’s <strong>no purchase obligation</strong>, but a small service fee applies to cover travel and time.<br><br>
-            Please leave a short message through the form, and I’ll get back to you as soon as possible to schedule your session.<br><br>
-            <a href="mailto:hello@bymajid.com?subject=On-site Consultation Request" class="cta" style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">Book a Site Visit →</a>
-            <br><small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
-          </div>
-          </form>
-        </div>
-
-        <aside style="grid-column: span 5; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
-          <h4 style="margin:0 0 8px; font-family:'Playfair Display',serif; font-size:clamp(18px,2.5vw,22px)">How to photograph your space</h4>
-          <ul style="margin:0; padding-left:18px; color:var(--muted); display:grid; gap:8px">
-            <li>Stand square-on to the wall; include floor and ceiling in frame.</li>
-            <li>Use natural light if possible; avoid strong shadows.</li>
-            <li>Place a common object (A4 paper, 30 cm ruler, or 12” LP) on the wall for scale.</li>
-            <li>Tell me approximate wall width and ceiling height for accurate sizing.</li>
-          </ul>
-        </aside>
-      </div>
-    </section>
+    <!-- INTERIOR CONSULTATION --><!-- INTERIOR CONSULTATION (simplified) -->
+<section id="consult" style="margin-top: clamp(28px,6vw,64px);">
+  <div class="grid" style="align-items:start; gap: var(--gap);">
+    <div style="grid-column: span 12; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
+      <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 8px">On-site Consultation</h3>
+      <p style="color:var(--muted); margin:0 0 12px">
+        Prefer a personal visit? I’ll come to your space, take measurements and reference photos, and prepare
+        tailored illustrations with suggested photographs and framing options. There’s <strong>no purchase obligation</strong>;
+        a small service fee applies to cover travel and time.
+      </p>
+      <a href="mailto:madjid.mohamadi@gmail.com?subject=On-site Consultation Request"
+         class="cta"
+         style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">
+        Book a Site Visit →
+      </a>
+      <br>
+      <small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
+    </div>
+  </div>
+</section>
 
     <!-- CONTACT -->
     <section id="contact" style="margin-top: clamp(28px,6vw,64px);">
@@ -510,4 +438,5 @@
   </script>
 </body>
 </html>
+
 
