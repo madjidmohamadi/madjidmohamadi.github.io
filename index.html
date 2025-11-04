@@ -46,8 +46,14 @@
     footer{margin-top:clamp(28px,6vw,64px); padding:24px 0 40px; color:var(--muted); border-top:1px solid color-mix(in oklab, var(--fg) 10%, transparent)}
     .footer-grid{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px}
     .social a{color:var(--muted)}
+
+    /* Lock About image aspect ratio across devices */
+    .about-photo{position:relative; aspect-ratio:3/2; overflow:hidden; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow)}
+    /* Fallback for older browsers without aspect-ratio */
+    .about-photo::before{content:""; display:block; padding-top:66.666%}
+    .about-photo > img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block}
     .card img{cursor:zoom-in}
-    .card a.zoom{display:block}
+    .card a.zoom{display:block; touch-action: pan-y;}
 
     /* Lightbox overlay (mobile + desktop) */
     .lightbox{position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:9999}
@@ -113,13 +119,11 @@
     <!-- ABOUT -->
     <section id="about" style="margin-top: clamp(28px,6vw,64px);">
       <div class="grid" style="grid-template-columns:repeat(12,1fr); gap:var(--gap)">
-        <div style="grid-column:span 7; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden">
-          <img src="images/about.jpg" alt="Majid in the field with camera" style="width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:3/2" loading="lazy">
+        <div class="about-photo" style="grid-column:span 7;">
+          <img src="images/about.jpg" alt="Majid in the field with camera" loading="lazy">
         </div>
         <div style="grid-column:span 5; display:flex; flex-direction:column; justify-content:center; gap:10px">
-          <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0">About</h3>
-          <p style="color:var(--muted); margin:0">Majid Mohamadi is a Canadian-Iranian fine art photographer whose work explores the quiet intersections of nature, memory, and human presence. Through minimalist compositions and meditative light, he transforms ordinary landscapes into poetic reflections on solitude, time, and resilience. His photographs — from silent deserts and ghostly lakes to distant horizons — invite viewers into a space of stillness where emotion and geometry coexist. Guided by a sense of calm observation, Majid’s work captures not just what is seen, but what is felt: the whispers of wind, the trace of light, the memory of silence. Each image becomes a visual poem — an echo of the unseen, a moment of connection between earth, light, and the human spirit.</p>
-          <p style="color:var(--muted); margin:0">Prints are available in gallery editions. Commissions and licensing by request.</p>
+          $1<p style="color:var(--muted); margin:0">Majid Mohammadi is a Canadian–Iranian fine art photographer whose work explores silence, solitude, and the poetry of natural forms. Through minimal compositions and meditative light, he reveals the quiet dialogue between earth, air, and memory. Each image becomes a moment of still reflection — where emptiness speaks, and the unseen finds its voice.</p>
         </div>
       </div>
     </section>
@@ -217,14 +221,14 @@
               <textarea name="notes" rows="4" placeholder="Style, colours, budget, favourite photos from my portfolio…" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)"></textarea>
             </label>
             <button type="submit" class="cta" style="width:max-content">Send details →</button>
-            <small style="color:var(--muted)">You can also email me directly at <a href="mailto:hello@bymajid.com">hello@bymajid.com</a> with your photos attached.</small>
+            <small style="color:var(--muted)">You can also email me directly at <a href="mailto:madjid.mohamadi@gmail.com">madjid.mohamadi@gmail.com</a> with your photos attached.</small>
 
           <div style="margin-top:18px; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px; color:var(--muted);">
             <strong style="color:var(--fg)">Prefer a personal visit?</strong><br>
             As an alternative, you can book an on-site consultation. I’ll visit your location, take measurements and reference photos, and prepare detailed illustrations with suggested photographs and framing options.<br><br>
             There’s <strong>no purchase obligation</strong>, but a small service fee applies to cover travel and time.<br><br>
             Please leave a short message through the form, and I’ll get back to you as soon as possible to schedule your session.<br><br>
-<a href="mailto:hello@bymajid.com?subject=On-site Consultation Request" class="cta" style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">Book a Visit Session →</a><br><small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
+<a href="mailto:madjid.mohamadi@gmail.com?subject=On-site Consultation Request" class="cta" style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">Book a Visit Session →</a><br><small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
           </div>
           </form>
         </div>
@@ -247,7 +251,7 @@
         <div style="grid-column: span 8; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
           <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin-top:0">Contact</h3>
           <p style="color:var(--muted); margin:0 0 12px">For print inquiries, commissions, or exhibitions:</p>
-          <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:hello@bymajid.com">hello@bymajid.com</a></p>
+          <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:madjid.mohamadi@gmail.com">madjid.mohamadi@gmail.com</a></p>
           <p style="margin:0 0 6px"><strong>Instagram:</strong> <a href="https://www.instagram.com/madjidmohamadi" target="_blank" rel="noopener">@madjidmohamadi</a></p>
         </div>
         <div style="grid-column: span 4; text-align:center; color:var(--muted)">
@@ -277,14 +281,15 @@
     // Copyright year
     const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
 
-    // Simple lightbox (mobile‑robust with fallback)
+    // Simple lightbox — robust for Android Chrome & iOS Safari
     (function(){
       const lb = document.querySelector('.lightbox');
       if (!lb) return;
       const lbImg = lb.querySelector('img');
       const closeBtn = lb.querySelector('.close');
 
-      function openLightbox(src){
+      // --- helpers
+      function showOverlay(src){
         document.body.classList.add('no-scroll');
         lb.classList.add('open');
         lbImg.src = '';
@@ -292,46 +297,63 @@
         pre.onload = () => { lbImg.src = src; };
         pre.onerror = () => { lbImg.src = src; };
         pre.src = src;
-        // Fallback for mobile: if overlay didn't show, open the image URL directly
+        // last-resort fallback for stubborn mobile browsers
         setTimeout(() => {
-          const shown = getComputedStyle(lb).display !== 'none' && lbImg.src;
-          if (!shown) window.location.href = src;
-        }, 500);
+          const visible = getComputedStyle(lb).display !== 'none' && lbImg.src;
+          if (!visible) window.location.href = src;
+        }, 400);
       }
-
-      function close(){
+      function hideOverlay(){
         lb.classList.remove('open');
         lbImg.src = '';
         document.body.classList.remove('no-scroll');
       }
 
-      // Ensure each image is wrapped in a link for native fallback
+      // Ensure every image is wrapped in a link (native fallback)
       document.querySelectorAll('.card img').forEach(img => {
         if (!img.parentElement || !img.parentElement.matches('a.zoom')){
           const a = document.createElement('a');
-          a.href = img.src;
-          a.className = 'zoom';
+          a.href = img.src; a.className = 'zoom';
           img.replaceWith(a); a.appendChild(img);
         }
       });
 
-      // Click / tap / pointer on image or its link
-      const handler = (e) => {
-        e.preventDefault();
-        const target = e.currentTarget.querySelector('img') || e.currentTarget;
-        const src = target.src || e.currentTarget.href;
-        openLightbox(src);
-      };
-
+      // Universal tap/click handler with scroll detection
+      const TAP_MOVE = 10, TAP_TIME = 500; // px/ms
       document.querySelectorAll('.card a.zoom').forEach(a => {
-        a.addEventListener('click', handler, { passive:false });
-        a.addEventListener('pointerup', handler, { passive:false });
-        a.addEventListener('touchend', handler, { passive:false });
+        let sx=0, sy=0, st=0, touchActive=false;
+
+        a.addEventListener('pointerdown', (e) => {
+          sx=e.clientX; sy=e.clientY; st=Date.now(); touchActive = (e.pointerType==='touch');
+        }, {passive:true});
+
+        a.addEventListener('pointerup', (e) => {
+          const isTouchUp = (e.pointerType==='touch') || touchActive;
+          const dx=Math.abs(e.clientX-sx), dy=Math.abs(e.clientY-sy), dt=Date.now()-st;
+          const isTap = dx<TAP_MOVE && dy<TAP_MOVE && dt<TAP_TIME;
+          if (isTouchUp) {
+            if (isTap) {
+              e.preventDefault();
+              const img = a.querySelector('img');
+              const src = (img && (img.currentSrc || img.src)) || a.href;
+              showOverlay(src);
+            }
+            return; // on touch, skip click
+          }
+        }, {passive:false});
+
+        a.addEventListener('click', (e) => {
+          // If touch sequence already handled, pointerup returned; proceed for mouse
+          const img = a.querySelector('img');
+          const src = (img && (img.currentSrc || img.src)) || a.href;
+          e.preventDefault();
+          showOverlay(src);
+        }, {passive:false});
       });
 
-      closeBtn.addEventListener('click', close);
-      lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
-      window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') close(); });
+      closeBtn.addEventListener('click', hideOverlay);
+      lb.addEventListener('click', (e)=>{ if(e.target===lb) hideOverlay(); });
+      window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') hideOverlay(); });
     })();
 
     // Interior consult form → opens email compose with prefilled details
@@ -353,13 +375,10 @@
           (d.get('notes') || '')
         ];
         const body = encodeURIComponent(lines.join('\n'));
-        const mailto = `mailto:hello@bymajid.com?subject=Interior Consultation — bymajid.com&body=${body}`;
+        const mailto = `mailto:madjid.mohamadi@gmail.com?subject=Interior Consultation — bymajid.com&body=${body}`;
         window.location.href = mailto;
       });
     }
   </script>
 </body>
 </html>
-
-
-
