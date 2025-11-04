@@ -55,16 +55,10 @@
     .grid{display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gap)}
     .card{grid-column: span 6; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative}
     .card img{width:100%; height:100%; display:block; object-fit:cover; aspect-ratio: 4/3}
+    .card.portrait img{aspect-ratio:3/4}
+    .card.sq img{aspect-ratio:1/1}
     .card .cap{position:absolute; inset:auto 0 0 0; padding:12px 14px; background:linear-gradient(180deg, transparent, rgba(0,0,0,.65)); color:#fff; font-size:.95rem}
     .chip{display:inline-block; padding:.25rem .6rem; border:1px solid color-mix(in oklab, #fff 35%, transparent); border-radius:999px; font-size:.72rem; opacity:.9}
-
-    @media (min-width: 1100px){.card:nth-child(3n){grid-column: span 7}.card:nth-child(3n) img{aspect-ratio: 3/4}.card:nth-child(4n){grid-column: span 5}}
-    @media (max-width: 720px){.card{grid-column: span 12}}
-
-    .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.8); display:none; align-items:center; justify-content:center; z-index:100}
-    .lightbox.open{display:flex}
-    .lightbox img{max-width:92vw; max-height:86vh; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6)}
-    .lightbox .close{position:absolute; top:16px; right:16px; background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.3); border-radius:999px; padding:8px 12px; cursor:pointer}
 
     footer{margin-top:clamp(28px,6vw,64px); padding:24px 0 40px; color:var(--muted); border-top:1px solid color-mix(in oklab, var(--fg) 10%, transparent)}
     .footer-grid{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px}
@@ -81,6 +75,8 @@
       <nav class="links" aria-label="Primary">
         <a href="#work">Portfolio</a>
         <a href="#about">About</a>
+        <a href="#awards">Awards</a>
+        <a href="#consult">Consult</a>
         <a href="#contact">Contact</a>
       </nav>
     </div>
@@ -89,142 +85,29 @@
   <main class="wrap">
     <section class="hero" id="home">
       <figure class="hero-card" aria-label="Featured photograph">
-        <img src="images/hero.jpg" alt="Featured fine art photograph by Majid" loading="eager">
+        <img src="images/a-journey-to-the-unknown.png" alt="A Journey to The Unknown" loading="eager">
       </figure>
       <div class="hero-copy">
         <h2>Quiet light. Honest places.</h2>
-        <p>Fine‑art photography exploring stillness, reflection, and the silent drama of the Pacific Northwest and beyond.</p>
+        <p>Fine-art photography exploring stillness, reflection, and the silent drama of the Pacific Northwest and beyond.</p>
         <a class="cta" href="#work">View Portfolio →</a>
       </div>
     </section>
 
     <section id="work" aria-label="Portfolio">
       <div class="grid">
-        <figure class="card"><img src="images/01.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Coast</span> Tidal Glass</figcaption></figure>
-        <figure class="card"><img src="images/02.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Forest</span> Reverie</figcaption></figure>
-        <figure class="card"><img src="images/03.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: City</span> Rain Script</figcaption></figure>
-        <figure class="card"><img src="images/04.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Desert</span> Dune Whisper</figcaption></figure>
-        <figure class="card"><img src="images/05.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Sky</span> After Storm</figcaption></figure>
-        <figure class="card"><img src="images/06.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Forest</span> Green Chapel</figcaption></figure>
-        <figure class="card"><img src="images/07.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Coast</span> Low Tide Lines</figcaption></figure>
-        <figure class="card"><img src="images/08.jpg" alt="" loading="lazy"><figcaption class="cap"><span class="chip">Series: Night</span> Mercury</figcaption></figure>
-      </div>
-    </section>
-
-    <section id="about" style="margin-top: clamp(28px,6vw,64px);">
-      <div class="grid" style="grid-template-columns:repeat(12,1fr); gap:var(--gap)">
-        <div style="grid-column:span 7; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden">
-          <img src="images/about.jpg" alt="Majid in the field with camera" style="width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:3/2" loading="lazy">
-        </div>
-        <div style="grid-column:span 5; display:flex; flex-direction:column; justify-content:center; gap:10px">
-          <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0">About</h3>
-          <p style="color:var(--muted); margin:0">Majid Mohammadi is a Vancouver‑based fine‑art photographer and pilot. His work blends disciplined observation with cinematic stillness—capturing the moment where light, weather, and terrain align.</p>
-          <p style="color:var(--muted); margin:0">Prints are available in gallery editions. Commissions and licensing by request.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="awards" style="margin-top: clamp(28px,6vw,64px);">
-      <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 12px">Awards &amp; Honors</h3>
-      <ul style="list-style: none; padding:0; margin:0; display:grid; gap:10px">
-        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-          <strong>Fine Art Photography Awards</strong> — Majid Mohamadi 1st Prize Winner in Travel. 
-          <a href="https://fineartphotoawards.com/winners-gallery/fapa-2019-2020/amateur/travel/gold-award/" target="_blank" rel="noopener">View</a>
-        </li>
-        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-          <strong>FIAP Honor Ribbon</strong>, 41st Trophy Torretes of Photography (Spain) 2018 — Recognized for excellence in international photography. 
-          <a href="https://www.festimatge.org/el-festival-2/" target="_blank" rel="noopener">View</a>
-        </li>
-        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-          <strong>LensCulture Art Photography Awards 2022</strong> — Featured and nominated for outstanding work in art photography. 
-          <a href="https://www.lensculture.com/photo-competitions/art-photography-awards/2022" target="_blank" rel="noopener">View</a>
-        </li>
-        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-          <strong>Kimia Photo Festival (Iran) 2019</strong> — Won first prize for creative photography. 
-          <a href="https://www.mehrnews.com/news/4463154/%D8%A7%D8%B9%D9%84%D8%A7%D9%85-%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B9%DA%A9%D8%B3-%D9%85%D8%B9%D8%AF%D9%86-%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D8%B3%D9%84%D8%A7%D9%85%DB%8C-%D8%B1%D8%A7%D8%AF-%D9%86%D8%B4%D8%A7%D9%86-%DA%A9%DB%8C%D9%85%DB%8C%D8%A7" target="_blank" rel="noopener">View</a>
-        </li>
-        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-          <strong>Blank Wall Gallery (Greece)</strong> — Received an honor diploma in 2020 for excellence in fine art photography. 
-          <a href="https://www.blankwallgallery.com/majid-mohammadi-iran-untitled/" target="_blank" rel="noopener">View</a>
-        </li>
-        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-          <strong>Focus Iran 2 — Craft and Folk Art Museum of Los Angeles (USA)</strong> — Honor diploma for artistic achievements in 2019. 
-          <a href="https://farhang.org/programs/focus-iran" target="_blank" rel="noopener">View</a>
-        </li>
-      </ul>
-    </section>
-
-    <section id="contact" style="margin-top: clamp(28px,6vw,64px);">
-      <div class="grid" style="align-items:center">
-        <div style="grid-column: span 8; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
-          <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin-top:0">Contact</h3>
-          <p style="color:var(--muted); margin:0 0 12px">For print inquiries, commissions, or exhibitions:</p>
-          <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:hello@bymajid.com">hello@bymajid.com</a></p>
-          <p style="margin:0 0 6px"><strong>Instagram:</strong> <a href="https://www.instagram.com/madjidmohamadi" target="_blank" rel="noopener">@madjidmohamadi</a></p>
-        </div>
-        <div style="grid-column: span 4; text-align:center; color:var(--muted)">
-          <p style="margin:6px 0 0">© <span id="year"></span> By Majid. All rights reserved.</p>
-        </div>
+        <figure class="card"><img src="images/how-earth-sees-the-leaves.png" alt="How Earth Sees the Leaves" loading="lazy"><figcaption class="cap"><span class="chip">Space: Gallery</span> How Earth Sees the Leaves</figcaption></figure>
+        <figure class="card portrait"><img src="images/golden-breath.png" alt="Golden Breath" loading="lazy"><figcaption class="cap"><span class="chip">Space: Lobby</span> Golden Breath</figcaption></figure>
+        <figure class="card"><img src="images/moonlight-over-the-ocean.png" alt="Moonlight Over The Ocean" loading="lazy"><figcaption class="cap"><span class="chip">Space: Living room</span> Moonlight Over The Ocean</figcaption></figure>
+        <figure class="card portrait"><img src="images/immigrants.png" alt="Immigrants" loading="lazy"><figcaption class="cap"><span class="chip">Space: Hotel lobby</span> Immigrants</figcaption></figure>
+        <figure class="card portrait"><img src="images/whisper-of-form.png" alt="Whisper of Form" loading="lazy"><figcaption class="cap"><span class="chip">Space: Shop</span> Whisper of Form</figcaption></figure>
+        <figure class="card portrait"><img src="images/the-shape-of-wind.png" alt="The Shape of Wind" loading="lazy"><figcaption class="cap"><span class="chip">Space: Shop</span> The Shape of Wind</figcaption></figure>
+        <figure class="card"><img src="images/the-tired-tree.png" alt="The Tired Tree" loading="lazy"><figcaption class="cap"><span class="chip">Space: Gallery</span> The Tired Tree</figcaption></figure>
+        <figure class="card sq"><img src="images/whispers-of-the-ghost-lake.png" alt="Whispers of the Ghost Lake" loading="lazy"><figcaption class="cap"><span class="chip">Space: Living room</span> Whispers of the Ghost Lake</figcaption></figure>
+        <figure class="card sq"><img src="images/story-of-two-benches.png" alt="Story of Two benches" loading="lazy"><figcaption class="cap"><span class="chip">Space: Wellness retreat</span> Story of Two benches</figcaption></figure>
+        <figure class="card"><img src="images/a-journey-to-the-unknown.png" alt="A Journey to The Unknown" loading="lazy"><figcaption class="cap"><span class="chip">Space: Living room</span> A Journey to The Unknown</figcaption></figure>
       </div>
     </section>
   </main>
-
-  <footer>
-    <div class="wrap footer-grid">
-      <div class="social" aria-label="Social links">
-        <a href="https://www.instagram.com/madjidmohamadi" aria-label="Instagram" title="Instagram">Instagram</a>
-        <span aria-hidden="true"> · </span>
-        <a href="#" aria-label="Prints" title="Prints">Prints</a>
-      </div>
-      <div>Built on GitHub Pages</div>
-    </div>
-  </footer>
-
-  <div class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
-    <button class="close" aria-label="Close">Close ✕</button>
-    <img src="" alt="Expanded view" />
-  </div>
-<script>
-  // Copyright year
-  const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
-
-  // Simple lightbox
-  (function(){
-    const lb = document.querySelector('.lightbox');
-    if (!lb) return;
-    const lbImg = lb.querySelector('img');
-    const closeBtn = lb.querySelector('.close');
-    document.querySelectorAll('.card img').forEach(img => {
-      img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
-    });
-    const close = () => { lb.classList.remove('open'); lbImg.src=''; };
-    closeBtn.addEventListener('click', close);
-    lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
-    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') close(); });
-  })();
-
-  // Interior consult form → opens email compose with prefilled details
-  const consult = document.getElementById('consultForm');
-  if (consult) {
-    consult.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const d = new FormData(consult);
-      const lines = [
-        `Name: ${d.get('name') || ''}`,
-        `Email: ${d.get('email') || ''}`,
-        `Room: ${d.get('room') || ''}`,
-        `Wall width: ${d.get('wall') || ''}`,
-        `Ceiling height: ${d.get('ceiling') || ''}`,
-        `Orientation: ${d.get('orientation') || ''}`,
-        `Frame: ${d.get('frame') || ''}`,
-        `Photo link: ${d.get('link') || ''}`,
-        '',
-        (d.get('notes') || '')
-      ];
-      const body = encodeURIComponent(lines.join('\n'));
-      const mailto = `mailto:hello@bymajid.com?subject=Interior Consultation — bymajid.com&body=${body}`;
-      window.location.href = mailto;
-    });
-  }
-</script>
-
+</body>
+</html>
