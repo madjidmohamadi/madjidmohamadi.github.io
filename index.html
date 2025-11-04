@@ -287,4 +287,64 @@ b')==='a%0Ab', 'T2b fail');
   console.assert(decodeURIComponent(encodeMailBody(s))===s, 'T3 fail');
 })();
 </script>
-</body></html>
+<script>
+// --- Patch script: ensure lightbox + visit popup work even if earlier bindings failed ---
+(function(){
+  // Helpers (idempotent)
+  if(typeof window.encodeMailBody!=='function'){
+    window.encodeMailBody=function(str){ const normalized=String(str).replace(/
+?
+/g,'
+'); return encodeURIComponent(normalized); };
+  }
+  function toast(msg){ var t=document.getElementById('toast'); if(!t){ t=document.createElement('div'); t.id='toast'; t.className='toast'; document.body.appendChild(t);} t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
+
+  // Lightbox
+  const lb=document.querySelector('.lightbox');
+  const lbImg=lb?lb.querySelector('img'):null;
+  const lbClose=lb?lb.querySelector('.close'):null;
+  function openLB(src){ if(!lb||!lbImg) return; document.body.classList.add('no-scroll'); lb.classList.add('open'); lbImg.src=src; }
+  function closeLB(){ if(!lb||!lbImg) return; lb.classList.remove('open'); lbImg.src=''; document.body.classList.remove('no-scroll'); }
+  if(lbClose){ lbClose.addEventListener('click', closeLB); }
+  if(lb){ lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLB(); }); }
+  window.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeLB(); });
+  // Bind/rehydrate thumbnails
+  document.querySelectorAll('#work .card img').forEach((img)=>{
+    if(!img.parentElement || !img.parentElement.matches('a.zoom')){ const a=document.createElement('a'); a.href=img.currentSrc||img.src; a.className='zoom'; img.replaceWith(a); a.appendChild(img); }
+    const link=img.parentElement;
+    link.onclick=(e)=>{ e.preventDefault(); openLB(img.currentSrc||img.src); };
+    link.addEventListener('touchend',(e)=>{ e.preventDefault(); openLB(img.currentSrc||img.src); }, {passive:false});
+  });
+
+  // Visit modal
+  const visitBtn=document.getElementById('visitOpenBtn');
+  const visitModal=document.getElementById('visitModal');
+  const visitClose=document.getElementById('visitCloseBtn');
+  const visitEmail=document.getElementById('visitEmail');
+  const visitAddress=document.getElementById('visitAddress');
+  const visitPhone=document.getElementById('visitPhone');
+  const visitNotes=document.getElementById('visitNotes');
+  const visitSend=document.getElementById('visitSendBtn');
+  function openVisit(){ if(visitModal) visitModal.classList.add('open'); }
+  function closeVisit(){ if(visitModal) visitModal.classList.remove('open'); }
+  if(visitBtn){ visitBtn.addEventListener('click',(e)=>{ e.preventDefault(); openVisit(); }); }
+  if(visitClose){ visitClose.addEventListener('click', closeVisit); }
+  if(visitModal){ visitModal.addEventListener('click',(e)=>{ if(e.target===visitModal) closeVisit(); }); }
+  if(visitSend){ visitSend.addEventListener('click',()=>{
+    const email=(visitEmail&&visitEmail.value||'').trim();
+    const addr=(visitAddress&&visitAddress.value||'').trim();
+    const phone=(visitPhone&&visitPhone.value||'').trim();
+    if(!email){ toast('Please enter your email.'); return; }
+    if(!addr){ toast('Please enter your full address.'); return; }
+    if(!phone){ toast('Please enter your phone number.'); return; }
+    const lines=['On-site visit request',`Email: ${email}`,`Address: ${addr}`,`Phone: ${phone}`,'',`Availability/Notes: ${(visitNotes&&visitNotes.value)||''}`];
+    const subject=encodeURIComponent('On-site Consultation Request');
+    const body=encodeMailBody(lines.join('
+'));
+    window.location.href=`mailto:madjid.mohamadi@gmail.com?cc=${encodeURIComponent(email)}&subject=${subject}&body=${body}`;
+    closeVisit(); toast('Your visit request was sent.');
+  }); }
+})();
+</script>
+</body>
+</html>
