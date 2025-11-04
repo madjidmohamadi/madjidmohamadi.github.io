@@ -184,3 +184,47 @@
     <button class="close" aria-label="Close">Close ✕</button>
     <img src="" alt="Expanded view" />
   </div>
+<script>
+  // Copyright year
+  const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+
+  // Simple lightbox
+  (function(){
+    const lb = document.querySelector('.lightbox');
+    if (!lb) return;
+    const lbImg = lb.querySelector('img');
+    const closeBtn = lb.querySelector('.close');
+    document.querySelectorAll('.card img').forEach(img => {
+      img.addEventListener('click', () => { lbImg.src = img.src; lb.classList.add('open'); });
+    });
+    const close = () => { lb.classList.remove('open'); lbImg.src=''; };
+    closeBtn.addEventListener('click', close);
+    lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') close(); });
+  })();
+
+  // Interior consult form → opens email compose with prefilled details
+  const consult = document.getElementById('consultForm');
+  if (consult) {
+    consult.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const d = new FormData(consult);
+      const lines = [
+        `Name: ${d.get('name') || ''}`,
+        `Email: ${d.get('email') || ''}`,
+        `Room: ${d.get('room') || ''}`,
+        `Wall width: ${d.get('wall') || ''}`,
+        `Ceiling height: ${d.get('ceiling') || ''}`,
+        `Orientation: ${d.get('orientation') || ''}`,
+        `Frame: ${d.get('frame') || ''}`,
+        `Photo link: ${d.get('link') || ''}`,
+        '',
+        (d.get('notes') || '')
+      ];
+      const body = encodeURIComponent(lines.join('\n'));
+      const mailto = `mailto:hello@bymajid.com?subject=Interior Consultation — bymajid.com&body=${body}`;
+      window.location.href = mailto;
+    });
+  }
+</script>
+
