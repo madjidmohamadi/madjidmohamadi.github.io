@@ -380,5 +380,116 @@
       });
     }
   </script>
+  <!-- Lightbox overlay -->
+<div class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" style="display:none;">
+  <button class="close" aria-label="Close">✕</button>
+  <img src="" alt="Expanded view" />
+</div>
+  <script>
+(function(){
+  // --- get elements
+  const lb = document.querySelector('.lightbox');
+  if (!lb) return;
+  const lbImg = lb.querySelector('img');
+  const closeBtn = lb.querySelector('.close');
+
+  // --- overlay show/hide
+  function showOverlay(src){
+    // ensure overlay has correct styles even if CSS didn't load yet
+    lb.style.position = 'fixed';
+    lb.style.inset = '0';
+    lb.style.background = 'rgba(0,0,0,0.85)';
+    lb.style.display = 'flex';
+    lb.style.alignItems = 'center';
+    lb.style.justifyContent = 'center';
+    lb.style.zIndex = '9999';
+    document.body.style.overflow = 'hidden';
+
+    lbImg.style.maxWidth = '90vw';
+    lbImg.style.maxHeight = '90vh';
+    lbImg.style.borderRadius = '12px';
+    lbImg.style.boxShadow = '0 20px 60px rgba(0,0,0,0.6)';
+
+    // preload for Android/iOS reliability
+    lbImg.src = '';
+    const pre = new Image();
+    pre.onload = () => { lbImg.src = src; };
+    pre.onerror = () => { lbImg.src = src; };
+    pre.src = src;
+
+    // fallback: if overlay fails (rare), open image directly
+    setTimeout(() => {
+      const visible = lb.style.display !== 'none' && lbImg.src;
+      if (!visible) window.location.href = src;
+    }, 400);
+  }
+
+  function hideOverlay(){
+    lb.style.display = 'none';
+    lbImg.src = '';
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', hideOverlay);
+  lb.addEventListener('click', (e) => { if (e.target === lb) hideOverlay(); });
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideOverlay(); });
+
+  // --- make every portfolio image openable (and have a native fallback)
+  document.querySelectorAll('.card img').forEach(img => {
+    // wrap in a link if not already
+    if (!img.parentElement || !img.parentElement.matches('a.zoom')) {
+      const a = document.createElement('a');
+      a.href = img.currentSrc || img.src;   // native fallback if JS fails
+      a.className = 'zoom';
+      img.replaceWith(a);
+      a.appendChild(img);
+    }
+  });
+
+  // --- tap vs scroll detection (prevents accidental opens while scrolling)
+  const TAP_MOVE = 10;   // px
+  const TAP_TIME = 500;  // ms
+
+  document.querySelectorAll('.card a.zoom').forEach(a => {
+    let sx=0, sy=0, st=0, touchActive=false;
+
+    a.style.touchAction = 'pan-y'; // allow vertical scroll on touch
+
+    a.addEventListener('pointerdown', (e) => {
+      sx = e.clientX; sy = e.clientY; st = Date.now();
+      touchActive = (e.pointerType === 'touch');
+    }, { passive: true });
+
+    a.addEventListener('pointerup', (e) => {
+      const isTouch = (e.pointerType === 'touch') || touchActive;
+      const dx = Math.abs(e.clientX - sx);
+      const dy = Math.abs(e.clientY - sy);
+      const dt = Date.now() - st;
+      const isTap = dx < TAP_MOVE && dy < TAP_MOVE && dt < TAP_TIME;
+
+      if (isTouch) {
+        if (isTap) {
+          e.preventDefault();
+          const img = a.querySelector('img');
+          const src = (img && (img.currentSrc || img.src)) || a.href;
+          showOverlay(src);
+        }
+        return; // prevent the follow-up synthetic click
+      }
+    }, { passive: false });
+
+    // mouse / non-touch click
+    a.addEventListener('click', (e) => {
+      // ignore if we just had a touch sequence
+      if (touchActive) return;
+      e.preventDefault();
+      const img = a.querySelector('img');
+      const src = (img && (img.currentSrc || img.src)) || a.href;
+      showOverlay(src);
+    }, { passive: false });
+  });
+})();
+</script>
 </body>
 </html>
+
