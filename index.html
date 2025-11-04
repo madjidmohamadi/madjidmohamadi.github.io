@@ -13,7 +13,7 @@
   <!-- Canonical + Social cards -->
   <link rel="canonical" href="https://bymajid.com/">
   <meta property="og:title" content="By Majid — Fine Art Photography">
-  <meta property="og:description" content="Fine-art photography exploring stillness, reflection, and the silent drama of the Pacific Northwest and beyond.">
+  <meta property="og:description" content="A visual meditation on stillness, space, and the quiet presence of the natural world.">
   <meta property="og:url" content="https://bymajid.com/">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://bymajid.com/images/social-card.jpg">
@@ -55,4 +55,458 @@
     .hero-card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; min-height:280px; position:relative}
     .hero-copy{padding:clamp(16px,3vw,28px)}
     .hero-copy h2{font-family:"Playfair Display",serif; font-size:clamp(26px,4vw,46px); margin:0 0 6px}
-    .hero-copy p{color
+    .hero-copy p{color:var(--muted); margin:0 0 14px}
+    .cta{display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700}
+
+    @media (max-width:900px){.hero{grid-template-columns:1fr}}
+
+    .grid{display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gap)}
+    .card{grid-column:span 6; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative}
+    .card img{width:100%; height:auto; display:block; object-fit:cover; aspect-ratio:4/3}
+    .card.portrait img{aspect-ratio:3/4}
+    .card.sq img{aspect-ratio:1/1}
+    .cap{position:absolute; inset:auto 0 0 0; padding:12px 14px; background:linear-gradient(180deg, transparent, rgba(0,0,0,.65)); color:#fff; font-size:.95rem}
+    .chip{display:inline-block; padding:.25rem .6rem; border:1px solid color-mix(in oklab, #fff 35%, transparent); border-radius:999px; font-size:.72rem; opacity:.9}
+
+    footer{margin-top:clamp(28px,6vw,64px); padding:24px 0 40px; color:var(--muted); border-top:1px solid color-mix(in oklab, var(--fg) 10%, transparent)}
+    .footer-grid{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px}
+    .social a{color:var(--muted)}
+    .card img{cursor:zoom-in}
+    .card a.zoom{display:block; touch-action: pan-y;}
+
+    /* Lightbox overlay (mobile + desktop) */
+    .lightbox{position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:9999}
+    .lightbox.open{display:flex}
+    .lightbox img{max-width:90vw; max-height:90vh; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6)}
+    .lightbox .close{position:absolute; top:20px; right:20px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.3); color:#fff; padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:700}
+    body.no-scroll{overflow:hidden}
+
+    /* A11y helpers */
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    :focus-visible{outline:2px solid color-mix(in oklab, var(--fg) 70%, transparent); outline-offset:3px}
+
+    /* Motion preferences */
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important; transition:none!important}
+    }
+  </style>
+
+  <!-- JSON-LD: Person (kept name as Majid Mohamadi by request) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Majid Mohamadi",
+    "jobTitle": "Fine Art Photographer",
+    "url": "https://bymajid.com/",
+    "image": "https://bymajid.com/images/about.jpg",
+    "sameAs": [
+      "https://www.instagram.com/madjidmohamadi"
+    ],
+    "knowsAbout": ["Fine art photography","Pacific Northwest","Landscape","Interior art consulting"],
+    "brand": {
+      "@type": "Brand",
+      "name": "By Majid"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Skip link -->
+  <a href="#home" class="sr-only" style="left:8px;top:8px;z-index:10000;position:absolute">Skip to content</a>
+
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <h1>By Majid</h1>
+        <small>Fine Art Photography</small>
+      </div>
+      <nav class="links" aria-label="Primary">
+        <a href="#work">Portfolio</a>
+        <a href="#about">About</a>
+        <a href="#awards">Awards</a>
+        <a href="#consult">Consult</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <figure class="hero-card" aria-label="Featured photograph">
+        <!-- Performance-optimized hero (AVIF/WebP + sizes) -->
+        <picture>
+          <source type="image/avif" srcset="images/a-journey-to-the-unknown.avif" />
+          <source type="image/webp" srcset="images/a-journey-to-the-unknown.webp" />
+          <img
+            src="images/a-journey-to-the-unknown.jpg"
+            alt="A Journey to The Unknown"
+            width="1600" height="1067"
+            fetchpriority="high" decoding="async" loading="eager"
+            sizes="(max-width: 900px) 100vw, 60vw"
+            style="width:100%;height:auto"
+          />
+        </picture>
+      </figure>
+      <div class="hero-copy">
+        <h2>Quiet light. Honest places.</h2>
+        <p>Fine-art photography exploring stillness, reflection, and the silent drama of the Pacific Northwest and beyond.</p>
+        <a class="cta" href="#work">View Portfolio →</a>
+      </div>
+    </section>
+
+    <!-- PORTFOLIO GRID -->
+    <section id="work" aria-label="Portfolio">
+      <div class="grid">
+        <figure class="card">
+          <img src="images/how-earth-sees-the-leaves.png" alt="How Earth Sees the Leaves" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
+          <figcaption class="cap"><span class="chip">Space: Gallery</span> How Earth Sees the Leaves</figcaption>
+        </figure>
+
+        <figure class="card portrait">
+          <img src="images/golden-breath.png" alt="Golden Breath" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
+          <figcaption class="cap"><span class="chip">Space: Lobby</span> Golden Breath</figcaption>
+        </figure>
+
+        <figure class="card">
+          <img src="images/moonlight-over-the-ocean.png" alt="Moonlight Over The Ocean" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
+          <figcaption class="cap"><span class="chip">Space: Living room</span> Moonlight Over The Ocean</figcaption>
+        </figure>
+
+        <figure class="card portrait">
+          <img src="images/immigrants.png" alt="Immigrants" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
+          <figcaption class="cap"><span class="chip">Space: Hotel lobby</span> Immigrants</figcaption>
+        </figure>
+
+        <figure class="card portrait">
+          <img src="images/whisper-of-form.png" alt="Whisper of Form" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
+          <figcaption class="cap"><span class="chip">Space: Shop</span> Whisper of Form</figcaption>
+        </figure>
+
+        <figure class="card portrait">
+          <img src="images/the-shape-of-wind.png" alt="The Shape of Wind" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
+          <figcaption class="cap"><span class="chip">Space: Shop</span> The Shape of Wind</figcaption>
+        </figure>
+
+        <figure class="card">
+          <img src="images/the-tired-tree.png" alt="The Tired Tree" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
+          <figcaption class="cap"><span class="chip">Space: Gallery</span> The Tired Tree</figcaption>
+        </figure>
+
+        <figure class="card sq">
+          <img src="images/whispers-of-the-ghost-lake.png" alt="Whispers of the Ghost Lake" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
+          <figcaption class="cap"><span class="chip">Space: Living room</span> Whispers of the Ghost Lake</figcaption>
+        </figure>
+
+        <figure class="card sq">
+          <img src="images/story-of-two-benches.png" alt="Story of Two Benches" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
+          <figcaption class="cap"><span class="chip">Space: Wellness retreat</span> Story of Two Benches</figcaption>
+        </figure>
+
+        <figure class="card">
+          <img src="images/a-journey-to-the-unknown.png" alt="A Journey to The Unknown" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
+          <figcaption class="cap"><span class="chip">Space: Living room</span> A Journey to The Unknown</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" style="margin-top: clamp(28px,6vw,64px);">
+      <div class="grid" style="grid-template-columns:repeat(12,1fr); gap:var(--gap)">
+        <div style="grid-column:span 7; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden">
+          <img src="images/about.jpg" alt="Majid in the field with camera" style="width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:3/2" loading="lazy" decoding="async" width="1200" height="800">
+        </div>
+        <div style="grid-column:span 5; display:flex; flex-direction:column; justify-content:center; gap:10px">
+          <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0">About</h3>
+          <p style="color:var(--muted); margin:0">Majid Mohammadi is a Canadian–Iranian fine art photographer whose work explores silence, solitude, and the poetry of natural forms. Through minimal compositions and meditative light, he reveals the quiet dialogue between earth, air, and memory. Each image becomes a moment of still reflection — where emptiness speaks, and the unseen finds its voice.</p>
+          <p style="color:var(--muted); margin:0">Prints are available in gallery editions. Commissions and licensing by request.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AWARDS -->
+    <section id="awards" style="margin-top: clamp(28px,6vw,64px);">
+      <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 12px">Awards &amp; Honors</h3>
+      <ul style="list-style:none; padding:0; margin:0; display:grid; gap:10px">
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>Fine Art Photography Awards</strong> — Majid Mohamadi 1st Prize Winner in Travel. <a href="https://fineartphotoawards.com/winners-gallery/fapa-2019-2020/amateur/travel/gold-award/" target="_blank" rel="noopener">View</a>
+        </li>
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>FIAP Honor Ribbon</strong>, 41st Trophy Torretes of Photography (Spain) 2018 — Recognized for excellence in international photography. <a href="https://www.festimatge.org/el-festival-2/" target="_blank" rel="noopener">View</a>
+        </li>
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>LensCulture Art Photography Awards 2022</strong> — Featured and nominated for outstanding work in art photography. <a href="https://www.lensculture.com/photo-competitions/art-photography-awards/2022" target="_blank" rel="noopener">View</a>
+        </li>
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>Kimia Photo Festival (Iran) 2019</strong> — Won first prize for creative photography. <a href="https://www.mehrnews.com/news/4463154/%D8%A7%D8%B9%D9%84%D8%A7%D9%85-%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B9%DA%A9%D8%B3-%D9%85%D8%B9%D8%AF%D9%86-%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D8%B3%D9%84%D8%A7%D9%85%DB%8C-%D8%B1%D8%A7%D8%AF-%D9%86%D8%B4%D8%A7%D9%86-%DA%A9%DB%8C%D9%85%DB%8C%D8%A7" target="_blank" rel="noopener">View</a>
+        </li>
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>Blank Wall Gallery (Greece)</strong> — Received an honor diploma in 2020 for excellence in fine art photography. <a href="https://www.blankwallgallery.com/majid-mohammadi-iran-untitled/" target="_blank" rel="noopener">View</a>
+        </li>
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>Focus Iran 2 — Craft and Folk Art Museum of Los Angeles (USA)</strong> — Honor diploma for artistic achievements in 2019. <a href="https://farhang.org/programs/focus-iran" target="_blank" rel="noopener">View</a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- INTERIOR CONSULTATION -->
+    <section id="consult" style="margin-top: clamp(28px,6vw,64px);">
+      <div class="grid" style="align-items:start; gap: var(--gap);">
+        <div style="grid-column: span 7; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
+          <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 8px">Free Interior Sizing &amp; Mockup</h3>
+          <p style="color:var(--muted); margin:0 0 12px">Send a photo of your wall and a few details. I’ll suggest the best photograph and frame size for your space — and provide a quick mockup.</p>
+
+          <form id="consultForm" style="display:grid; gap:12px">
+            <label>
+              <span style="display:block; font-weight:600; margin-bottom:4px">Your Name</span>
+              <input name="name" required placeholder="Full name" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
+            </label>
+            <label>
+              <span style="display:block; font-weight:600; margin-bottom:4px">Email</span>
+              <input name="email" type="email" required placeholder="you@example.com" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
+            </label>
+            <div class="grid" style="grid-template-columns:repeat(12,1fr); gap:var(--gap)">
+              <label style="grid-column:span 6">
+                <span style="display:block; font-weight:600; margin-bottom:4px">Room</span>
+                <select name="room" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
+                  <option>Living room</option>
+                  <option>Bedroom</option>
+                  <option>Dining</option>
+                  <option>Office/Reception</option>
+                  <option>Hallway</option>
+                  <option>Spa/Wellness</option>
+                  <option>Other</option>
+                </select>
+              </label>
+              <label style="grid-column:span 3">
+                <span style="display:block; font-weight:600; margin-bottom:4px">Wall width</span>
+                <input name="wall" placeholder="e.g., 320 cm / 126 in" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
+              </label>
+              <label style="grid-column:span 3">
+                <span style="display:block; font-weight:600; margin-bottom:4px">Ceiling height</span>
+                <input name="ceiling" placeholder="e.g., 260 cm / 102 in" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
+              </label>
+            </div>
+            <div class="grid" style="grid-template-columns:repeat(12,1fr); gap:var(--gap)">
+              <label style="grid-column:span 6">
+                <span style="display:block; font-weight:600; margin-bottom:4px">Preferred orientation</span>
+                <select name="orientation" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
+                  <option>Any</option>
+                  <option>Horizontal (landscape)</option>
+                  <option>Vertical (portrait)</option>
+                  <option>Square</option>
+                </select>
+              </label>
+              <label style="grid-column:span 6">
+                <span style="display:block; font-weight:600; margin-bottom:4px">Frame colour</span>
+                <select name="frame" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
+                  <option>Let me suggest</option>
+                  <option>Black</option>
+                  <option>White</option>
+                  <option>Natural wood</option>
+                  <option>Metal</option>
+                </select>
+              </label>
+            </div>
+            <label>
+              <span style="display:block; font-weight:600; margin-bottom:4px">Link to your room photo(s)</span>
+              <input name="link" type="url" placeholder="Dropbox / Google Drive / iCloud link" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)">
+            </label>
+            <label>
+              <span style="display:block; font-weight:600; margin-bottom:4px">Notes</span>
+              <textarea name="notes" rows="4" placeholder="Style, colours, budget, favourite photos from my portfolio…" style="width:100%; padding:10px; border-radius:10px; border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); background:transparent; color:var(--fg)"></textarea>
+            </label>
+            <button type="submit" class="cta" style="width:max-content">Send details →</button>
+            <small style="color:var(--muted)">You can also email me directly at <a href="mailto:hello@bymajid.com">hello@bymajid.com</a> with your photos attached.</small>
+
+          <div style="margin-top:18px; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px; color:var(--muted);">
+            <strong style="color:var(--fg)">Prefer a personal visit?</strong><br>
+            As an alternative, you can book an on-site consultation. I’ll visit your location, take measurements and reference photos, and prepare detailed illustrations with suggested photographs and framing options.<br><br>
+            There’s <strong>no purchase obligation</strong>, but a small service fee applies to cover travel and time.<br><br>
+            Please leave a short message through the form, and I’ll get back to you as soon as possible to schedule your session.<br><br>
+            <a href="mailto:hello@bymajid.com?subject=On-site Consultation Request" class="cta" style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">Book a Site Visit →</a>
+            <br><small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
+          </div>
+          </form>
+        </div>
+
+        <aside style="grid-column: span 5; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
+          <h4 style="margin:0 0 8px; font-family:'Playfair Display',serif; font-size:clamp(18px,2.5vw,22px)">How to photograph your space</h4>
+          <ul style="margin:0; padding-left:18px; color:var(--muted); display:grid; gap:8px">
+            <li>Stand square-on to the wall; include floor and ceiling in frame.</li>
+            <li>Use natural light if possible; avoid strong shadows.</li>
+            <li>Place a common object (A4 paper, 30 cm ruler, or 12” LP) on the wall for scale.</li>
+            <li>Tell me approximate wall width and ceiling height for accurate sizing.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" style="margin-top: clamp(28px,6vw,64px);">
+      <div class="grid" style="align-items:center">
+        <div style="grid-column: span 8; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
+          <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin-top:0">Contact</h3>
+          <p style="color:var(--muted); margin:0 0 12px">For print inquiries, commissions, or exhibitions:</p>
+          <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:hello@bymajid.com">hello@bymajid.com</a></p>
+          <p style="margin:0 0 6px"><strong>Instagram:</strong> <a href="https://www.instagram.com/madjidmohamadi" target="_blank" rel="noopener">@madjidmohamadi</a></p>
+        </div>
+        <div style="grid-column: span 4; text-align:center; color:var(--muted)">
+          <p style="margin:6px 0 0">© <span id="year"></span> By Majid. All rights reserved.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-grid">
+      <div class="social" aria-label="Social links">
+        <a href="https://www.instagram.com/madjidmohamadi" aria-label="Instagram" title="Instagram" target="_blank" rel="noopener">Instagram</a>
+        <span aria-hidden="true"> · </span>
+        <a href="mailto:hello@bymajid.com?subject=Prints%20Inquiry" aria-label="Prints" title="Prints">Prints</a>
+      </div>
+      <div>Built on GitHub Pages</div>
+    </div>
+  </footer>
+
+  <!-- Accessible Lightbox -->
+  <div class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lb-title">
+    <h2 id="lb-title" class="sr-only">Image viewer</h2>
+    <button class="close" aria-label="Close">Close ✕</button>
+    <img src="" alt="" />
+  </div>
+
+  <script>
+    // Copyright year
+    const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+
+    // Simple lightbox with a11y improvements (tap-aware)
+    (function(){
+      const lb = document.querySelector('.lightbox');
+      if (!lb) return;
+      const lbImg = lb.querySelector('img');
+      const closeBtn = lb.querySelector('.close');
+      const main = document.querySelector('main');
+      let lastFocus = null;
+
+      function openLightbox(src){
+        lastFocus = document.activeElement;
+        document.body.classList.add('no-scroll');
+        lb.classList.add('open');
+
+        // Hide background for assistive tech
+        if ('inert' in HTMLElement.prototype) { main.inert = true; }
+        else { main.setAttribute('aria-hidden','true'); }
+
+        lbImg.src = '';
+        const pre = new Image();
+        pre.onload = () => { lbImg.src = src; };
+        pre.onerror = () => { lbImg.src = src; };
+        pre.src = src;
+
+        // Move focus to close button
+        closeBtn.focus();
+      }
+
+      function close(){
+        lb.classList.remove('open');
+        lbImg.src = '';
+        document.body.classList.remove('no-scroll');
+
+        if ('inert' in HTMLElement.prototype) { main.inert = false; }
+        else { main.removeAttribute('aria-hidden'); }
+
+        if (lastFocus) lastFocus.focus();
+      }
+
+      // Ensure each image is wrapped in a link for native fallback
+      document.querySelectorAll('.card img').forEach(img => {
+        if (!img.parentElement || !img.parentElement.matches('a.zoom')){
+          const a = document.createElement('a');
+          a.href = img.src;
+          a.className = 'zoom';
+          img.replaceWith(a); a.appendChild(img);
+        }
+      });
+
+      // Tap detection to prevent accidental opens during scroll
+      const TAP_MOVE_THR = 10;   // px
+      const TAP_TIME_THR = 500;  // ms
+
+      document.querySelectorAll('.card a.zoom').forEach(a => {
+        let startX=0, startY=0, startT=0, startType='';
+
+        a.addEventListener('pointerdown', (e) => {
+          startX = e.clientX; startY = e.clientY; startT = Date.now(); startType = e.pointerType || 'mouse';
+        }, { passive:true });
+
+        a.addEventListener('pointerup', (e) => {
+          const dx = Math.abs(e.clientX - startX);
+          const dy = Math.abs(e.clientY - startY);
+          const dt = Date.now() - startT;
+          const isTouch = (e.pointerType === 'touch' || startType === 'touch');
+          const isTap = dx < TAP_MOVE_THR && dy < TAP_MOVE_THR && dt < TAP_TIME_THR;
+
+          if (isTouch) {
+            if (isTap) {
+              e.preventDefault();
+              const img = a.querySelector('img');
+              const src = (img && img.src) || a.href;
+              openLightbox(src);
+            }
+          }
+        }, { passive:false });
+
+        // For mouse/pen clicks, open normally via click
+        a.addEventListener('click', (e) => {
+          if (startType === 'touch') return; // ignore synthetic click after touch
+          e.preventDefault();
+          const img = a.querySelector('img');
+          const src = (img && img.src) || a.href;
+          openLightbox(src);
+        }, { passive:false });
+      });
+
+      // Close interactions
+      closeBtn.addEventListener('click', close);
+      lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
+      window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') close(); });
+
+      // Trap focus within the lightbox
+      lb.addEventListener('keydown', (e)=>{
+        if(e.key !== 'Tab') return;
+        const f = lb.querySelectorAll('button, [href], img, [tabindex]:not([tabindex="-1"])');
+        if (!f.length) return;
+        const first = f[0], last = f[f.length-1];
+        if (e.shiftKey && document.activeElement === first){ last.focus(); e.preventDefault(); }
+        else if (!e.shiftKey && document.activeElement === last){ first.focus(); e.preventDefault(); }
+      });
+    })();
+
+    // Interior consult form → opens email compose with prefilled details
+    const consult = document.getElementById('consultForm');
+    if (consult) {
+      consult.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const d = new FormData(consult);
+        const lines = [
+          `Name: ${d.get('name') || ''}`,
+          `Email: ${d.get('email') || ''}`,
+          `Room: ${d.get('room') || ''}`,
+          `Wall width: ${d.get('wall') || ''}`,
+          `Ceiling height: ${d.get('ceiling') || ''}`,
+          `Orientation: ${d.get('orientation') || ''}`,
+          `Frame: ${d.get('frame') || ''}`,
+          `Photo link: ${d.get('link') || ''}`,
+          '',
+          (d.get('notes') || '')
+        ];
+        const body = encodeURIComponent(lines.join('\n'));
+        const mailto = `mailto:hello@bymajid.com?subject=Interior Consultation — bymajid.com&body=${body}`;
+        window.location.href = mailto;
+      });
+    }
+  </script>
+</body>
+</html>
