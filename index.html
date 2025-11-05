@@ -41,7 +41,6 @@
     a:hover{opacity:.9}
     .wrap{max-width:var(--maxw); margin-inline:auto; padding:clamp(16px,4vw,32px)}
 
-    /* Skip link */
     .skip-link{
       position:fixed; left:8px; top:8px; z-index:10000;
       transform:translateY(-200%); transition:transform .2s ease;
@@ -69,7 +68,7 @@
       .hero-copy{ text-align:center }
     }
 
-    /* ===== GRID ===== */
+    /* GRID */
     .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gap); align-items:start }
     .card{ grid-column:span 6; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative; align-self:start }
     .card img{ width:100%; height:auto; display:block; cursor:zoom-in }
@@ -120,14 +119,13 @@
     .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:#111; color:#fff; padding:10px 14px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,.4); display:none; z-index:10001; font-weight:600 }
     .toast.show{ display:block }
 
-    /* Mobile polish */
     :root{ --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px); }
     header{ padding-top: max(0px, var(--safe-top)/2); }
     footer{ padding-bottom: max(24px, var(--safe-bottom)); }
     @media (max-width: 600px){ .wrap{ padding-inline: clamp(14px, 4vw, 22px); } }
     html, body{ overflow-x: hidden; }
 
-    /* === Header "☰ Sections" button + drawer === */
+    /* Header "☰ Sections" */
     .sections-btn{
       padding:10px 14px; border-radius:999px; font-weight:800;
       background:var(--fg); color:var(--bg); border:0; cursor:pointer;
@@ -154,16 +152,14 @@
       outline: none;
     }
 
-    /* Smooth scroll */
     html{ scroll-behavior:smooth; }
 
-    /* ===== Shared section-card + collapsible styles (About + FAQ) ===== */
+    /* Shared card/collapsible */
     .section-card{
       background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
       padding: clamp(16px,3vw,24px);
     }
 
-    /* Collapsible containers (use <details class="collapsible">) */
     .collapsible{
       background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;
     }
@@ -177,15 +173,18 @@
     .collapsible .caret{ flex:0 0 auto; transition: transform .2s ease; opacity:.8 }
     details[open] > summary .caret{ transform:rotate(90deg) }
     .collapsible .content{ padding:16px; }
-    /* For FAQ items inside collapsible content */
+
+    /* FAQ lists — set QUESTIONS to use body font (same as Awards sentences) */
     .faq-list{ display:grid; gap:10px; margin:0; padding:0; }
     .faq-list details{
       background:var(--card); border-radius:12px; box-shadow:var(--shadow);
       overflow:hidden; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent);
     }
     .faq-list summary{
-      list-style:none; cursor:pointer; padding:14px 16px; font-weight:700;
+      list-style:none; cursor:pointer; padding:14px 16px;
       display:flex; align-items:center; justify-content:space-between; gap:12px;
+      font-family:inherit; /* <- matches body text like Awards sentences */
+      font-weight:700;
     }
     .faq-list summary::-webkit-details-marker{ display:none }
     .faq-list .answer{ padding:0 16px 16px; color:var(--muted) }
@@ -206,7 +205,6 @@
   }
   </script>
 
-  <!-- FAQPage schema -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -243,7 +241,7 @@
     </div>
   </header>
 
-  <!-- Drawer for sections -->
+  <!-- Drawer -->
   <nav class="sections-drawer" id="sectionsDrawer" aria-label="Sections menu">
     <a href="#work">Portfolio</a>
     <a href="#about">About</a>
@@ -268,7 +266,7 @@
       </div>
     </section>
 
-    <!-- PORTFOLIO GRID -->
+    <!-- PORTFOLIO -->
     <section id="work" aria-label="Portfolio">
       <div class="grid">
         <figure class="card">
@@ -323,9 +321,9 @@
       </div>
     </section>
 
-    <!-- ABOUT (now collapsible) -->
+    <!-- ABOUT (collapsed by default) -->
     <section id="about" style="margin-top: clamp(28px,6vw,64px);">
-      <details class="collapsible" open>
+      <details class="collapsible">
         <summary>
           About
           <span class="caret">▸</span>
@@ -345,50 +343,60 @@
       </details>
     </section>
 
-    <!-- AWARDS -->
+    <!-- AWARDS (collapsed by default) -->
     <section id="awards" style="margin-top: clamp(28px,6vw,64px);">
-      <div class="section-card">
-        <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 12px">Awards &amp; Honors</h3>
-        <ul style="list-style:none; padding:0; margin:0; display:grid; gap:10px">
-          <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-            <strong>Fine Art Photography Awards</strong> — Majid Mohamadi 1st Prize Winner in Travel. <a href="https://fineartphotoawards.com/winners-gallery/fapa-2019-2020/amateur/travel/gold-award/" target="_blank" rel="noopener">View</a>
-          </li>
-          <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-            <strong>FIAP Honor Ribbon</strong>, 41st Trophy Torretes of Photography (Spain) 2018 — Recognized for excellence in international photography. <a href="https://www.festimatge.org/el-festival-2/" target="_blank" rel="noopener">View</a>
-          </li>
-          <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-            <strong>LensCulture Art Photography Awards 2022</strong> — Featured and nominated for outstanding work in art photography. <a href="https://www.lensculture.com/photo-competitions/art-photography-awards/2022" target="_blank" rel="noopener">View</a>
-          </li>
-          <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-            <strong>Kimia Photo Festival (Iran) 2019</strong> — Won first prize for creative photography. <a href="https://www.mehrnews.com/news/4463154/%D8%A7%D8%B9%D9%84%D8%A7%D9%85-%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B9%DA%A9%D8%B3-%D9%85%D8%B9%D8%AF%D9%86-%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D8%B3%D9%84%D8%A7%D9%85%DB%8C-%D8%B1%D8%A7%D8%AF-%D9%86%D8%B4%D8%A7%D9%86-%DA%A9%DB%8C%D9%85%DB%8C%D8%A7" target="_blank" rel="noopener">View</a>
-          </li>
-          <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-            <strong>Blank Wall Gallery (Greece)</strong> — Received an honor diploma in 2020 for excellence in fine art photography. <a href="https://www.blankwallgallery.com/majid-mohammedi-iran-untitled/" target="_blank" rel="noopener">View</a>
-          </li>
-          <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-            <strong>Focus Iran 2 — Craft and Folk Art Museum of Los Angeles (USA)</strong> — Honor diploma for artistic achievements in 2019. <a href="https://farhang.org/programs/focus-iran" target="_blank" rel="noopener">View</a>
-          </li>
-        </ul>
-      </div>
+      <details class="collapsible">
+        <summary>
+          Awards &amp; Honors
+          <span class="caret">▸</span>
+        </summary>
+        <div class="content">
+          <ul style="list-style:none; padding:0; margin:0; display:grid; gap:10px">
+            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+              <strong>Fine Art Photography Awards</strong> — Majid Mohamadi 1st Prize Winner in Travel. <a href="https://fineartphotoawards.com/winners-gallery/fapa-2019-2020/amateur/travel/gold-award/" target="_blank" rel="noopener">View</a>
+            </li>
+            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+              <strong>FIAP Honor Ribbon</strong>, 41st Trophy Torretes of Photography (Spain) 2018 — Recognized for excellence in international photography. <a href="https://www.festimatge.org/el-festival-2/" target="_blank" rel="noopener">View</a>
+            </li>
+            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+              <strong>LensCulture Art Photography Awards 2022</strong> — Featured and nominated for outstanding work in art photography. <a href="https://www.lensculture.com/photo-competitions/art-photography-awards/2022" target="_blank" rel="noopener">View</a>
+            </li>
+            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+              <strong>Kimia Photo Festival (Iran) 2019</strong> — Won first prize for creative photography. <a href="https://www.mehrnews.com/news/4463154/%D8%A7%D8%B9%D9%84%D8%A7%D9%85-%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B9%DA%A9%D8%B3-%D9%85%D8%B9%D8%AF%D9%86-%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D8%B3%D9%84%D8%A7%D9%85%DB%8C-%D8%B1%D8%A7%D8%AF-%D9%86%D8%B4%D8%A7%D9%86-%DA%A9%DB%8C%D9%85%DB%8C%D8%A7" target="_blank" rel="noopener">View</a>
+            </li>
+            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+              <strong>Blank Wall Gallery (Greece)</strong> — Received an honor diploma in 2020 for excellence in fine art photography. <a href="https://www.blankwallgallery.com/majid-mohammedi-iran-untitled/" target="_blank" rel="noopener">View</a>
+            </li>
+            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+              <strong>Focus Iran 2 — Craft and Folk Art Museum of Los Angeles (USA)</strong> — Honor diploma for artistic achievements in 2019. <a href="https://farhang.org/programs/focus-iran" target="_blank" rel="noopener">View</a>
+            </li>
+          </ul>
+        </div>
+      </details>
     </section>
 
-    <!-- INTERIOR CONSULTATION -->
+    <!-- CONSULT (collapsed by default) -->
     <section id="consult" style="margin-top: clamp(28px,6vw,64px);">
-      <div class="section-card">
-        <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 8px">On-site Consultation</h3>
-        <p style="color:var(--muted); margin:0 0 12px">
-          Prefer a personal visit? I’ll come to your space, take measurements and reference photos, and prepare
-          tailored illustrations with suggested photographs and framing options. There’s <strong>no purchase obligation</strong>;
-          a small service fee applies to cover travel and time.
-        </p>
-        <a href="#" class="cta js-book-visit" style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">Book a Site Visit →</a>
-        <br><small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
-      </div>
+      <details class="collapsible">
+        <summary>
+          On-site Consultation
+          <span class="caret">▸</span>
+        </summary>
+        <div class="content">
+          <p style="color:var(--muted); margin:0 0 12px">
+            Prefer a personal visit? I’ll come to your space, take measurements and reference photos, and prepare
+            tailored illustrations with suggested photographs and framing options. There’s <strong>no purchase obligation</strong>;
+            a small service fee applies to cover travel and time.
+          </p>
+          <a href="#" class="cta js-book-visit" style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">Book a Site Visit →</a>
+          <br><small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
+        </div>
+      </details>
     </section>
 
-    <!-- ===== FAQ (now in a section-card wrapper; items stay collapsible) ===== -->
+    <!-- FAQ (collapsed by default; questions use Inter font) -->
     <section id="faq" aria-label="Frequently Asked Questions" style="margin-top: clamp(28px,6vw,64px);">
-      <details class="collapsible" open>
+      <details class="collapsible">
         <summary>
           FAQ
           <span class="caret">▸</span>
@@ -481,15 +489,20 @@
       </details>
     </section>
 
-    <!-- CONTACT -->
+    <!-- CONTACT (collapsed by default) -->
     <section id="contact" style="margin-top: clamp(28px,6vw,64px);">
-      <div class="section-card">
-        <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin-top:0">Contact</h3>
-        <p style="color:var(--muted); margin:0 0 12px">For print inquiries, commissions, or exhibitions:</p>
-        <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:madjid.mohamadi@gmail.com">madjid.mohamadi@gmail.com</a></p>
-        <p style="margin:0 0 6px"><strong>Instagram:</strong> <a href="https://www.instagram.com/madjidmohamadi" target="_blank" rel="noopener">@madjidmohamadi</a></p>
-        <p style="margin:6px 0 0">© <span id="year"></span> By Majid. All rights reserved.</p>
-      </div>
+      <details class="collapsible">
+        <summary>
+          Contact
+          <span class="caret">▸</span>
+        </summary>
+        <div class="content">
+          <p style="color:var(--muted); margin:0 0 12px">For print inquiries, commissions, or exhibitions:</p>
+          <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:madjid.mohamadi@gmail.com">madjid.mohamadi@gmail.com</a></p>
+          <p style="margin:0 0 6px"><strong>Instagram:</strong> <a href="https://www.instagram.com/madjidmohamadi" target="_blank" rel="noopener">@madjidmohamadi</a></p>
+          <p style="margin:6px 0 0">© <span id="year"></span> By Majid. All rights reserved.</p>
+        </div>
+      </details>
     </section>
   </main>
 
@@ -504,7 +517,7 @@
     </div>
   </footer>
 
-  <!-- Lightbox + purchase -->
+  <!-- Lightbox -->
   <div class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lb-title">
     <h2 id="lb-title" class="sr-only">Image viewer</h2>
     <button class="close" aria-label="Close">Close ✕</button>
@@ -585,7 +598,6 @@
       setTimeout(()=>toast.classList.remove('show'), 3200);
     }
 
-    /* Lightbox + Quote + Visit (unchanged behavior) */
     (function(){
       const lb = document.querySelector('.lightbox');
       if (!lb) return;
@@ -641,7 +653,7 @@
       addEventListener('resize', fitLightbox, { passive:true });
       addEventListener('orientationchange', fitLightbox, { passive:true });
 
-      // Quote modal
+      // Quote
       const quoteModal = document.getElementById('quoteModal');
       const quoteForm  = document.getElementById('quoteForm');
       const cancelQuote = document.getElementById('cancelQuote');
@@ -693,7 +705,7 @@
         }
       });
 
-      // Site Visit modal
+      // Site Visit
       const visitModal = document.getElementById('visitModal');
       const visitForm = document.getElementById('visitForm');
       const cancelVisit = document.getElementById('cancelVisit');
@@ -742,7 +754,7 @@
         }
       });
 
-      // FAQ: open if linked via hash (e.g., #q-process)
+      // Open specific FAQ item by hash
       if (location.hash) {
         const el = document.querySelector(location.hash);
         if (el && el.tagName === 'DETAILS') {
@@ -760,17 +772,7 @@
 
     })();
 
-    // Improve --vh with visualViewport chrome show/hide
-    if (window.visualViewport) {
-      const updateVh = () => {
-        document.documentElement.style.setProperty('--vh', (visualViewport.height * 0.01) + 'px');
-      };
-      visualViewport.addEventListener('resize', updateVh, { passive:true });
-      visualViewport.addEventListener('scroll', updateVh, { passive:true });
-      updateVh();
-    }
-
-    // === Sections drawer logic ===
+    // Sections drawer
     (function(){
       const btn = document.getElementById('sectionsBtn');
       const drawer = document.getElementById('sectionsDrawer');
