@@ -64,12 +64,17 @@
     .hero-copy p{color:var(--muted); margin:0 0 14px}
     .cta{display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700}
 
-    @media (max-width:900px){.hero{grid-template-columns:1fr}}
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr}
+      /* Mobile-only: lock a clean ratio; center crop */
+      .hero-card{ aspect-ratio:3/2; min-height:220px; }
+      .hero-card img{ width:100%; height:100% !important; object-fit:cover; object-position:center; }
+    }
 
     /* ===== PORTFOLIO ===== */
     .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gap); align-items:start }
     .card{ grid-column:span 6; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative; align-self:start }
-    .card img{ width:100%; height:auto; display:block }
+    .card img{ width:100%; height:auto; display:block; cursor:zoom-in }
     .cap{ position:absolute; left:0; right:0; bottom:0; max-width:100%; box-sizing:border-box; padding:12px 14px; background:linear-gradient(180deg, transparent, rgba(0,0,0,.65)); color:#fff; font-size:clamp(11px,2.8vw,15px); line-height:1.3; letter-spacing:.2px; overflow-wrap:anywhere; pointer-events:none }
     .chip{ display:inline-block; padding:.25rem .6rem; border:1px solid color-mix(in oklab, #fff 35%, transparent); border-radius:999px; font-size:.8em; opacity:.9 }
 
@@ -78,15 +83,28 @@
     footer{margin-top:clamp(28px,6vw,64px); padding:24px 0 40px; color:var(--muted); border-top:1px solid color-mix(in oklab, var(--fg) 10%, transparent)}
     .footer-grid{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px}
     .social a{color:var(--muted)}
-    .card img{cursor:zoom-in}
     .card a.zoom{display:block; touch-action:manipulation}
 
     /* Lightbox + Purchase */
-    .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.95); display:none; align-items:center; justify-content:center; z-index:9999; padding: calc(var(--safe-top) + 48px) 16px calc(var(--safe-bottom) + 96px); overscroll-behavior: contain; overflow:auto; }
+    .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.95); display:none; align-items:center; justify-content:center; z-index:9999; padding: calc(env(safe-area-inset-top,0px) + 48px) 16px calc(env(safe-area-inset-bottom,0px) + 96px); overscroll-behavior:contain; overflow:auto; }
     .lightbox.open{display:flex}
-    .lightbox img{ max-width: calc(100vw - 32px); max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 160px); width:auto; height:auto; object-fit: contain; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); display:block; }
-    .lightbox .close{ position:fixed; top: max(12px, var(--safe-top) + 8px); right: max(12px, env(safe-area-inset-right,0px) + 8px); background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.3); color:#fff; padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:700 }
-    .buy{ position:fixed; left:50%; transform:translateX(-50%); bottom: max(12px, var(--safe-bottom) + 12px); background:#fff; color:#000; border:none; border-radius:999px; padding:10px 16px; font-weight:800; cursor:pointer; box-shadow:0 10px 30px rgba(0,0,0,.4) }
+    .lightbox img{
+      object-fit:contain !important;
+      width:auto !important; height:auto !important;
+      max-width: calc(100vw - 32px) !important;
+      max-height: calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 160px) !important;
+      border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); display:block;
+    }
+    @supports (height: 100svh){
+      .lightbox img{ max-height: calc(100svh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 160px) !important; }
+    }
+    @supports not (height: 100dvh){
+      @supports not (height: 100svh){
+        .lightbox img{ max-height: calc(var(--vh) * 100 - 160px) !important; }
+      }
+    }
+    .lightbox .close{ position:fixed; top: max(12px, env(safe-area-inset-top,0px) + 8px); right: max(12px, env(safe-area-inset-right,0px) + 8px); background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.3); color:#fff; padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:700 }
+    .buy{ position:fixed; left:50%; transform:translateX(-50%); bottom: max(12px, env(safe-area-inset-bottom,0px) + 12px); background:#fff; color:#000; border:none; border-radius:999px; padding:10px 16px; font-weight:800; cursor:pointer; box-shadow:0 10px 30px rgba(0,0,0,.4) }
     body.no-scroll{overflow:hidden}
 
     /* Shared modal styles (quote + site visit) */
@@ -118,128 +136,23 @@
     details[open] .caret{ transform:rotate(90deg) }
     .faq small.muted{ color:var(--muted) }
 
-    /* ------- Responsive/mobile refinements (ADDED) ------- */
-    :root{
-      --safe-top: env(safe-area-inset-top, 0px);
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
-    }
+    /* Mobile polish */
+    :root{ --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px); }
     header{ padding-top: max(0px, var(--safe-top)/2); }
     footer{ padding-bottom: max(24px, var(--safe-bottom)); }
-
-    /* HERO: lock aspect ratio and avoid weird crops on mobile */
-    .hero-card{
-      aspect-ratio: 3 / 2;           /* predictable height on phones */
-      min-height: 220px;             /* floor for very small screens */
-    }
-    .hero-card img{ width:100%; height:100% !important; object-fit: cover; }
-
-    /* Use modern viewport units when available; fall back to your --vh */
-    @supports (height: 100dvh){
-      .lightbox img{ max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 160px); }
-    }
-    @supports (height: 100svh){
-      .lightbox img{ max-height: calc(100svh - var(--safe-top) - var(--safe-bottom) - 160px); }
-    }
-    @supports not (height: 100dvh){
-      @supports not (height: 100svh){
-        .lightbox img{ max-height: calc(var(--vh) * 100 - 160px); }
-      }
-    }
-    } /* room for buttons */
-    }
-    @supports not (height: 100svh){
-      .lightbox img{ max-height: calc(var(--vh) * 100 - 96px); }
-    }
-
-    /* Tighter wrappers on small screens */
-    @media (max-width: 600px){
-      .wrap{ padding-inline: clamp(14px, 4vw, 22px); }
-    }
-
-    /* NAV: prevent overflow / wrapping weirdness */
+    @media (max-width: 600px){ .wrap{ padding-inline: clamp(14px, 4vw, 22px); } }
     .links{ flex-wrap: wrap; row-gap: 8px; }
     @media (max-width: 520px){
-      .links{
-        overflow-x: auto;
-        white-space: nowrap;
-        gap: 14px;
-        -webkit-overflow-scrolling: touch;
-      }
+      .links{ overflow-x:auto; white-space:nowrap; gap:14px; -webkit-overflow-scrolling:touch; }
       .links a{ flex:0 0 auto; }
     }
-
-    /* GRID: simpler columns on mobile; perfect edges, no squish */
-    @media (max-width: 900px){
-      .grid{ grid-template-columns: repeat(6, 1fr); } /* 2-up */
-      .card{ grid-column: span 3; }
-    }
+    @media (max-width: 900px){ .grid{ grid-template-columns: repeat(6, 1fr); } .card{ grid-column: span 3; } }
     @media (max-width: 680px){
-      .grid{ grid-template-columns: repeat(4, 1fr); } /* 1-up */
+      .grid{ grid-template-columns: repeat(4, 1fr); }
       .card{ grid-column: span 4; }
+      .cap{ padding:14px 16px; font-size: clamp(12px, 3.6vw, 15px); background: linear-gradient(180deg, transparent 0, rgba(0,0,0,.65) 40%); }
     }
-
-    /* Caption readability on small screens */
-    @media (max-width: 680px){
-      .cap{
-        padding: 14px 16px;
-        font-size: clamp(12px, 3.6vw, 15px);
-        background: linear-gradient(180deg, transparent 0, rgba(0,0,0,.65) 40%);
-      }
-    }
-
-    /* FAQ tap targets + smoother caret on mobile */
-    .faq summary{ padding: 16px; -webkit-tap-highlight-color: transparent; }
-    .faq .caret{ transform-origin: 50% 55%; }
-
-    /* Inputs already 16px; make sure dialogs don’t hit the notch */
-    .modal-card{ margin-top: max(0px, var(--safe-top)); margin-bottom: max(0px, var(--safe-bottom)); }
-
-    /* Prevent accidental horizontal scroll due to 100vw images on iOS */
     html, body{ overflow-x: hidden; }
-  
-    /* --- LIGHTBOX: ensure full image fits within screen on mobile --- */
-    .lightbox{
-      padding-top: calc(var(--safe-top) + 8px);
-      padding-bottom: calc(var(--safe-bottom) + 110px); /* room for buy button */
-      padding-left: 16px; padding-right:16px;
-    }
-    .lightbox .close{ top: calc(16px + var(--safe-top)); }
-    .buy{ bottom: calc(16px + var(--safe-bottom)); }
-
-    /* Contain image within viewport and keep aspect without cropping */
-    .lightbox img{
-      width: auto;
-      height: auto;
-      max-width: calc(100vw - 32px);
-      object-fit: contain;
-    }
-    @supports (height: 100svh){
-      .lightbox img{ max-height: calc(100svh - var(--safe-top) - var(--safe-bottom) - 140px); }
-    }
-    @supports (height: 100dvh){
-      .lightbox img{ max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 140px); }
-    }
-    @supports not (height: 100svh){
-      .lightbox img{ max-height: calc(var(--vh) * 100 - var(--safe-top) - var(--safe-bottom) - 140px); }
-    }
-
-    /* Prevent background content peeking around edges while image is centered */
-    .lightbox{ align-items:center; justify-content:center; }
-
-    </style>
-
-  <!-- Override CSS for mobile/lightbox (append) -->
-  <style id="android-fixes">
-    /* Ensure hero ratio only on mobile, avoid tall crop on desktop */
-    @media (min-width:901px){ .hero-card{ aspect-ratio:auto !important; } .hero-card img{ height:auto !important; } }
-    @media (max-width:900px){ .hero-card{ aspect-ratio:3/2 !important; } .hero-card img{ height:100% !important; object-fit:cover; } }
-
-    /* Lightbox containment and safe areas */
-    .lightbox{ overflow:auto; }
-    .lightbox img{ object-fit:contain !important; width:auto !important; height:auto !important; max-width:calc(100vw - 32px) !important; }
-    @supports (height: 100dvh){ .lightbox img{ max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 160px) !important; } }
-    @supports (height: 100svh){ .lightbox img{ max-height: calc(100svh - var(--safe-top) - var(--safe-bottom) - 160px) !important; } }
-    @supports not (height: 100dvh){ @supports not (height: 100svh){ .lightbox img{ max-height: calc(var(--vh) * 100 - 160px) !important; } } }
   </style>
 
   <script type="application/ld+json">
@@ -291,7 +204,7 @@
         <a href="#about">About</a>
         <a href="#awards">Awards</a>
         <a href="#consult">Consult</a>
-        <a href="#faq">FAQ</a><!-- NEW -->
+        <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
       </nav>
     </div>
@@ -303,7 +216,7 @@
       <figure class="hero-card" aria-label="Featured photograph">
         <img src="/images/a-journey-to-the-unknown.png" alt="A Journey to The Unknown"
              width="1600" height="1067" fetchpriority="high" decoding="async" loading="eager"
-             sizes="(max-width: 900px) 100vw, 60vw" style="display:block;width:100%" />
+             sizes="(max-width: 900px) 100vw, 60vw" style="display:block;width:100%">
       </figure>
       <div class="hero-copy">
         <h2>Quiet light. Honest places.</h2>
@@ -422,7 +335,7 @@
       </div>
     </section>
 
-    <!-- ===== FAQ (NEW) ===== -->
+    <!-- ===== FAQ ===== -->
     <section id="faq" class="faq" aria-label="Frequently Asked Questions">
       <h3>FAQ</h3>
       <div class="faq-list">
@@ -563,7 +476,7 @@
     </form>
   </div>
 
-  <!-- Site visit dialog (new) -->
+  <!-- Site visit dialog -->
   <div class="modal" id="visitModal" role="dialog" aria-modal="true" aria-labelledby="visit-title" aria-hidden="true">
     <form class="modal-card" id="visitForm">
       <h3 id="visit-title">Request a Site Visit</h3>
@@ -589,9 +502,9 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    // dynamic --vh for mobile
+    // dynamic --vh for mobile (prefers visualViewport when available)
     function setVh(){
-      const h = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
+      var h = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
       document.documentElement.style.setProperty('--vh', (h * 0.01) + 'px');
     }
     setVh(); addEventListener('resize', setVh); addEventListener('orientationchange', setVh);
@@ -634,6 +547,11 @@
       let lastFocus = null;
       let currentPhoto = { src:'', title:'' };
 
+      function fitLightbox(){
+        const vb = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
+        lbImg.style.maxHeight = (vb - 160) + 'px';
+      }
+
       function openLightbox(src, title){
         lastFocus = document.activeElement;
         document.body.classList.add('no-scroll');
@@ -652,7 +570,6 @@
         closeBtn.focus();
         fitLightbox();
       }
-      }
       function closeLightbox(){
         lb.classList.remove('open');
         lbImg.src = '';
@@ -661,35 +578,20 @@
         if (lastFocus) lastFocus.focus();
       }
 
-      // Wrap grid images with links to open lightbox
+      // Open by tapping any grid image (reliable on Samsung/Chrome)
       document.querySelectorAll('.card img').forEach(img => {
-        if (!img.parentElement || !img.parentElement.matches('a.zoom')){
-          const a = document.createElement('a');
-          a.href = img.src;
-          a.className = 'zoom';
-          a.setAttribute('role','button');
-          img.replaceWith(a); a.appendChild(img);
-        }
-      });
-      document.querySelectorAll('.card a.zoom').forEach(a => {
-        a.addEventListener('click', (e) => {
+        img.addEventListener('click', (e) => {
           e.preventDefault();
-          const img = a.querySelector('img');
-          openLightbox(img.src, img.alt || '');
+          const src = img.currentSrc || img.src;
+          openLightbox(src, img.alt || '');
         }, { passive:false });
       });
 
       closeBtn.addEventListener('click', closeLightbox, { passive:true });
       lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLightbox(); }, { passive:true });
       addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLightbox(); }, { passive:true });
-
-      // Refit image on viewport changes while lightbox is open
-      function fitLightbox(){
-        const vb = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
-        lbImg.style.maxHeight = (vb - 160) + 'px';
-      }
       addEventListener('resize', fitLightbox, { passive:true });
-      addEventListener('orientationchange', fitLightbox, { passive:true }); }, { passive:true });
+      addEventListener('orientationchange', fitLightbox, { passive:true });
 
       // Quote modal hooks
       const quoteModal = document.getElementById('quoteModal');
@@ -743,7 +645,7 @@
         }
       });
 
-      // === Site Visit modal (NEW) ===
+      // Site Visit modal
       const visitModal = document.getElementById('visitModal');
       const visitForm = document.getElementById('visitForm');
       const cancelVisit = document.getElementById('cancelVisit');
@@ -809,10 +711,8 @@
       }, { passive:true });
 
     })();
-  </script>
 
-  <!-- iOS visualViewport hook for steadier --vh on mobile (ADDED) -->
-  <script>
+    // Improve --vh updates when browser chrome shows/hides
     if (window.visualViewport) {
       const updateVh = () => {
         document.documentElement.style.setProperty('--vh', (visualViewport.height * 0.01) + 'px');
@@ -820,33 +720,7 @@
       visualViewport.addEventListener('resize', updateVh, { passive:true });
       visualViewport.addEventListener('scroll', updateVh, { passive:true });
       updateVh();
-    };
-      visualViewport.addEventListener('resize', updateVh, { passive:true });
-      visualViewport.addEventListener('scroll', updateVh, { passive:true });
     }
-  </script>
-  <!-- Force-bind click handler for images on Android -->
-  <script>
-    (function(){
-      var imgs = document.querySelectorAll('.card img');
-      function attach(){
-        imgs.forEach(function(img){
-          if (img.__lbBound) return; img.__lbBound = true;
-          img.style.cursor = 'zoom-in';
-          img.addEventListener('click', function(e){
-            e.preventDefault();
-            var src = img.currentSrc || img.src;
-            if (typeof openLightbox === 'function') {
-              openLightbox(src, img.alt || '');
-            } else {
-              // fallback: trigger original handler by clicking parent if exists
-              var p = img.closest('a'); if (p) p.click();
-            }
-          }, {passive:false});
-        });
-      }
-      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', attach); else attach();
-    })();
   </script>
 </body>
 </html>
