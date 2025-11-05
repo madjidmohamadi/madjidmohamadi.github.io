@@ -466,8 +466,6 @@
           <h3 style="margin-top:0">Request a Site Visit</h3>
           <label>Name<br><input name="name" required style="width:100%"></label><br>
           <label>Email<br><input name="email" type="email" required style="width:100%"></label><br>
-          <label>Phone<br><input name="phone" required style="width:100%"></label><br>
-          <label>Address<br><input name="address" required style="width:100%"></label><br>
           <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:8px">
             <button type="button" id="cancelVisit">Cancel</button>
             <button type="submit">Confirm</button>
@@ -484,8 +482,7 @@
       try {
         // ✅ Your current IDs — keep if they match your EmailJS dashboard
         await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', data); // to YOU
-        await emailjs.send('service_5n0g1j5', 'template_yb845wt', data); // confirmation to USER
-        alert('Your request was sent! You’ll get a confirmation email soon.');
+        alert('Your request was sent! we’ll get back to you very soon.');
       } catch(err){
         alert('Something went wrong. Please try again later.');
       }
@@ -495,6 +492,7 @@
 </script>
 </body>
 </html>
+
 
 
 
