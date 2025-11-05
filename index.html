@@ -65,8 +65,7 @@
       display:grid;
       grid-template-columns:repeat(12,1fr);
       gap:var(--gap);
-      /* 👇 prevent items from stretching to the tallest row */
-      align-items:start;
+      align-items:start; /* prevent equal-height rows stretching cards */
     }
     .card{
       grid-column:span 6;
@@ -75,7 +74,6 @@
       box-shadow:var(--shadow);
       overflow:hidden;
       position:relative;
-      /* 👇 ensure each card hugs its content height */
       align-self:start;
     }
 
@@ -100,11 +98,26 @@
     .card img{cursor:zoom-in}
     .card a.zoom{display:block; touch-action: pan-y;}
 
-    /* Lightbox overlay */
-    .lightbox{position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:9999}
+    /* ===== Lightbox overlay (mobile-friendly full screen) ===== */
+    .lightbox{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.95);
+      display:none; align-items:center; justify-content:center;
+      z-index:9999;
+    }
     .lightbox.open{display:flex}
-    .lightbox img{max-width:90vw; max-height:90vh; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6)}
-    .lightbox .close{position:absolute; top:20px; right:20px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.3); color:#fff; padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:700}
+    .lightbox img{
+      max-width:100vw;
+      max-height:100dvh; /* dynamic viewport height for Android/iOS */
+      border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      display:block;
+    }
+    .lightbox .close{
+      position:absolute; top:16px; right:16px;
+      background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.3);
+      color:#fff; padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:700
+    }
     body.no-scroll{overflow:hidden}
 
     /* A11y helpers */
@@ -260,7 +273,7 @@
           <strong>LensCulture Art Photography Awards</strong> — Featured and nominated for outstanding work in art photography. <a href="https://www.lensculture.com/photo-competitions/art-photography-awards/2022" target="_blank" rel="noopener">View</a>
         </li>
         <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-          <strong>Kimia Photo Festival</strong> — Won first prize for creative photography. <a href="https://www.mehrnews.com/news/4463154/%D8%A7%D8%B9%D9%84%D8%A7%D9%85-%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B9%DA%A9%D8%B3-%D9%85%D8%B9%D8%AF%D9%86-%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D8%B3%D9%84%D8%A7%D9%85%DB%8C-%D8%B1%D8%A7%D8%AF-%D9%86%D8%B4%D8%A7%D9%86-%DA%A9%DB%8C%D9%85%DB%8C%D8%A7" target="_blank" rel="noopener">View</a>
+          <strong>Kimia Photo Festival</strong> — Won first prize for creative photography. <a href="https://www.mehrnews.com/news/4463154/%D8%A7%D8%B9%D9%84%D8%A7%D9%85-%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B9%DA%A9%D8%B3-%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D8%B3%D9%84%D8%A7%D9%85%DB%8C-%D8%B1%D8%A7%D8%AF-%D9%86%D8%B4%D8%A7%D9%86-%DA%A9%DB%8C%D9%85%DB%8C%D8%A7" target="_blank" rel="noopener">View</a>
         </li>
         <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
           <strong>Blank Wall Gallery</strong> — Received an honor diploma for excellence in fine art photography. <a href="https://www.blankwallgallery.com/majid-mohammadi-iran-untitled/" target="_blank" rel="noopener">View</a>
@@ -299,7 +312,7 @@
           <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin-top:0">Contact</h3>
           <p style="color:var(--muted); margin:0 0 12px">For print inquiries, commissions, or exhibitions:</p>
           <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:madjid.mohamadi@gmail.com">madjid.mohamadi@gmail.com</a></p>
-          <p style="margin:0 0 6px"><strong>Instagram:</strong> <a href="https://www.instagram.com/madjidmohamadi" target="_blank" rel="noopener">@madjidmohammadi</a></p>
+          <p style="margin:0 0 6px"><strong>Instagram:</strong> <a href="https://www.instagram.com/madjidmohamadi" target="_blank" rel="noopener">@madjidmohamadi</a></p>
         </div>
         <div style="grid-column: span 4; text-align:center; color:var(--muted)">
           <p style="margin:6px 0 0">© <span id="year"></span> By Majid. All rights reserved.</p>
@@ -330,7 +343,7 @@
   // Copyright year
   const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
 
-  // Simple lightbox with a11y improvements (tap-aware)
+  // Simple lightbox with a11y improvements
   (function(){
     const lb = document.querySelector('.lightbox');
     if (!lb) return;
@@ -377,42 +390,14 @@
       }
     });
 
-    // Tap detection to prevent accidental opens during scroll
-    const TAP_MOVE_THR = 10;   // px
-    const TAP_TIME_THR = 500;  // ms
-
+    // ✅ Open lightbox on click (works for mouse + touch/Android)
     document.querySelectorAll('.card a.zoom').forEach(a => {
-      let startX=0, startY=0, startT=0, startType='';
-
-      a.addEventListener('pointerdown', (e) => {
-        startX = e.clientX; startY = e.clientY; startT = Date.now(); startType = e.pointerType || 'mouse';
-      }, { passive:true });
-
-      a.addEventListener('pointerup', (e) => {
-        const dx = Math.abs(e.clientX - startX);
-        const dy = Math.abs(e.clientY - startY);
-        const dt = Date.now() - startT;
-        const isTouch = (e.pointerType === 'touch' || startType === 'touch');
-        const isTap = dx < TAP_MOVE_THR && dy < TAP_MOVE_THR && dt < TAP_TIME_THR;
-
-        if (isTouch) {
-          if (isTap) {
-            e.preventDefault();
-            const img = a.querySelector('img');
-            const src = (img && img.src) || a.href;
-            openLightbox(src);
-          }
-        }
-      }, { passive:false });
-
-      // For mouse/pen clicks, open normally via click
       a.addEventListener('click', (e) => {
-        if (startType === 'touch') return; // ignore synthetic click after touch
         e.preventDefault();
         const img = a.querySelector('img');
         const src = (img && img.src) || a.href;
         openLightbox(src);
-      }, { passive:false });
+      });
     });
 
     // Close interactions
