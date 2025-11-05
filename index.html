@@ -82,9 +82,9 @@
     .card a.zoom{display:block; touch-action:manipulation}
 
     /* Lightbox + Purchase */
-    .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.95); display:none; align-items:center; justify-content:center; z-index:9999; padding: calc(var(--safe-top) + 48px) 16px calc(var(--safe-bottom) + 96px); overscroll-behavior: contain; }
+    .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.95); display:none; align-items:center; justify-content:center; z-index:9999; padding: calc(var(--safe-top) + 48px) 16px calc(var(--safe-bottom) + 96px); overscroll-behavior: contain; overflow:auto; }
     .lightbox.open{display:flex}
-    .lightbox img{ max-width: calc(100vw - 32px); max-height: calc(var(--vh) * 100 - 140px); width:auto; height:auto; object-fit: contain; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); display:block; }
+    .lightbox img{ max-width: calc(100vw - 32px); max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 160px); width:auto; height:auto; object-fit: contain; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); display:block; }
     .lightbox .close{ position:fixed; top: max(12px, var(--safe-top) + 8px); right: max(12px, env(safe-area-inset-right,0px) + 8px); background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.3); color:#fff; padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:700 }
     .buy{ position:fixed; left:50%; transform:translateX(-50%); bottom: max(12px, var(--safe-bottom) + 12px); background:#fff; color:#000; border:none; border-radius:999px; padding:10px 16px; font-weight:800; cursor:pointer; box-shadow:0 10px 30px rgba(0,0,0,.4) }
     body.no-scroll{overflow:hidden}
@@ -134,8 +134,17 @@
     .hero-card img{ width:100%; height:100% !important; object-fit: cover; }
 
     /* Use modern viewport units when available; fall back to your --vh */
+    @supports (height: 100dvh){
+      .lightbox img{ max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 160px); }
+    }
     @supports (height: 100svh){
-      .lightbox img{ max-height: calc(100svh - 140px - var(--safe-top) - var(--safe-bottom)); }
+      .lightbox img{ max-height: calc(100svh - var(--safe-top) - var(--safe-bottom) - 160px); }
+    }
+    @supports not (height: 100dvh){
+      @supports not (height: 100svh){
+        .lightbox img{ max-height: calc(var(--vh) * 100 - 160px); }
+      }
+    }
     } /* room for buttons */
     }
     @supports not (height: 100svh){
@@ -617,18 +626,18 @@
         lb.classList.add('open');
         if (main) main.setAttribute('aria-hidden','true');
 
-        lb.scrollTop = 0; // ensure top of lightbox on open
-
         lbImg.alt = title || '';
         currentPhoto = { src, title: title || '' };
 
         lbImg.src = '';
         const pre = new Image();
-        pre.onload = () => { lbImg.src = src; };
-        pre.onerror = () => { lbImg.src = src; };
+        pre.onload = () => { lbImg.src = src; fitLightbox(); };
+        pre.onerror = () => { lbImg.src = src; fitLightbox(); };
         pre.src = src;
 
         closeBtn.focus();
+        fitLightbox();
+      }
       }
       function closeLightbox(){
         lb.classList.remove('open');
@@ -659,6 +668,14 @@
       closeBtn.addEventListener('click', closeLightbox, { passive:true });
       lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLightbox(); }, { passive:true });
       addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLightbox(); }, { passive:true });
+
+      // Refit image on viewport changes while lightbox is open
+      function fitLightbox(){
+        const vb = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
+        lbImg.style.maxHeight = (vb - 160) + 'px';
+      }
+      addEventListener('resize', fitLightbox, { passive:true });
+      addEventListener('orientationchange', fitLightbox, { passive:true }); }, { passive:true });
 
       // Quote modal hooks
       const quoteModal = document.getElementById('quoteModal');
