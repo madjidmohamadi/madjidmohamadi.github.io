@@ -812,9 +812,118 @@
         toggleDrawer(false);
       }, { passive:true });
     })();
+    <script>
+  // Open the right collapsible when the hash changes (or on load)
+  (function () {
+    function closeAllTopLevel() {
+      document.querySelectorAll('section details.collapsible[open]')
+        .forEach(d => d.removeAttribute('open'));
+    }
+
+    function openSectionForHash(hash) {
+      if (!hash) return;
+
+      // If user targets a specific FAQ item (e.g., #q-paper)
+      const maybeDetails = document.querySelector(hash);
+      if (maybeDetails && maybeDetails.tagName === 'DETAILS') {
+        // Ensure parent FAQ section opens
+        const faqSection = document.getElementById('faq');
+        if (faqSection) {
+          const faqTop = faqSection.querySelector('details.collapsible');
+          if (faqTop) faqTop.setAttribute('open', '');
+        }
+        // Open the specific FAQ item
+        maybeDetails.setAttribute('open', '');
+        maybeDetails.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+
+      // Otherwise, assume a top-level <section id="...">
+      const section = document.querySelector(hash);
+      if (!section) return;
+
+      const top = section.querySelector('details.collapsible');
+      closeAllTopLevel();
+      if (top) top.setAttribute('open', '');
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Handle initial load (if URL already has a hash)
+    if (location.hash) openSectionForHash(location.hash);
+
+    // Handle future hash changes (clicking menu items, etc.)
+    window.addEventListener('hashchange', () => openSectionForHash(location.hash), { passive: true });
+
+    // Also intercept clicks inside the sections drawer to avoid any race conditions
+    const drawer = document.getElementById('sectionsDrawer');
+    if (drawer) {
+      drawer.addEventListener('click', (e) => {
+        const a = e.target.closest('a[href^="#"]');
+        if (!a) return;
+        // Let the hash update first, then open the right section
+        // (microtask delay ensures location.hash is updated)
+        Promise.resolve().then(() => openSectionForHash(a.getAttribute('href')));
+      }, { passive: true });
+    }
+  })();
+<script>
+  // Open the right collapsible when the hash changes (or on load)
+  (function () {
+    function closeAllTopLevel() {
+      document.querySelectorAll('section details.collapsible[open]')
+        .forEach(d => d.removeAttribute('open'));
+    }
+
+    function openSectionForHash(hash) {
+      if (!hash) return;
+
+      // If user targets a specific FAQ item (e.g., #q-paper)
+      const maybeDetails = document.querySelector(hash);
+      if (maybeDetails && maybeDetails.tagName === 'DETAILS') {
+        // Ensure parent FAQ section opens
+        const faqSection = document.getElementById('faq');
+        if (faqSection) {
+          const faqTop = faqSection.querySelector('details.collapsible');
+          if (faqTop) faqTop.setAttribute('open', '');
+        }
+        // Open the specific FAQ item
+        maybeDetails.setAttribute('open', '');
+        maybeDetails.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+
+      // Otherwise, assume a top-level <section id="...">
+      const section = document.querySelector(hash);
+      if (!section) return;
+
+      const top = section.querySelector('details.collapsible');
+      closeAllTopLevel();
+      if (top) top.setAttribute('open', '');
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Handle initial load (if URL already has a hash)
+    if (location.hash) openSectionForHash(location.hash);
+
+    // Handle future hash changes (clicking menu items, etc.)
+    window.addEventListener('hashchange', () => openSectionForHash(location.hash), { passive: true });
+
+    // Also intercept clicks inside the sections drawer to avoid any race conditions
+    const drawer = document.getElementById('sectionsDrawer');
+    if (drawer) {
+      drawer.addEventListener('click', (e) => {
+        const a = e.target.closest('a[href^="#"]');
+        if (!a) return;
+        // Let the hash update first, then open the right section
+        // (microtask delay ensures location.hash is updated)
+        Promise.resolve().then(() => openSectionForHash(a.getAttribute('href')));
+      }, { passive: true });
+    }
+  })();
   </script>
 </body>
 </html>
+
 
 
 
