@@ -41,7 +41,7 @@
     a:hover{opacity:.9}
     .wrap{max-width:var(--maxw); margin-inline:auto; padding:clamp(16px,4vw,32px)}
 
-    /* Accessible "Skip to content" — hidden unless focused */
+    /* Skip link (hidden until focused) */
     .skip-link{
       position:fixed; left:8px; top:8px; z-index:10000;
       transform:translateY(-200%); transition:transform .2s ease;
@@ -117,7 +117,7 @@
   </script>
 </head>
 <body>
-  <!-- Skip link (hidden until focused) -->
+  <!-- Hidden until focused -->
   <a href="#home" class="skip-link">Skip to content</a>
 
   <header id="siteHeader">
@@ -317,11 +317,11 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    // update --vh for mobile UI chrome changes
+    // --vh for mobile browser chrome
     function setVh(){ document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px'); }
     setVh(); addEventListener('resize', setVh); addEventListener('orientationchange', setVh);
 
-    // sticky header height for anchor offset
+    // sticky header offset for anchors
     function setHeaderOffset(){
       const h = document.getElementById('siteHeader');
       if(!h) return;
@@ -330,7 +330,7 @@
     }
     setHeaderOffset(); addEventListener('resize', setHeaderOffset);
 
-    // copyright year
+    // Copyright year
     const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
 
     // EmailJS init
@@ -377,7 +377,7 @@
         if (lastFocus) lastFocus.focus();
       }
 
-      // wrap grid images so taps open lightbox
+      // Wrap grid images to open lightbox (fixes Android/iOS taps)
       document.querySelectorAll('.card img').forEach(img => {
         if (!img.parentElement || !img.parentElement.matches('a.zoom')){
           const a = document.createElement('a');
@@ -431,12 +431,23 @@
       cancelQuote.addEventListener('click', ()=> closeQuote(), { passive:true });
       modal.addEventListener('click', (e)=>{ if(e.target===modal) closeQuote(); }, { passive:true });
 
+      // ✅ Send with EmailJS variables that your template expects
       form.addEventListener('submit', async (e)=>{
         e.preventDefault();
-        const data = Object.fromEntries(new FormData(form).entries());
-        data.subject = 'Quote Request — bymajid.com';
+        const fd = Object.fromEntries(new FormData(form).entries());
+        const params = {
+          from_email: fd.email,
+          reply_to: fd.email,
+          message: fd.note || '',
+          photo_title: fd.photo_title || currentPhoto.title || '',
+          photo_src: fd.photo_src || currentPhoto.src || '',
+          page_url: location.href,
+          user_agent: navigator.userAgent,
+          timestamp: new Date().toISOString(),
+          subject: 'Quote Request — bymajid.com'
+        };
         try{
-          await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', data);
+          await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', params);
           closeQuote();
           close();
           showToast('Your quote request has been sent, we reach back to you with a quote as soon as possible.');
@@ -445,6 +456,75 @@
           showToast('Something went wrong. Please try again.');
         }
       });
+    })();
+
+    // === Site Visit booking (popup) ===
+    (function(){
+      const btns = document.querySelectorAll('.js-book-visit');
+      if (!btns.length) return;
+
+      btns.forEach(b=>{
+        b.addEventListener('click', (e)=>{
+          e.preventDefault();
+          openSiteVisitPopup();
+        }, { passive:false });
+      });
+
+      function openSiteVisitPopup(){
+        const modal = document.createElement('div');
+        modal.className = 'quote-modal open';
+        modal.setAttribute('role','dialog');
+        modal.setAttribute('aria-modal','true');
+        modal.innerHTML = `
+          <form class="quote-card" id="visitForm">
+            <h3>Request a Site Visit</h3>
+            <label for="visit_name">Your Name</label>
+            <input id="visit_name" name="name" required autocomplete="name">
+            <label for="visit_email">Your Email</label>
+            <input id="visit_email" name="email" type="email" inputmode="email" autocomplete="email" required>
+            <div class="quote-actions">
+              <button type="button" class="btn cancel" id="cancelVisit">Cancel</button>
+              <button type="submit" class="btn submit">Submit</button>
+            </div>
+          </form>
+        `;
+        document.body.appendChild(modal);
+
+        const close = ()=> modal.remove();
+
+        modal.addEventListener('click', (e)=>{ if (e.target === modal) close(); }, {passive:true});
+        modal.querySelector('#cancelVisit').addEventListener('click', close, {passive:true});
+
+        modal.querySelector('#visitForm').addEventListener('submit', async (e)=>{
+          e.preventDefault();
+          const fd = Object.fromEntries(new FormData(e.target).entries());
+          const params = {
+            from_name:  fd.name,
+            from_email: fd.email,
+            message:    'New on-site consultation request',
+            subject:    'Site Visit Request — bymajid.com',
+            page_url:   location.href,
+            timestamp:  new Date().toISOString()
+          };
+          try{
+            await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', params);
+            close();
+            const toast = document.getElementById('toast');
+            if (toast){
+              toast.textContent = 'Thanks! We’ll reply within 24 hours.';
+              toast.classList.add('show');
+              setTimeout(()=>toast.classList.remove('show'), 3000);
+            } else {
+              alert('Thanks! We’ll reply within 24 hours.');
+            }
+          }catch(err){
+            alert('Something went wrong. Please try again later.');
+          }
+        });
+
+        const first = modal.querySelector('#visit_name');
+        if (first) first.focus();
+      }
     })();
   </script>
 </body>
