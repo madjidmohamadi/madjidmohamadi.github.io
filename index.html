@@ -228,6 +228,20 @@
 
     </style>
 
+  <!-- Override CSS for mobile/lightbox (append) -->
+  <style id="android-fixes">
+    /* Ensure hero ratio only on mobile, avoid tall crop on desktop */
+    @media (min-width:901px){ .hero-card{ aspect-ratio:auto !important; } .hero-card img{ height:auto !important; } }
+    @media (max-width:900px){ .hero-card{ aspect-ratio:3/2 !important; } .hero-card img{ height:100% !important; object-fit:cover; } }
+
+    /* Lightbox containment and safe areas */
+    .lightbox{ overflow:auto; }
+    .lightbox img{ object-fit:contain !important; width:auto !important; height:auto !important; max-width:calc(100vw - 32px) !important; }
+    @supports (height: 100dvh){ .lightbox img{ max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 160px) !important; } }
+    @supports (height: 100svh){ .lightbox img{ max-height: calc(100svh - var(--safe-top) - var(--safe-bottom) - 160px) !important; } }
+    @supports not (height: 100dvh){ @supports not (height: 100svh){ .lightbox img{ max-height: calc(var(--vh) * 100 - 160px) !important; } } }
+  </style>
+
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -810,6 +824,29 @@
       visualViewport.addEventListener('resize', updateVh, { passive:true });
       visualViewport.addEventListener('scroll', updateVh, { passive:true });
     }
+  </script>
+  <!-- Force-bind click handler for images on Android -->
+  <script>
+    (function(){
+      var imgs = document.querySelectorAll('.card img');
+      function attach(){
+        imgs.forEach(function(img){
+          if (img.__lbBound) return; img.__lbBound = true;
+          img.style.cursor = 'zoom-in';
+          img.addEventListener('click', function(e){
+            e.preventDefault();
+            var src = img.currentSrc || img.src;
+            if (typeof openLightbox === 'function') {
+              openLightbox(src, img.alt || '');
+            } else {
+              // fallback: trigger original handler by clicking parent if exists
+              var p = img.closest('a'); if (p) p.click();
+            }
+          }, {passive:false});
+        });
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', attach); else attach();
+    })();
   </script>
 </body>
 </html>
