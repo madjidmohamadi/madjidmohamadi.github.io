@@ -435,9 +435,68 @@
         window.location.href = mailto;
       });
     }
+     ...
+    window.location.href = mailto;
+  });
+}
+
+// === Book a Site Visit Popup ===
+
+// Include EmailJS SDK
+(function(){
+  const s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js';
+  s.onload = function(){
+    emailjs.init('mK0NVdRoob8JAczNU'); 
+  };
+  document.head.appendChild(s);
+})();
+
+// Add click listener for button or link
+document.querySelectorAll('#bookBtn, .js-book-visit').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    openSiteVisitPopup();
+  });
+});
+
+// Create popup dynamically
+function openSiteVisitPopup() {
+  const modal = document.createElement('div');
+  modal.innerHTML = `
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:9999;">
+      <form id="visitForm" style="background:#fff;color:#000;padding:20px;border-radius:10px;width:90%;max-width:400px;">
+        <h3>Request a Site Visit</h3>
+        <label>Name<br><input name=\"name\" required></label><br>
+        <label>Email<br><input name=\"email\" type=\"email\" required></label><br>
+        <label>Phone<br><input name=\"phone\" required></label><br>
+        <label>Address<br><input name=\"address\" required></label><br>
+        <button type=\"submit\">Confirm</button>
+        <button type=\"button\" id=\"cancelVisit\">Cancel</button>
+      </form>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  modal.querySelector('#cancelVisit').onclick = () => modal.remove();
+  modal.querySelector('#visitForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target).entries());
+    try {
+      await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', data);
+      await emailjs.send('service_5n0g1j5', 'template_yb845wt', data);
+      alert('Your request was sent! You’ll get a confirmation email soon.');
+    } catch(err){
+      alert('Something went wrong. Please try again later.');
+    }
+    modal.remove();
+  };
+}
+
   </script>
 </body>
 </html>
+
 
 
 
