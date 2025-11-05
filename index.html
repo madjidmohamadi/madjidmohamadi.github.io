@@ -131,11 +131,7 @@
       aspect-ratio: 3 / 2;           /* predictable height on phones */
       min-height: 220px;             /* floor for very small screens */
     }
-    .hero-card img{
-      width:100%;
-      height:100%;
-      object-fit: cover;              /* fills card without distortion */
-    }
+    .hero-card img{ width:100%; height:100% !important; object-fit: cover; }
 
     /* Use modern viewport units when available; fall back to your --vh */
     @supports (height: 100svh){
@@ -190,7 +186,37 @@
 
     /* Prevent accidental horizontal scroll due to 100vw images on iOS */
     html, body{ overflow-x: hidden; }
-  </style>
+  
+    /* --- LIGHTBOX: ensure full image fits within screen on mobile --- */
+    .lightbox{
+      padding-top: calc(var(--safe-top) + 8px);
+      padding-bottom: calc(var(--safe-bottom) + 110px); /* room for buy button */
+      padding-left: 16px; padding-right:16px;
+    }
+    .lightbox .close{ top: calc(16px + var(--safe-top)); }
+    .buy{ bottom: calc(16px + var(--safe-bottom)); }
+
+    /* Contain image within viewport and keep aspect without cropping */
+    .lightbox img{
+      width: auto;
+      height: auto;
+      max-width: calc(100vw - 32px);
+      object-fit: contain;
+    }
+    @supports (height: 100svh){
+      .lightbox img{ max-height: calc(100svh - var(--safe-top) - var(--safe-bottom) - 140px); }
+    }
+    @supports (height: 100dvh){
+      .lightbox img{ max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 140px); }
+    }
+    @supports not (height: 100svh){
+      .lightbox img{ max-height: calc(var(--vh) * 100 - var(--safe-top) - var(--safe-bottom) - 140px); }
+    }
+
+    /* Prevent background content peeking around edges while image is centered */
+    .lightbox{ align-items:center; justify-content:center; }
+
+    </style>
 
   <script type="application/ld+json">
   {
@@ -253,7 +279,7 @@
       <figure class="hero-card" aria-label="Featured photograph">
         <img src="/images/a-journey-to-the-unknown.png" alt="A Journey to The Unknown"
              width="1600" height="1067" fetchpriority="high" decoding="async" loading="eager"
-             sizes="(max-width: 900px) 100vw, 60vw" style="display:block;width:100%;height:auto" />
+             sizes="(max-width: 900px) 100vw, 60vw" style="display:block;width:100%" />
       </figure>
       <div class="hero-copy">
         <h2>Quiet light. Honest places.</h2>
@@ -540,7 +566,10 @@
 
   <script>
     // dynamic --vh for mobile
-    function setVh(){ document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px'); }
+    function setVh(){
+      const h = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
+      document.documentElement.style.setProperty('--vh', (h * 0.01) + 'px');
+    }
     setVh(); addEventListener('resize', setVh); addEventListener('orientationchange', setVh);
 
     // anchor offset
@@ -586,6 +615,8 @@
         document.body.classList.add('no-scroll');
         lb.classList.add('open');
         if (main) main.setAttribute('aria-hidden','true');
+
+        lb.scrollTop = 0; // ensure top of lightbox on open
 
         lbImg.alt = title || '';
         currentPhoto = { src, title: title || '' };
@@ -754,6 +785,10 @@
       const updateVh = () => {
         document.documentElement.style.setProperty('--vh', (visualViewport.height * 0.01) + 'px');
       };
+      visualViewport.addEventListener('resize', updateVh, { passive:true });
+      visualViewport.addEventListener('scroll', updateVh, { passive:true });
+      updateVh();
+    };
       visualViewport.addEventListener('resize', updateVh, { passive:true });
       visualViewport.addEventListener('scroll', updateVh, { passive:true });
     }
