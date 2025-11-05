@@ -136,18 +136,19 @@
     <section class="hero" id="home">
       <figure class="hero-card" aria-label="Featured photograph">
         <!-- Performance-optimized hero (AVIF/WebP + sizes) -->
-        <picture>
-          <source type="image/avif" srcset="images/a-journey-to-the-unknown.avif" />
-          <source type="image/webp" srcset="images/a-journey-to-the-unknown.webp" />
-          <img
-            src="images/a-journey-to-the-unknown.png"
-            alt="A Journey to The Unknown"
-            width="1600" height="1067"
-            fetchpriority="high" decoding="async" loading="eager"
-            sizes="(max-width: 900px) 100vw, 60vw"
-            style="width:100%;height:auto"
-          />
-        </picture>
+       <picture>
+  <source type="image/avif" srcset="/images/a-journey-to-the-unknown.avif">
+  <source type="image/webp" srcset="/images/a-journey-to-the-unknown.webp">
+  <img
+    src="/images/a-journey-to-the-unknown.jpg"  <!-- ensure this one exists -->
+    alt="A Journey to The Unknown"
+    width="1600" height="1067"
+    fetchpriority="high" decoding="async" loading="eager"
+    sizes="(max-width: 900px) 100vw, 60vw"
+    style="display:block;width:100%;height:auto"
+    onerror="this.onerror=null; this.src='/images/a-journey-to-the-unknown.png';"
+  />
+</picture>
       </figure>
       <div class="hero-copy">
         <h2>Quiet light. Honest places.</h2>
@@ -492,6 +493,7 @@
 </script>
 </body>
 </html>
+
 
 
 
