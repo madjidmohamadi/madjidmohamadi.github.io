@@ -7,6 +7,7 @@
   <meta name="description" content="By Majid — Fine Art Photography portfolio" />
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#0e0e10">
+
   <link rel="canonical" href="https://bymajid.com/">
   <meta property="og:title" content="By Majid — Fine Art Photography">
   <meta property="og:description" content="A visual meditation on stillness, space, and the quiet presence of the natural world.">
@@ -40,6 +41,14 @@
     a:hover{opacity:.9}
     .wrap{max-width:var(--maxw); margin-inline:auto; padding:clamp(16px,4vw,32px)}
 
+    /* Accessible "Skip to content" — hidden unless focused */
+    .skip-link{
+      position:fixed; left:8px; top:8px; z-index:10000;
+      transform:translateY(-200%); transition:transform .2s ease;
+      background:#111; color:#fff; padding:8px 12px; border-radius:8px;
+    }
+    .skip-link:focus{ transform:none; }
+
     header{position:sticky; top:0; backdrop-filter:saturate(180%) blur(12px); background:color-mix(in oklab, var(--bg) 90%, transparent); z-index:20; border-bottom:1px solid color-mix(in oklab, var(--fg) 12%, transparent)}
     .nav{display:flex; align-items:center; justify-content:space-between}
     .brand{display:flex; align-items:baseline; gap:10px}
@@ -64,7 +73,7 @@
     .cap{ position:absolute; left:0; right:0; bottom:0; max-width:100%; box-sizing:border-box; padding:12px 14px; background:linear-gradient(180deg, transparent, rgba(0,0,0,.65)); color:#fff; font-size:clamp(11px,2.8vw,15px); line-height:1.3; letter-spacing:.2px; overflow-wrap:anywhere; pointer-events:none }
     .chip{ display:inline-block; padding:.25rem .6rem; border:1px solid color-mix(in oklab, #fff 35%, transparent); border-radius:999px; font-size:.8em; opacity:.9 }
 
-    /* ✅ Make in-page anchors land below the sticky header */
+    /* Anchors land below the sticky header */
     section[id]{ scroll-margin-top: calc(var(--headerH) + 12px) }
 
     footer{margin-top:clamp(28px,6vw,64px); padding:24px 0 40px; color:var(--muted); border-top:1px solid color-mix(in oklab, var(--fg) 10%, transparent)}
@@ -73,7 +82,7 @@
     .card img{cursor:zoom-in}
     .card a.zoom{display:block; touch-action:manipulation}
 
-    /* ===== Lightbox / Quote (unchanged from previous working version) ===== */
+    /* Lightbox + Quote */
     .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.95); display:none; align-items:center; justify-content:center; z-index:9999 }
     .lightbox.open{display:flex}
     .lightbox img{ max-width:100vw; max-height:calc(var(--vh) * 100); border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); display:block }
@@ -96,19 +105,20 @@
 
   <script type="application/ld+json">
   {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Majid Mohamadi",
-    "jobTitle": "Fine Art Photographer",
-    "url": "https://bymajid.com/",
-    "image": "https://bymajid.com/images/about.jpg",
-    "sameAs": ["https://www.instagram.com/madjidmohamadi"],
-    "brand": { "@type": "Brand", "name": "By Majid" }
+    "@context":"https://schema.org",
+    "@type":"Person",
+    "name":"Majid Mohamadi",
+    "jobTitle":"Fine Art Photographer",
+    "url":"https://bymajid.com/",
+    "image":"https://bymajid.com/images/about.jpg",
+    "sameAs":["https://www.instagram.com/madjidmohamadi"],
+    "brand":{"@type":"Brand","name":"By Majid"}
   }
   </script>
 </head>
 <body>
-  <a href="#home" class="sr-only" style="left:8px;top:8px;z-index:10000;position:absolute">Skip to content</a>
+  <!-- Skip link (hidden until focused) -->
+  <a href="#home" class="skip-link">Skip to content</a>
 
   <header id="siteHeader">
     <div class="wrap nav">
@@ -130,8 +140,8 @@
     <!-- HERO -->
     <section class="hero" id="home">
       <figure class="hero-card" aria-label="Featured photograph">
-        <img src="/images/a-journey-to-the-unknown.png" alt="A Journey to The Unknown" width="1600" height="1067"
-             fetchpriority="high" decoding="async" loading="eager"
+        <img src="/images/a-journey-to-the-unknown.png" alt="A Journey to The Unknown"
+             width="1600" height="1067" fetchpriority="high" decoding="async" loading="eager"
              sizes="(max-width: 900px) 100vw, 60vw" style="display:block;width:100%;height:auto" />
       </figure>
       <div class="hero-copy">
@@ -204,7 +214,7 @@
         </div>
         <div style="grid-column:span 5; display:flex; flex-direction:column; justify-content:center; gap:10px">
           <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0">About</h3>
-          <p style="color:var(--muted); margin:0">Majid Mohamadi is a Canadian–Iranian fine art photographer whose work explores silence, solitude, and the poetry of natural forms…</p>
+          <p style="color:var(--muted); margin:0">Majid Mohamadi is a Canadian–Iranian fine art photographer whose work explores silence, solitude, and the poetry of natural forms. Through minimal compositions and meditative light, he reveals the quiet dialogue between earth, air, and memory. Each image becomes a moment of still reflection — where emptiness speaks, and the unseen finds its voice.</p>
           <p style="color:var(--muted); margin:0">Prints are available in gallery editions. Commissions and licensing by request.</p>
         </div>
       </div>
@@ -215,18 +225,36 @@
       <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 12px">Awards &amp; Honors</h3>
       <ul style="list-style:none; padding:0; margin:0; display:grid; gap:10px">
         <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-          <strong>Fine Art Photography Awards</strong> — 1st Prize Winner in Travel.
+          <strong>Fine Art Photography Awards</strong> — Majid Mohamadi 1st Prize Winner in Travel. <a href="https://fineartphotoawards.com/winners-gallery/fapa-2019-2020/amateur/travel/gold-award/" target="_blank" rel="noopener">View</a>
         </li>
-        <!-- … -->
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>FIAP Honor Ribbon</strong>, 41st Trophy Torretes of Photography (Spain) 2018 — Recognized for excellence in international photography. <a href="https://www.festimatge.org/el-festival-2/" target="_blank" rel="noopener">View</a>
+        </li>
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>LensCulture Art Photography Awards 2022</strong> — Featured and nominated for outstanding work in art photography. <a href="https://www.lensculture.com/photo-competitions/art-photography-awards/2022" target="_blank" rel="noopener">View</a>
+        </li>
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>Kimia Photo Festival (Iran) 2019</strong> — Won first prize for creative photography. <a href="https://www.mehrnews.com/news/4463154/%D8%A7%D8%B9%D9%84%D8%A7%D9%85-%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B9%DA%A9%D8%B3-%D9%85%D8%B9%D8%AF%D9%86-%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D8%B3%D9%84%D8%A7%D9%85%DB%8C-%D8%B1%D8%A7%D8%AF-%D9%86%D8%B4%D8%A7%D9%86-%DA%A9%DB%8C%D9%85%DB%8C%D8%A7" target="_blank" rel="noopener">View</a>
+        </li>
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>Blank Wall Gallery (Greece)</strong> — Received an honor diploma in 2020 for excellence in fine art photography. <a href="https://www.blankwallgallery.com/majid-mohammedi-iran-untitled/" target="_blank" rel="noopener">View</a>
+        </li>
+        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
+          <strong>Focus Iran 2 — Craft and Folk Art Museum of Los Angeles (USA)</strong> — Honor diploma for artistic achievements in 2019. <a href="https://farhang.org/programs/focus-iran" target="_blank" rel="noopener">View</a>
+        </li>
       </ul>
     </section>
 
-    <!-- CONSULT -->
+    <!-- INTERIOR CONSULTATION -->
     <section id="consult" style="margin-top: clamp(28px,6vw,64px);">
       <div class="grid" style="align-items:start; gap: var(--gap);">
         <div style="grid-column: span 12; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
           <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 8px">On-site Consultation</h3>
-          <p style="color:var(--muted); margin:0 0 12px">Prefer a personal visit? …</p>
+          <p style="color:var(--muted); margin:0 0 12px">
+            Prefer a personal visit? I’ll come to your space, take measurements and reference photos, and prepare
+            tailored illustrations with suggested photographs and framing options. There’s <strong>no purchase obligation</strong>;
+            a small service fee applies to cover travel and time.
+          </p>
           <a href="#" class="cta js-book-visit" style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">Book a Site Visit →</a>
           <br><small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
         </div>
@@ -289,11 +317,11 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    // update --vh for mobile address bar changes
+    // update --vh for mobile UI chrome changes
     function setVh(){ document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px'); }
     setVh(); addEventListener('resize', setVh); addEventListener('orientationchange', setVh);
 
-    // ✅ measure sticky header and set scroll offset for anchors
+    // sticky header height for anchor offset
     function setHeaderOffset(){
       const h = document.getElementById('siteHeader');
       if(!h) return;
@@ -302,10 +330,10 @@
     }
     setHeaderOffset(); addEventListener('resize', setHeaderOffset);
 
-    // year
+    // copyright year
     const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
 
-    // EmailJS
+    // EmailJS init
     (function(){
       const s = document.createElement('script');
       s.src = 'https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js';
@@ -313,7 +341,7 @@
       document.head.appendChild(s);
     })();
 
-    // Lightbox + quote (same as previous working version)
+    // Lightbox + quote
     (function(){
       const lb = document.querySelector('.lightbox');
       if (!lb) return;
