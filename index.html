@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>By Majid — Fine Art Photography</title>
   <meta name="description" content="By Majid — Fine Art Photography portfolio" />
   <meta name="color-scheme" content="dark light">
@@ -117,6 +117,79 @@
     .faq .caret{ flex:0 0 auto; transition: transform .2s ease; opacity:.8 }
     details[open] .caret{ transform:rotate(90deg) }
     .faq small.muted{ color:var(--muted) }
+
+    /* ------- Responsive/mobile refinements (ADDED) ------- */
+    :root{
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    header{ padding-top: max(0px, var(--safe-top)/2); }
+    footer{ padding-bottom: max(24px, var(--safe-bottom)); }
+
+    /* HERO: lock aspect ratio and avoid weird crops on mobile */
+    .hero-card{
+      aspect-ratio: 3 / 2;           /* predictable height on phones */
+      min-height: 220px;             /* floor for very small screens */
+    }
+    .hero-card img{
+      width:100%;
+      height:100%;
+      object-fit: cover;              /* fills card without distortion */
+    }
+
+    /* Use modern viewport units when available; fall back to your --vh */
+    @supports (height: 100svh){
+      .lightbox img{ max-height: calc(100svh - 96px); } /* room for buttons */
+    }
+    @supports not (height: 100svh){
+      .lightbox img{ max-height: calc(var(--vh) * 100 - 96px); }
+    }
+
+    /* Tighter wrappers on small screens */
+    @media (max-width: 600px){
+      .wrap{ padding-inline: clamp(14px, 4vw, 22px); }
+    }
+
+    /* NAV: prevent overflow / wrapping weirdness */
+    .links{ flex-wrap: wrap; row-gap: 8px; }
+    @media (max-width: 520px){
+      .links{
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 14px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .links a{ flex:0 0 auto; }
+    }
+
+    /* GRID: simpler columns on mobile; perfect edges, no squish */
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: repeat(6, 1fr); } /* 2-up */
+      .card{ grid-column: span 3; }
+    }
+    @media (max-width: 680px){
+      .grid{ grid-template-columns: repeat(4, 1fr); } /* 1-up */
+      .card{ grid-column: span 4; }
+    }
+
+    /* Caption readability on small screens */
+    @media (max-width: 680px){
+      .cap{
+        padding: 14px 16px;
+        font-size: clamp(12px, 3.6vw, 15px);
+        background: linear-gradient(180deg, transparent 0, rgba(0,0,0,.65) 40%);
+      }
+    }
+
+    /* FAQ tap targets + smoother caret on mobile */
+    .faq summary{ padding: 16px; -webkit-tap-highlight-color: transparent; }
+    .faq .caret{ transform-origin: 50% 55%; }
+
+    /* Inputs already 16px; make sure dialogs don’t hit the notch */
+    .modal-card{ margin-top: max(0px, var(--safe-top)); margin-bottom: max(0px, var(--safe-bottom)); }
+
+    /* Prevent accidental horizontal scroll due to 100vw images on iOS */
+    html, body{ overflow-x: hidden; }
   </style>
 
   <script type="application/ld+json">
@@ -674,8 +747,16 @@
 
     })();
   </script>
+
+  <!-- iOS visualViewport hook for steadier --vh on mobile (ADDED) -->
+  <script>
+    if (window.visualViewport) {
+      const updateVh = () => {
+        document.documentElement.style.setProperty('--vh', (visualViewport.height * 0.01) + 'px');
+      };
+      visualViewport.addEventListener('resize', updateVh, { passive:true });
+      visualViewport.addEventListener('scroll', updateVh, { passive:true });
+    }
+  </script>
 </body>
 </html>
-
-
-
