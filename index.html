@@ -41,17 +41,16 @@
     a:hover{opacity:.9}
     .wrap{max-width:var(--maxw); margin-inline:auto; padding:clamp(16px,4vw,32px)}
 
-    /* Skip link */
     .skip-link{ position:fixed; left:8px; top:8px; z-index:10000; transform:translateY(-200%); transition:transform .2s ease; background:#111; color:#fff; padding:8px 12px; border-radius:8px; }
     .skip-link:focus{ transform:none }
 
-    /* Header with ☰ button */
     header{position:sticky; top:0; backdrop-filter:saturate(180%) blur(12px); background:color-mix(in oklab, var(--bg) 90%, transparent); z-index:20; border-bottom:1px solid color-mix(in oklab, var(--fg) 12%, transparent)}
     .nav{display:flex; align-items:center; justify-content:space-between}
     .brand{display:flex; align-items:baseline; gap:10px}
     .brand h1{font-family:"Playfair Display",serif; font-weight:700; letter-spacing:.5px; margin:0; font-size:clamp(18px,2.4vw,26px)}
     .brand small{color:var(--muted); letter-spacing:2px; text-transform:uppercase; font-size:.72rem}
 
+    /* ☰ button + panel */
     .sections-btn{
       display:inline-flex; align-items:center; justify-content:center;
       width:44px; height:44px; border-radius:999px; border:1px solid color-mix(in oklab, var(--fg) 14%, transparent);
@@ -65,7 +64,6 @@
     .sections-panel a{ display:block; padding:10px 12px; border-radius:10px; color:var(--fg); font-weight:600 }
     .sections-panel a:hover{ background:color-mix(in oklab, var(--fg) 8%, transparent) }
 
-    /* Hero */
     .hero{display:grid; grid-template-columns:1.2fr .8fr; gap:var(--gap); align-items:center; padding-block:clamp(28px,6vw,64px)}
     .hero-card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; min-height:280px; position:relative}
     .hero-copy{padding:clamp(16px,3vw,28px)}
@@ -80,7 +78,7 @@
       .hero-card img{ width:100%; height:100% !important; object-fit:cover; object-position:center; }
     }
 
-    /* Collapsible sections (About / Awards / Consult / FAQ / Contact) */
+    /* Collapsible shells (About/Awards/Consult/FAQ/Contact) */
     .collapsible{
       background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;
       margin-top: clamp(28px,6vw,64px);
@@ -94,7 +92,7 @@
     .caret{ flex:0 0 auto; opacity:.8; transition:transform .2s ease }
     details[open] .caret{ transform:rotate(90deg) }
 
-    /* ===== PORTFOLIO ===== */
+    /* Grid + cards */
     .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gap); align-items:start }
     .card{ grid-column:span 6; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative; align-self:start }
     .card img{ width:100%; height:auto; display:block; cursor:zoom-in }
@@ -108,7 +106,7 @@
     .social a{color:var(--muted)}
     .card a.zoom{display:block; touch-action:manipulation}
 
-    /* Lightbox + Purchase */
+    /* Lightbox */
     .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.95); display:none; align-items:center; justify-content:center; z-index:9999; padding: calc(env(safe-area-inset-top,0px) + 48px) 16px calc(env(safe-area-inset-bottom,0px) + 96px); overscroll-behavior:contain; overflow:auto; }
     .lightbox.open{display:flex}
     .lightbox img{
@@ -130,7 +128,7 @@
     .buy{ position:fixed; left:50%; transform:translateX(-50%); bottom: max(12px, env(safe-area-inset-bottom,0px) + 12px); background:#fff; color:#000; border:none; border-radius:999px; padding:10px 16px; font-weight:800; cursor:pointer; box-shadow:0 10px 30px rgba(0,0,0,.4) }
     body.no-scroll{overflow:hidden}
 
-    /* Shared modal styles */
+    /* Modals */
     .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:10000; background:rgba(0,0,0,.6) }
     .modal.open{display:flex}
     .modal-card{ background:#fff; color:#111; border-radius:14px; width:min(92vw,420px); padding:18px 16px; box-shadow:0 20px 60px rgba(0,0,0,.6); font-size:16px }
@@ -143,13 +141,17 @@
     .btn.submit{ background:#111; color:#fff }
 
     .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:#111; color:#fff; padding:10px 14px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,.4); display:none; z-index:10001; font-weight:600 }
-    .toast.show{ display:block }
 
-    /* FAQ Q/A fonts to match Awards list */
-    .faq .faq-list details summary{ font-family:"Playfair Display",serif; font-weight:700; font-size:clamp(18px,2.4vw,20px) }
-    .faq .faq-list .answer{ font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; font-weight:600; color:var(--muted) }
+    /* FAQ fonts with strong specificity (so they don't get overridden) */
+    .faq .faq-list details > summary{
+      font-family:"Playfair Display",serif !important; font-weight:700 !important;
+      font-size:clamp(18px,2.4vw,20px) !important;
+    }
+    .faq .faq-list .answer{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif !important;
+      font-weight:600 !important; color:var(--muted) !important;
+    }
 
-    /* Mobile polish */
     :root{ --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px); }
     header{ padding-top: max(0px, var(--safe-top)/2); }
     footer{ padding-bottom: max(24px, var(--safe-bottom)); }
@@ -182,7 +184,7 @@
         <small>Fine Art Photography</small>
       </div>
 
-      <!-- ☰ button -->
+      <!-- ☰ -->
       <div style="position:relative">
         <button id="sectionsToggle" class="sections-btn" aria-label="Open sections" aria-expanded="false">☰</button>
         <nav id="sectionsPanel" class="sections-panel" hidden>
@@ -212,7 +214,7 @@
       </div>
     </section>
 
-    <!-- PORTFOLIO GRID -->
+    <!-- PORTFOLIO -->
     <section id="work" aria-label="Portfolio">
       <div class="grid">
         <figure class="card">
@@ -245,7 +247,6 @@
           <figcaption class="cap"><span class="chip">Space: Shop</span> The Shape of Wind</figcaption>
         </figure>
 
-        <!-- FIXED: portrait intrinsic size -->
         <figure class="card">
           <img src="/images/the-tired-tree.png" alt="The Tired Tree" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
           <figcaption class="cap"><span class="chip">Space: Gallery</span> The Tired Tree</figcaption>
@@ -268,7 +269,7 @@
       </div>
     </section>
 
-    <!-- ABOUT (closed by default) -->
+    <!-- ABOUT -->
     <section id="about">
       <details class="collapsible">
         <summary>About <span class="caret">▸</span></summary>
@@ -286,7 +287,7 @@
       </details>
     </section>
 
-    <!-- AWARDS (closed by default) -->
+    <!-- AWARDS -->
     <section id="awards">
       <details class="collapsible">
         <summary>Awards &amp; Honors <span class="caret">▸</span></summary>
@@ -315,7 +316,7 @@
       </details>
     </section>
 
-    <!-- CONSULT (closed by default) -->
+    <!-- CONSULT -->
     <section id="consult">
       <details class="collapsible">
         <summary>On-site Consultation <span class="caret">▸</span></summary>
@@ -331,7 +332,7 @@
       </details>
     </section>
 
-    <!-- FAQ (closed by default; keeps question-level details) -->
+    <!-- FAQ -->
     <section id="faq" class="faq">
       <details class="collapsible">
         <summary>FAQ <span class="caret">▸</span></summary>
@@ -423,7 +424,7 @@
       </details>
     </section>
 
-    <!-- CONTACT (closed by default) -->
+    <!-- CONTACT -->
     <section id="contact">
       <details class="collapsible">
         <summary>Contact <span class="caret">▸</span></summary>
@@ -506,14 +507,14 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    // dynamic --vh for mobile (prefers visualViewport when available)
+    // dynamic --vh for mobile
     function setVh(){
       var h = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
       document.documentElement.style.setProperty('--vh', (h * 0.01) + 'px');
     }
     setVh(); addEventListener('resize', setVh); addEventListener('orientationchange', setVh);
 
-    // anchor offset
+    // header offset
     function setHeaderOffset(){
       const h = document.getElementById('siteHeader');
       const px = h ? (h.offsetHeight || 64) : 64;
@@ -524,23 +525,7 @@
     // year
     const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
 
-    // EmailJS init
-    (function(){
-      const s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js';
-      s.onload = function(){ emailjs.init('mK0NVdRoob8JAczNU'); };
-      document.head.appendChild(s);
-    })();
-
-    // Toast
-    const toast = document.getElementById('toast');
-    function showToast(msg){
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(()=>toast.classList.remove('show'), 3200);
-    }
-
-    // Lightbox + Quote
+    /* ===== Lightbox (unchanged) ===== */
     (function(){
       const lb = document.querySelector('.lightbox');
       if (!lb) return;
@@ -582,7 +567,6 @@
         if (lastFocus) lastFocus.focus();
       }
 
-      // Open by tapping any grid image
       document.querySelectorAll('.card img').forEach(img => {
         img.addEventListener('click', (e) => {
           e.preventDefault();
@@ -596,61 +580,9 @@
       addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLightbox(); }, { passive:true });
       addEventListener('resize', fitLightbox, { passive:true });
       addEventListener('orientationchange', fitLightbox, { passive:true });
-
-      // Quote modal hooks
-      const quoteModal = document.getElementById('quoteModal');
-      const quoteForm  = document.getElementById('quoteForm');
-      const cancelQuote = document.getElementById('cancelQuote');
-      const photoSrcInput = document.getElementById('photo_src');
-      const photoTitleInput = document.getElementById('photo_title');
-      const photoLine = document.getElementById('quote-photo');
-
-      function openQuote(){
-        photoSrcInput.value = currentPhoto.src;
-        photoTitleInput.value = currentPhoto.title;
-        photoLine.textContent = currentPhoto.title ? `Photo: “${currentPhoto.title}”` : '';
-        quoteModal.classList.add('open');
-        quoteModal.setAttribute('aria-hidden','false');
-        const emailField = document.getElementById('buyer_email');
-        if (emailField) emailField.focus();
-      }
-      function closeQuote(){
-        quoteModal.classList.remove('open');
-        quoteModal.setAttribute('aria-hidden','true');
-      }
-
-      buyBtn.addEventListener('click', (e)=>{ e.stopPropagation(); openQuote(); }, { passive:false });
-      cancelQuote.addEventListener('click', ()=> closeQuote(), { passive:true });
-      quoteModal.addEventListener('click', (e)=>{ if(e.target===quoteModal) closeQuote(); }, { passive:true });
-
-      quoteForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const fd = new FormData(quoteForm);
-        const data = Object.fromEntries(fd.entries());
-        const params = {
-          subject: 'Quote Request — bymajid.com',
-          from_email: data.email,
-          reply_to: data.email,
-          message: data.note || '',
-          photo_title: photoTitleInput.value || '',
-          photo_src: photoSrcInput.value || '',
-          page_url: location.href,
-          user_agent: navigator.userAgent,
-          timestamp: new Date().toISOString()
-        };
-        try{
-          await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', params);
-          closeQuote();
-          closeLightbox();
-          showToast('Your quote request has been sent. I will reply with a quote as soon as possible.');
-          quoteForm.reset();
-        }catch(err){
-          showToast('Something went wrong. Please try again.');
-        }
-      });
     })();
 
-    /* ===== Sections menu logic (☰) ===== */
+    /* ===== ☰ Sections: open + smooth scroll (robust) ===== */
     (function(){
       const btn = document.getElementById('sectionsToggle');
       const panel = document.getElementById('sectionsPanel');
@@ -668,7 +600,7 @@
         });
       }
 
-      function smoothScrollTo(el){
+      function scrollToEl(el){
         const top = el.getBoundingClientRect().top + window.scrollY - headerH();
         window.scrollTo({ top: Math.max(0, top), behavior:'smooth' });
       }
@@ -679,12 +611,12 @@
         const d = wrap.querySelector('details.collapsible');
 
         if(isDetails(d)){
-          d.setAttribute('open','');
+          if(!d.open) d.open = true;
           closeAllDetails(id);
-          // Scroll *after* the details finishes opening/layout
-          requestAnimationFrame(()=>requestAnimationFrame(()=>smoothScrollTo(d)));
+          // Wait for layout to settle then scroll (works on Samsung Chrome)
+          setTimeout(()=>scrollToEl(d), 60);
         }else{
-          requestAnimationFrame(()=>smoothScrollTo(wrap));
+          setTimeout(()=>scrollToEl(wrap), 10);
         }
       }
 
@@ -710,7 +642,16 @@
         if(e.key === 'Escape' && !panel.hidden) closePanel();
       }, {passive:true});
 
-      // Accordion behaviour when user clicks section summaries
+      // Also support direct hash navigation (#about etc.)
+      function openFromHash(){
+        const id = (location.hash||'').replace('#','');
+        if(!id) return;
+        openSection(id);
+      }
+      window.addEventListener('hashchange', openFromHash, {passive:true});
+      if(location.hash) setTimeout(openFromHash, 120);
+
+      // Keep accordion behavior if user taps the section header directly
       document.querySelectorAll('details.collapsible > summary').forEach(sum=>{
         sum.addEventListener('click', ()=>{
           const sec = sum.closest('section')?.id;
@@ -719,7 +660,7 @@
       });
     })();
 
-    // Improve --vh updates when browser chrome shows/hides
+    // Update --vh when browser chrome shows/hides
     if (window.visualViewport) {
       const updateVh = () => {
         document.documentElement.style.setProperty('--vh', (visualViewport.height * 0.01) + 'px');
@@ -728,6 +669,9 @@
       visualViewport.addEventListener('scroll', updateVh, { passive:true });
       updateVh();
     }
+
+    // Year
+    (function(){ const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
   </script>
 </body>
 </html>
