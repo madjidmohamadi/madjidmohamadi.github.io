@@ -1,677 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>By Majid — Fine Art Photography</title>
-  <meta name="description" content="By Majid — Fine Art Photography portfolio" />
-  <meta name="color-scheme" content="dark light">
-  <meta name="theme-color" content="#0e0e10">
+<script>
+/* ===== ☰ Sections: open + smooth scroll (robust) ===== */
+(function(){
+  const btn   = document.getElementById('sectionsToggle');
+  const panel = document.getElementById('sectionsPanel');
+  if(!btn || !panel) return;
 
-  <link rel="canonical" href="https://bymajid.com/">
-  <meta property="og:title" content="By Majid — Fine Art Photography">
-  <meta property="og:description" content="A visual meditation on stillness, space, and the quiet presence of the natural world.">
-  <meta property="og:url" content="https://bymajid.com/">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://bymajid.com/images/social-card.jpg">
-  <meta property="og:image:alt" content="Fine art landscape photograph by Majid Mohamadi">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="By Majid — Fine Art Photography">
-  <meta name="twitter:description" content="Quiet light. Honest places.">
-  <meta name="twitter:image" content="https://bymajid.com/images/social-card.jpg">
+  const collapsibleIds = ['about','awards','consult','faq','contact'];
+  const headerH = () => (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--headerH'))||64) + 12;
+  const isDetails = el => !!el && el.tagName === 'DETAILS';
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@500;700&display=swap"
-        onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@500;700&display=swap">
-  </noscript>
-
-  <style>
-    :root { --bg:#0e0e10; --fg:#e9e9ec; --muted:#b6b6bd; --card:#151518; --shadow:0 10px 30px rgba(0,0,0,.35); --radius:18px; --gap:clamp(12px,2vw,20px); --maxw:1200px; --vh:1vh; --headerH:64px }
-    @media (prefers-color-scheme: light){ :root{ --bg:#fafafa; --fg:#151518; --muted:#6b6b74; --card:#fff; --shadow:0 10px 30px rgba(0,0,0,.08) }}
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    html{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
-    body{ margin:0; background:var(--bg); color:var(--fg); font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif; line-height:1.6; -webkit-tap-highlight-color:transparent }
-    a{color:var(--fg); text-decoration:none}
-    a:hover{opacity:.9}
-    .wrap{max-width:var(--maxw); margin-inline:auto; padding:clamp(16px,4vw,32px)}
-
-    .skip-link{ position:fixed; left:8px; top:8px; z-index:10000; transform:translateY(-200%); transition:transform .2s ease; background:#111; color:#fff; padding:8px 12px; border-radius:8px; }
-    .skip-link:focus{ transform:none }
-
-    header{position:sticky; top:0; backdrop-filter:saturate(180%) blur(12px); background:color-mix(in oklab, var(--bg) 90%, transparent); z-index:20; border-bottom:1px solid color-mix(in oklab, var(--fg) 12%, transparent)}
-    .nav{display:flex; align-items:center; justify-content:space-between}
-    .brand{display:flex; align-items:baseline; gap:10px}
-    .brand h1{font-family:"Playfair Display",serif; font-weight:700; letter-spacing:.5px; margin:0; font-size:clamp(18px,2.4vw,26px)}
-    .brand small{color:var(--muted); letter-spacing:2px; text-transform:uppercase; font-size:.72rem}
-
-    /* ☰ button + panel */
-    .sections-btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      width:44px; height:44px; border-radius:999px; border:1px solid color-mix(in oklab, var(--fg) 14%, transparent);
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.06));
-      cursor:pointer; font-size:20px; line-height:1; user-select:none;
-    }
-    .sections-panel{
-      position:absolute; right:clamp(16px,4vw,32px); top:calc(100% + 8px); background:var(--card); border:1px solid color-mix(in oklab, var(--fg) 12%, transparent); border-radius:14px; box-shadow:var(--shadow); padding:10px; width:220px;
-    }
-    .sections-panel[hidden]{ display:none }
-    .sections-panel a{ display:block; padding:10px 12px; border-radius:10px; color:var(--fg); font-weight:600 }
-    .sections-panel a:hover{ background:color-mix(in oklab, var(--fg) 8%, transparent) }
-
-    .hero{display:grid; grid-template-columns:1.2fr .8fr; gap:var(--gap); align-items:center; padding-block:clamp(28px,6vw,64px)}
-    .hero-card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; min-height:280px; position:relative}
-    .hero-copy{padding:clamp(16px,3vw,28px)}
-    .hero-copy h2{font-family:"Playfair Display",serif; font-size:clamp(26px,4vw,46px); margin:0 0 6px}
-    .hero-copy p{color:var(--muted); margin:0 0 14px}
-    .cta{display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700}
-    .hero-card img{display:block; width:100%; height:auto}
-
-    @media (max-width:900px){
-      .hero{grid-template-columns:1fr}
-      .hero-card{ aspect-ratio:3/2; min-height:220px; }
-      .hero-card img{ width:100%; height:100% !important; object-fit:cover; object-position:center; }
-    }
-
-    /* Collapsible shells (About/Awards/Consult/FAQ/Contact) */
-    .collapsible{
-      background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;
-      margin-top: clamp(28px,6vw,64px);
-    }
-    .collapsible > summary{
-      list-style:none; cursor:pointer; padding:16px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px;
-      font-weight:700; font-family:"Playfair Display",serif; font-size:clamp(18px,2.6vw,24px);
-    }
-    .collapsible > summary::-webkit-details-marker{ display:none }
-    .collapsible .inner{ padding: clamp(16px,3vw,24px); padding-top:0 }
-    .caret{ flex:0 0 auto; opacity:.8; transition:transform .2s ease }
-    details[open] .caret{ transform:rotate(90deg) }
-
-    /* Grid + cards */
-    .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gap); align-items:start }
-    .card{ grid-column:span 6; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative; align-self:start }
-    .card img{ width:100%; height:auto; display:block; cursor:zoom-in }
-    .cap{ position:absolute; left:0; right:0; bottom:0; max-width:100%; box-sizing:border-box; padding:12px 14px; background:linear-gradient(180deg, transparent, rgba(0,0,0,.65)); color:#fff; font-size:clamp(11px,2.8vw,15px); line-height:1.3; letter-spacing:.2px; overflow-wrap:anywhere; pointer-events:none }
-    .chip{ display:inline-block; padding:.25rem .6rem; border:1px solid color-mix(in oklab, #fff 35%, transparent); border-radius:999px; font-size:.8em; opacity:.9 }
-
-    section[id]{ scroll-margin-top: calc(var(--headerH) + 12px) }
-
-    footer{margin-top:clamp(28px,6vw,64px); padding:24px 0 40px; color:var(--muted); border-top:1px solid color-mix(in oklab, var(--fg) 10%, transparent)}
-    .footer-grid{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px}
-    .social a{color:var(--muted)}
-    .card a.zoom{display:block; touch-action:manipulation}
-
-    /* Lightbox */
-    .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.95); display:none; align-items:center; justify-content:center; z-index:9999; padding: calc(env(safe-area-inset-top,0px) + 48px) 16px calc(env(safe-area-inset-bottom,0px) + 96px); overscroll-behavior:contain; overflow:auto; }
-    .lightbox.open{display:flex}
-    .lightbox img{
-      object-fit:contain !important;
-      width:auto !important; height:auto !important;
-      max-width: calc(100vw - 32px) !important;
-      max-height: calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 160px) !important;
-      border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6); display:block;
-    }
-    @supports (height: 100svh){
-      .lightbox img{ max-height: calc(100svh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 160px) !important; }
-    }
-    @supports not (height: 100dvh){
-      @supports not (height: 100svh){
-        .lightbox img{ max-height: calc(var(--vh) * 100 - 160px) !important; }
-      }
-    }
-    .lightbox .close{ position:fixed; top: max(12px, env(safe-area-inset-top,0px) + 8px); right: max(12px, env(safe-area-inset-right,0px) + 8px); background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.3); color:#fff; padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:700 }
-    .buy{ position:fixed; left:50%; transform:translateX(-50%); bottom: max(12px, env(safe-area-inset-bottom,0px) + 12px); background:#fff; color:#000; border:none; border-radius:999px; padding:10px 16px; font-weight:800; cursor:pointer; box-shadow:0 10px 30px rgba(0,0,0,.4) }
-    body.no-scroll{overflow:hidden}
-
-    /* Modals */
-    .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:10000; background:rgba(0,0,0,.6) }
-    .modal.open{display:flex}
-    .modal-card{ background:#fff; color:#111; border-radius:14px; width:min(92vw,420px); padding:18px 16px; box-shadow:0 20px 60px rgba(0,0,0,.6); font-size:16px }
-    .modal-card h3{ margin:0 0 10px; font-family:"Playfair Display",serif }
-    .modal-card label{ display:block; font-size:.9rem; margin:8px 0 4px }
-    .modal-card input,.modal-card textarea{ width:100%; border:1px solid #d0d0d4; border-radius:10px; padding:10px 12px; font:inherit }
-    .modal-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:12px }
-    .btn{ border:none; border-radius:999px; padding:10px 14px; font-weight:700; cursor:pointer }
-    .btn.cancel{ background:#eee; color:#222 }
-    .btn.submit{ background:#111; color:#fff }
-
-    .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:#111; color:#fff; padding:10px 14px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,.4); display:none; z-index:10001; font-weight:600 }
-
-    /* FAQ fonts with strong specificity (so they don't get overridden) */
-    .faq .faq-list details > summary{
-      font-family:"Playfair Display",serif !important; font-weight:700 !important;
-      font-size:clamp(18px,2.4vw,20px) !important;
-    }
-    .faq .faq-list .answer{
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif !important;
-      font-weight:600 !important; color:var(--muted) !important;
-    }
-
-    :root{ --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px); }
-    header{ padding-top: max(0px, var(--safe-top)/2); }
-    footer{ padding-bottom: max(24px, var(--safe-bottom)); }
-    @media (max-width: 600px){ .wrap{ padding-inline: clamp(14px, 4vw, 22px); } }
-    @media (max-width: 900px){ .grid{ grid-template-columns: repeat(6, 1fr); } .card{ grid-column: span 3; } }
-    @media (max-width: 680px){ .grid{ grid-template-columns: repeat(4, 1fr); } .card{ grid-column: span 4; } .cap{ padding:14px 16px; font-size: clamp(12px, 3.6vw, 15px); background: linear-gradient(180deg, transparent 0, rgba(0,0,0,.65) 40%); } }
-    html, body{ overflow-x: hidden; }
-  </style>
-
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Person",
-    "name":"Majid Mohamadi",
-    "jobTitle":"Fine Art Photographer",
-    "url":"https://bymajid.com/",
-    "image":"https://bymajid.com/images/about.jpg",
-    "sameAs":["https://www.instagram.com/madjidmohamadi"],
-    "brand":{"@type":"Brand","name":"By Majid"}
+  function closeAllDetails(exceptId){
+    collapsibleIds.forEach(id=>{
+      if(id===exceptId) return;
+      const d = document.getElementById(id)?.querySelector('details.collapsible');
+      if(isDetails(d)) d.removeAttribute('open');
+    });
   }
-  </script>
-</head>
-<body>
-  <a href="#home" class="skip-link">Skip to content</a>
 
-  <header id="siteHeader">
-    <div class="wrap nav">
-      <div class="brand">
-        <h1>By Majid</h1>
-        <small>Fine Art Photography</small>
-      </div>
+  function offsetScrollTo(el){
+    const top = el.getBoundingClientRect().top + window.scrollY - headerH();
+    window.scrollTo({ top: Math.max(0, top), behavior:'smooth' });
+  }
 
-      <!-- ☰ -->
-      <div style="position:relative">
-        <button id="sectionsToggle" class="sections-btn" aria-label="Open sections" aria-expanded="false">☰</button>
-        <nav id="sectionsPanel" class="sections-panel" hidden>
-          <a href="#work"    data-section="work">Portfolio</a>
-          <a href="#about"   data-section="about">About</a>
-          <a href="#awards"  data-section="awards">Awards</a>
-          <a href="#consult" data-section="consult">Consult</a>
-          <a href="#faq"     data-section="faq">FAQ</a>
-          <a href="#contact" data-section="contact">Contact</a>
-        </nav>
-      </div>
-    </div>
-  </header>
+  function openSection(id){
+    const wrap = document.getElementById(id);
+    if(!wrap) return;
 
-  <main class="wrap">
-    <!-- HERO -->
-    <section class="hero" id="home">
-      <figure class="hero-card" aria-label="Featured photograph">
-        <img src="/images/a-journey-to-the-unknown.png" alt="A Journey to The Unknown"
-             width="1600" height="1067" fetchpriority="high" decoding="async" loading="eager"
-             sizes="(max-width: 900px) 100vw, 60vw">
-      </figure>
-      <div class="hero-copy">
-        <h2>Quiet light. Honest places.</h2>
-        <p>A visual meditation on stillness, space, and the quiet presence of the natural world.</p>
-        <a class="cta" href="#work">View Portfolio →</a>
-      </div>
-    </section>
-
-    <!-- PORTFOLIO -->
-    <section id="work" aria-label="Portfolio">
-      <div class="grid">
-        <figure class="card">
-          <img src="/images/how-earth-sees-the-leaves.png" alt="How Earth Sees the Leaves" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
-          <figcaption class="cap"><span class="chip">Space: Gallery</span> How Earth Sees the Leaves</figcaption>
-        </figure>
-
-        <figure class="card">
-          <img src="/images/golden-breath.png" alt="Golden Breath" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
-          <figcaption class="cap"><span class="chip">Space: Lobby</span> Golden Breath</figcaption>
-        </figure>
-
-        <figure class="card">
-          <img src="/images/moonlight-over-the-ocean.png" alt="Moonlight Over The Ocean" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
-          <figcaption class="cap"><span class="chip">Space: Living room</span> Moonlight Over The Ocean</figcaption>
-        </figure>
-
-        <figure class="card">
-          <img src="/images/immigrants.png" alt="Immigrants" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
-          <figcaption class="cap"><span class="chip">Space: Hotel lobby</span> Immigrants</figcaption>
-        </figure>
-
-        <figure class="card">
-          <img src="/images/whisper-of-form.png" alt="Whisper of Form" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
-          <figcaption class="cap"><span class="chip">Space: Shop</span> Whisper of Form</figcaption>
-        </figure>
-
-        <figure class="card">
-          <img src="/images/the-shape-of-wind.png" alt="The Shape of Wind" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
-          <figcaption class="cap"><span class="chip">Space: Shop</span> The Shape of Wind</figcaption>
-        </figure>
-
-        <figure class="card">
-          <img src="/images/the-tired-tree.png" alt="The Tired Tree" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
-          <figcaption class="cap"><span class="chip">Space: Gallery</span> The Tired Tree</figcaption>
-        </figure>
-
-        <figure class="card">
-          <img src="/images/whispers-of-the-ghost-lake.png" alt="Whispers of the Ghost Lake" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
-          <figcaption class="cap"><span class="chip">Space: Living room</span> Whispers of the Ghost Lake</figcaption>
-        </figure>
-
-        <figure class="card">
-          <img src="/images/story-of-two-benches.png" alt="Story of Two Benches" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
-          <figcaption class="cap"><span class="chip">Space: Wellness retreat</span> Story of Two Benches</figcaption>
-        </figure>
-
-        <figure class="card">
-          <img src="/images/a-journey-to-the-unknown.png" alt="A Journey to The Unknown" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
-          <figcaption class="cap"><span class="chip">Space: Living room</span> A Journey to The Unknown</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about">
-      <details class="collapsible">
-        <summary>About <span class="caret">▸</span></summary>
-        <div class="inner">
-          <div class="grid" style="grid-template-columns:repeat(12,1fr); gap:var(--gap)">
-            <div style="grid-column:span 7; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden">
-              <img src="/images/about.jpg" alt="Majid in the field with camera" style="width:100%;height:auto;display:block" loading="lazy" decoding="async" width="1200" height="800">
-            </div>
-            <div style="grid-column:span 5; display:flex; flex-direction:column; justify-content:center; gap:10px">
-              <p style="color:var(--muted); margin:0">Majid Mohamadi is a Canadian–Iranian fine art photographer and commercial pilot based in the Pacific Northwest. His work is shaped by long hours spent above coastlines, mountains, and desert horizons — where silence expands and time seems to slow. Through minimal compositions and meditative light, he explores stillness, reflection, and the quiet emotional landscapes that exist between places. Whether in the air or on the ground, Majid approaches the world with the same instinct: to look closely, to listen to silence, and to capture the moments when the visible world begins to feel like memory.</p>
-              <p style="color:var(--muted); margin:0">Prints are available in gallery editions. Commissions and licensing by request.</p>
-            </div>
-          </div>
-        </div>
-      </details>
-    </section>
-
-    <!-- AWARDS -->
-    <section id="awards">
-      <details class="collapsible">
-        <summary>Awards &amp; Honors <span class="caret">▸</span></summary>
-        <div class="inner">
-          <ul style="list-style:none; padding:0; margin:0; display:grid; gap:10px">
-            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-              <strong>Fine Art Photography Awards</strong> — <span style="font-weight:600">Majid Mohamadi 1st Prize Winner in Travel.</span> <a href="https://fineartphotoawards.com/winners-gallery/fapa-2019-2020/amateur/travel/gold-award/" target="_blank" rel="noopener">View</a>
-            </li>
-            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-              <strong>FIAP Honor Ribbon</strong>, 41st Trophy Torretes of Photography (Spain) 2018 — <span style="font-weight:600">Recognized for excellence in international photography.</span> <a href="https://www.festimatge.org/el-festival-2/" target="_blank" rel="noopener">View</a>
-            </li>
-            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-              <strong>LensCulture Art Photography Awards 2022</strong> — <span style="font-weight:600">Featured and nominated for outstanding work in art photography.</span> <a href="https://www.lensculture.com/photo-competitions/art-photography-awards/2022" target="_blank" rel="noopener">View</a>
-            </li>
-            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-              <strong>Kimia Photo Festival (Iran) 2019</strong> — <span style="font-weight:600">Won first prize for creative photography.</span> <a href="https://www.mehrnews.com/news/4463154/%D8%A7%D8%B9%D9%84%D8%A7%D9%85-%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B9%DA%A9%D8%B3-%D9%85%D8%B9%D8%AF%D9%86-%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D8%B3%D9%84%D8%A7%D9%85%DB%8C-%D8%B1%D8%A7%D8%AF-%D9%86%D8%B4%D8%A7%D9%86-%DA%A9%DB%8C%D9%85%DB%8C%D8%A7" target="_blank" rel="noopener">View</a>
-            </li>
-            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-              <strong>Blank Wall Gallery (Greece)</strong> — <span style="font-weight:600">Received an honor diploma in 2020 for excellence in fine art photography.</span> <a href="https://www.blankwallgallery.com/majid-mohammedi-iran-untitled/" target="_blank" rel="noopener">View</a>
-            </li>
-            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-              <strong>Focus Iran 2 — Craft and Folk Art Museum of Los Angeles (USA)</strong> — <span style="font-weight:600">Honor diploma for artistic achievements in 2019.</span> <a href="https://farhang.org/programs/focus-iran" target="_blank" rel="noopener">View</a>
-            </li>
-          </ul>
-        </div>
-      </details>
-    </section>
-
-    <!-- CONSULT -->
-    <section id="consult">
-      <details class="collapsible">
-        <summary>On-site Consultation <span class="caret">▸</span></summary>
-        <div class="inner">
-          <p style="color:var(--muted); margin:0 0 12px">
-            Prefer a personal visit? I’ll come to your space, take measurements and reference photos, and prepare
-            tailored illustrations with suggested photographs and framing options. There’s <strong>no purchase obligation</strong>;
-            a small service fee applies to cover travel and time.
-          </p>
-          <a href="#" class="cta js-book-visit" style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">Book a Site Visit →</a>
-          <br><small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
-        </div>
-      </details>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq" class="faq">
-      <details class="collapsible">
-        <summary>FAQ <span class="caret">▸</span></summary>
-        <div class="inner">
-          <div class="faq-list">
-            <details id="q-paper">
-              <summary>What type of paper are the prints made on?<span class="caret">▸</span></summary>
-              <div class="answer">Each print is produced on <strong>museum-grade, archival matte fine-art paper</strong>. It has a soft texture, rich detail, and is designed to last for decades without fading.</div>
-            </details>
-
-            <details id="q-editions">
-              <summary>Are the prints limited edition?<span class="caret">▸</span></summary>
-              <div class="answer">Many pieces are offered in <strong>small, limited runs</strong>. Each one is <strong>signed</strong> and, when applicable, <strong>numbered</strong>, so you’re receiving a piece that’s truly personal and collectible. Each work also includes an artist statement and a short note about the experience of making the photograph.</div>
-            </details>
-
-            <details id="q-framed">
-              <summary>Do the prints come framed?<span class="caret">▸</span></summary>
-              <div class="answer">Prints are usually offered <strong>unframed</strong> so you can choose a frame that fits your home. If you prefer, <strong>framing can be arranged</strong> on request — I’ll share options and pricing before you commit.</div>
-            </details>
-
-            <details id="q-custom-size">
-              <summary>Can I request a custom size?<span class="caret">▸</span></summary>
-              <div class="answer">Absolutely. Many artworks can be printed in <strong>custom dimensions</strong> to fit your wall perfectly. Just mention the size you have in mind when you inquire.</div>
-            </details>
-
-            <details id="q-framing-options">
-              <summary>Do you offer different framing options?<span class="caret">▸</span></summary>
-              <div class="answer">Yes — I work with professional framers in Vancouver. <strong>Natural wood, black, and white</strong> frames are the most popular choices. I’m happy to help you pick a style that suits the piece and your space.</div>
-            </details>
-
-            <details id="q-process">
-              <summary>What is the purchase process?<span class="caret">▸</span></summary>
-              <div class="answer">
-                1) Click <strong>“Purchase This Photo”</strong> and send your request with the size and framing preference.<br>
-                2) I’ll reply by email with a <strong>personal quote</strong>, including print details and shipping or delivery costs.<br>
-                3) Once you’re happy with everything, <strong>full payment</strong> is made to begin production.<br>
-                4) Your artwork is <strong>professionally printed</strong> (and framed if selected).<br>
-                5) It will be <strong>shipped</strong>, or you can arrange <strong>local pickup or delivery</strong> in Vancouver.<br>
-                <small class="muted">Shipping and delivery are calculated separately.</small>
-              </div>
-            </details>
-
-            <details id="q-timing">
-              <summary>How long does production take?<span class="caret">▸</span></summary>
-              <div class="answer">Printing usually takes <strong>5–10 business days</strong>. Framed works may require a little longer. If you need something by a specific date, just let me know.</div>
-            </details>
-
-            <details id="q-international">
-              <summary>Do you ship internationally?<span class="caret">▸</span></summary>
-              <div class="answer">Yes — I ship worldwide. Prints are packaged carefully in protective tubes or flat archival sleeves to ensure they arrive safely.</div>
-            </details>
-
-            <details id="q-shipping">
-              <summary>What are the shipping or delivery costs?<span class="caret">▸</span></summary>
-              <div class="answer"><strong>Shipping and local delivery are extra</strong> and calculated based on your location and order size. This is clearly included in your quote <strong>before</strong> you make any payment.</div>
-            </details>
-
-            <details id="q-pickup">
-              <summary>Can I pick up my print locally in Vancouver?<span class="caret">▸</span></summary>
-              <div class="answer">Yes — <strong>local pickup</strong> can be arranged at no cost. Local delivery in Vancouver is also available for an additional fee.</div>
-            </details>
-
-            <details id="q-returns">
-              <summary>What is your return or exchange policy?<span class="caret">▸</span></summary>
-              <div class="answer">Each print is made to order. If your piece arrives <strong>damaged</strong>, I will replace it at no charge. Otherwise, <strong>all sales are final</strong> — thank you for understanding.</div>
-            </details>
-
-            <details id="q-colors">
-              <summary>Will the colors look the same as what I see on my screen?<span class="caret">▸</span></summary>
-              <div class="answer">Prints are produced with professional color standards, but screens vary in brightness. Expect the artwork to feel <strong>more natural, soft, and tactile</strong> than a backlit display — that’s part of the beauty of fine-art printing.</div>
-            </details>
-
-            <details id="q-help">
-              <summary>Can you help me choose the right piece or size for my space?<span class="caret">▸</span></summary>
-              <div class="answer">Yes — I love doing this. Send a photo of your wall, and I’ll suggest artworks and sizes that fit the atmosphere and proportions of your room.</div>
-            </details>
-
-            <details id="q-b2b">
-              <summary>Do you work with interior designers, hotels, or businesses?<span class="caret">▸</span></summary>
-              <div class="answer">Yes. I frequently work with designers and commercial spaces. If you’re planning a project, I’d be happy to discuss scale, editioning, and pricing.</div>
-            </details>
-
-            <details id="q-authentic">
-              <summary>Are all photographs taken by you?<span class="caret">▸</span></summary>
-              <div class="answer">Yes — every image is photographed and curated personally by me. Each piece carries a place, a story, and a moment I witnessed.</div>
-            </details>
-          </div>
-        </div>
-      </details>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact">
-      <details class="collapsible">
-        <summary>Contact <span class="caret">▸</span></summary>
-        <div class="inner">
-          <div class="grid" style="align-items:center">
-            <div style="grid-column: span 8;">
-              <p style="color:var(--muted); margin:0 0 12px">For print inquiries, commissions, or exhibitions:</p>
-              <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:madjid.mohamadi@gmail.com">madjid.mohamadi@gmail.com</a></p>
-              <p style="margin:0 0 6px"><strong>Instagram:</strong> <a href="https://www.instagram.com/madjidmohamadi" target="_blank" rel="noopener">@madjidmohamadi</a></p>
-            </div>
-            <div style="grid-column: span 4; text-align:center; color:var(--muted)">
-              <p style="margin:6px 0 0">© <span id="year"></span> By Majid. All rights reserved.</p>
-            </div>
-          </div>
-        </div>
-      </details>
-    </section>
-  </main>
-
-  <footer>
-    <div class="wrap footer-grid">
-      <div class="social" aria-label="Social links">
-        <a href="https://www.instagram.com/madjidmohamadi" aria-label="Instagram" title="Instagram" target="_blank" rel="noopener">Instagram</a>
-        <span aria-hidden="true"> · </span>
-        <a href="mailto:madjid.mohamadi@gmail.com?subject=Prints%20Inquiry" aria-label="Prints" title="Prints">Prints</a>
-      </div>
-      <div>Built on GitHub Pages</div>
-    </div>
-  </footer>
-
-  <!-- Lightbox + purchase -->
-  <div class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lb-title">
-    <h2 id="lb-title" class="sr-only">Image viewer</h2>
-    <button class="close" aria-label="Close">Close ✕</button>
-    <img src="" alt="" />
-    <button class="buy" type="button" aria-label="Purchase this photo">Purchase this Photo</button>
-  </div>
-
-  <!-- Quote dialog -->
-  <div class="modal" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quote-title" aria-hidden="true">
-    <form class="modal-card" id="quoteForm">
-      <h3 id="quote-title">Request a Quote</h3>
-      <p id="quote-photo" style="margin:.25rem 0 .5rem; font-size:.9rem; color:#444"></p>
-      <input type="hidden" name="photo_src" id="photo_src">
-      <input type="hidden" name="photo_title" id="photo_title">
-      <label for="buyer_email">Your Email</label>
-      <input id="buyer_email" name="email" type="email" required placeholder="you@example.com" inputmode="email" autocomplete="email">
-      <label for="buyer_note">Notes (optional)</label>
-      <textarea id="buyer_note" name="note" rows="4" placeholder="Size, frame preference, delivery city…"></textarea>
-      <div class="modal-actions">
-        <button type="button" class="btn cancel" id="cancelQuote">Cancel</button>
-        <button type="submit" class="btn submit">Submit</button>
-      </div>
-    </form>
-  </div>
-
-  <!-- Site visit dialog -->
-  <div class="modal" id="visitModal" role="dialog" aria-modal="true" aria-labelledby="visit-title" aria-hidden="true">
-    <form class="modal-card" id="visitForm">
-      <h3 id="visit-title">Request a Site Visit</h3>
-      <label for="visit_name">Your Name</label>
-      <input id="visit_name" name="visit_name" required placeholder="Full Name" autocomplete="name">
-      <label for="visit_email">Your Email</label>
-      <input id="visit_email" name="visit_email" type="email" required placeholder="you@example.com" inputmode="email" autocomplete="email">
-      <label for="visit_phone">Phone (optional)</label>
-      <input id="visit_phone" name="visit_phone" type="tel" placeholder="+1 604 …" inputmode="tel" autocomplete="tel">
-      <label for="visit_city">City</label>
-      <input id="visit_city" name="visit_city" required placeholder="e.g., West Vancouver">
-      <label for="visit_date">Preferred Date (optional)</label>
-      <input id="visit_date" name="visit_date" type="date">
-      <label for="visit_note">Notes (optional)</label>
-      <textarea id="visit_note" name="note" rows="4" placeholder="Access, parking, room types, timing…"></textarea>
-      <div class="modal-actions">
-        <button type="button" class="btn cancel" id="cancelVisit">Cancel</button>
-        <button type="submit" class="btn submit">Submit</button>
-      </div>
-    </form>
-  </div>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <script>
-    // dynamic --vh for mobile
-    function setVh(){
-      var h = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
-      document.documentElement.style.setProperty('--vh', (h * 0.01) + 'px');
+    const d = wrap.querySelector('details.collapsible');
+    if(isDetails(d)){
+      if(!d.open) d.open = true;
+      closeAllDetails(id);
+      // wait a frame so layout settles, then scroll
+      requestAnimationFrame(()=> setTimeout(()=> offsetScrollTo(d), 50));
+    }else{
+      requestAnimationFrame(()=> setTimeout(()=> offsetScrollTo(wrap), 10));
     }
-    setVh(); addEventListener('resize', setVh); addEventListener('orientationchange', setVh);
+  }
 
-    // header offset
-    function setHeaderOffset(){
-      const h = document.getElementById('siteHeader');
-      const px = h ? (h.offsetHeight || 64) : 64;
-      document.documentElement.style.setProperty('--headerH', px + 'px');
-    }
-    setHeaderOffset(); addEventListener('resize', setHeaderOffset);
+  function openPanel(){ panel.hidden = false; btn.setAttribute('aria-expanded','true'); }
+  function closePanel(){ panel.hidden = true; btn.setAttribute('aria-expanded','false'); }
+  function togglePanel(){ (panel.hidden ? openPanel : closePanel)(); }
 
-    // year
-    const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+  btn.addEventListener('click', togglePanel, {passive:true});
 
-    /* ===== Lightbox (unchanged) ===== */
-    (function(){
-      const lb = document.querySelector('.lightbox');
-      if (!lb) return;
-      const lbImg = lb.querySelector('img');
-      const closeBtn = lb.querySelector('button.close');
-      const buyBtn = lb.querySelector('button.buy');
-      const main = document.querySelector('main');
-      let lastFocus = null;
-      let currentPhoto = { src:'', title:'' };
+  // Use history hash so back button works; then drive scroll via hashchange handler
+  panel.addEventListener('click', (e)=>{
+    const a = e.target.closest('a[data-section]');
+    if(!a) return;
+    e.preventDefault();
+    const id = a.getAttribute('data-section');
+    closePanel();
+    // push hash (no full page jump), then handle in hash handler
+    history.pushState(null, '', '#'+id);
+    // also open immediately for browsers that delay hashchange
+    openSection(id);
+  });
 
-      function fitLightbox(){
-        const vb = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
-        lbImg.style.maxHeight = (vb - 160) + 'px';
-      }
+  document.addEventListener('click', (e)=>{
+    if(panel.hidden) return;
+    if(e.target === btn || panel.contains(e.target)) return;
+    closePanel();
+  }, {passive:true});
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && !panel.hidden) closePanel();
+  }, {passive:true});
 
-      function openLightbox(src, title){
-        lastFocus = document.activeElement;
-        document.body.classList.add('no-scroll');
-        lb.classList.add('open');
-        if (main) main.setAttribute('aria-hidden','true');
+  // Handle direct hash navigation and back/forward
+  function openFromHash(){
+    const id = (location.hash||'').slice(1);
+    if(!id) return;
+    openSection(id);
+  }
+  window.addEventListener('hashchange', openFromHash, {passive:true});
+  if(location.hash) setTimeout(openFromHash, 120);
 
-        lbImg.alt = title || '';
-        currentPhoto = { src, title: title || '' };
-
-        lbImg.src = '';
-        const pre = new Image();
-        pre.onload = () => { lbImg.src = src; fitLightbox(); };
-        pre.onerror = () => { lbImg.src = src; fitLightbox(); };
-        pre.src = src;
-
-        closeBtn.focus();
-        fitLightbox();
-      }
-      function closeLightbox(){
-        lb.classList.remove('open');
-        lbImg.src = '';
-        document.body.classList.remove('no-scroll');
-        if (main) main.removeAttribute('aria-hidden');
-        if (lastFocus) lastFocus.focus();
-      }
-
-      document.querySelectorAll('.card img').forEach(img => {
-        img.addEventListener('click', (e) => {
-          e.preventDefault();
-          const src = img.currentSrc || img.src;
-          openLightbox(src, img.alt || '');
-        }, { passive:false });
-      });
-
-      closeBtn.addEventListener('click', closeLightbox, { passive:true });
-      lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLightbox(); }, { passive:true });
-      addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLightbox(); }, { passive:true });
-      addEventListener('resize', fitLightbox, { passive:true });
-      addEventListener('orientationchange', fitLightbox, { passive:true });
-    })();
-
-    /* ===== ☰ Sections: open + smooth scroll (robust) ===== */
-    (function(){
-      const btn = document.getElementById('sectionsToggle');
-      const panel = document.getElementById('sectionsPanel');
-      if(!btn || !panel) return;
-
-      const collapsibleIds = ['about','awards','consult','faq','contact'];
-      const headerH = () => (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--headerH'))||64) + 12;
-      const isDetails = el => !!el && el.tagName === 'DETAILS';
-
-      function closeAllDetails(exceptId){
-        collapsibleIds.forEach(id=>{
-          if(id === exceptId) return;
-          const d = document.getElementById(id)?.querySelector('details.collapsible');
-          if(isDetails(d)) d.removeAttribute('open');
-        });
-      }
-
-      function scrollToEl(el){
-        const top = el.getBoundingClientRect().top + window.scrollY - headerH();
-        window.scrollTo({ top: Math.max(0, top), behavior:'smooth' });
-      }
-
-      function openSection(id){
-        const wrap = document.getElementById(id);
-        if(!wrap) return;
-        const d = wrap.querySelector('details.collapsible');
-
-        if(isDetails(d)){
-          if(!d.open) d.open = true;
-          closeAllDetails(id);
-          // Wait for layout to settle then scroll (works on Samsung Chrome)
-          setTimeout(()=>scrollToEl(d), 60);
-        }else{
-          setTimeout(()=>scrollToEl(wrap), 10);
-        }
-      }
-
-      function openPanel(){ panel.hidden = false; btn.setAttribute('aria-expanded','true'); }
-      function closePanel(){ panel.hidden = true; btn.setAttribute('aria-expanded','false'); }
-      function togglePanel(){ (panel.hidden ? openPanel : closePanel)(); }
-
-      btn.addEventListener('click', (e)=>{ e.preventDefault(); togglePanel(); }, {passive:false});
-      panel.addEventListener('click', (e)=>{
-        const a = e.target.closest('a[data-section]');
-        if(!a) return;
-        e.preventDefault();
-        const id = a.getAttribute('data-section');
-        closePanel();
-        openSection(id);
-      }, {passive:false});
-      document.addEventListener('click', (e)=>{
-        if(panel.hidden) return;
-        if(e.target === btn || panel.contains(e.target)) return;
-        closePanel();
-      }, {passive:true});
-      document.addEventListener('keydown', (e)=>{
-        if(e.key === 'Escape' && !panel.hidden) closePanel();
-      }, {passive:true});
-
-      // Also support direct hash navigation (#about etc.)
-      function openFromHash(){
-        const id = (location.hash||'').replace('#','');
-        if(!id) return;
-        openSection(id);
-      }
-      window.addEventListener('hashchange', openFromHash, {passive:true});
-      if(location.hash) setTimeout(openFromHash, 120);
-
-      // Keep accordion behavior if user taps the section header directly
-      document.querySelectorAll('details.collapsible > summary').forEach(sum=>{
-        sum.addEventListener('click', ()=>{
-          const sec = sum.closest('section')?.id;
-          if(sec) closeAllDetails(sec);
-        }, {passive:true});
-      });
-    })();
-
-    // Update --vh when browser chrome shows/hides
-    if (window.visualViewport) {
-      const updateVh = () => {
-        document.documentElement.style.setProperty('--vh', (visualViewport.height * 0.01) + 'px');
-      };
-      visualViewport.addEventListener('resize', updateVh, { passive:true });
-      visualViewport.addEventListener('scroll', updateVh, { passive:true });
-      updateVh();
-    }
-
-    // Year
-    (function(){ const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
-  </script>
-</body>
-</html>
+  // Keep accordion behavior if user taps the section header directly
+  document.querySelectorAll('details.collapsible > summary').forEach(sum=>{
+    sum.addEventListener('click', ()=>{
+      const sec = sum.closest('section')?.id;
+      if(sec) closeAllDetails(sec);
+      // scroll to the details container itself (header offset)
+      const d = sum.parentElement;
+      requestAnimationFrame(()=> setTimeout(()=> offsetScrollTo(d), 30));
+    }, {passive:true});
+  });
+})();
+</script>
