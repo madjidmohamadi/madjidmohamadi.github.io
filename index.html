@@ -156,6 +156,41 @@
 
     /* Smooth scroll */
     html{ scroll-behavior:smooth; }
+
+    /* ===== Shared section-card + collapsible styles (About + FAQ) ===== */
+    .section-card{
+      background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+      padding: clamp(16px,3vw,24px);
+    }
+
+    /* Collapsible containers (use <details class="collapsible">) */
+    .collapsible{
+      background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;
+    }
+    .collapsible summary{
+      list-style:none; cursor:pointer; padding:14px 16px; font-weight:800;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      font-family:"Playfair Display",serif; font-size:clamp(20px,3vw,28px);
+      border-bottom:1px solid color-mix(in oklab, var(--fg) 10%, transparent);
+    }
+    .collapsible summary::-webkit-details-marker{ display:none }
+    .collapsible .caret{ flex:0 0 auto; transition: transform .2s ease; opacity:.8 }
+    details[open] > summary .caret{ transform:rotate(90deg) }
+    .collapsible .content{ padding:16px; }
+    /* For FAQ items inside collapsible content */
+    .faq-list{ display:grid; gap:10px; margin:0; padding:0; }
+    .faq-list details{
+      background:var(--card); border-radius:12px; box-shadow:var(--shadow);
+      overflow:hidden; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent);
+    }
+    .faq-list summary{
+      list-style:none; cursor:pointer; padding:14px 16px; font-weight:700;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .faq-list summary::-webkit-details-marker{ display:none }
+    .faq-list .answer{ padding:0 16px 16px; color:var(--muted) }
+    .faq-list .caret{ flex:0 0 auto; transition: transform .2s ease; opacity:.8 }
+    .faq-list details[open] .caret{ transform:rotate(90deg) }
   </style>
 
   <script type="application/ld+json">
@@ -201,7 +236,7 @@
         <small>Fine Art Photography</small>
       </div>
 
-      <!-- Replaced text links with the Sections button -->
+      <!-- “☰ Sections” button -->
       <button class="sections-btn" id="sectionsBtn" aria-haspopup="true" aria-expanded="false" aria-controls="sectionsDrawer" aria-label="Open sections menu">
         ☰ Sections
       </button>
@@ -288,161 +323,172 @@
       </div>
     </section>
 
-    <!-- ABOUT -->
+    <!-- ABOUT (now collapsible) -->
     <section id="about" style="margin-top: clamp(28px,6vw,64px);">
-      <div class="grid" style="grid-template-columns:repeat(12,1fr); gap:var(--gap)">
-        <div style="grid-column:span 7; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden">
-          <img src="/images/about.jpg" alt="Majid in the field with camera" style="width:100%;height:auto;display:block" loading="lazy" decoding="async" width="1200" height="800">
+      <details class="collapsible" open>
+        <summary>
+          About
+          <span class="caret">▸</span>
+        </summary>
+        <div class="content">
+          <div class="grid" style="grid-template-columns:repeat(12,1fr); gap:var(--gap)">
+            <div style="grid-column:span 7; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden">
+              <img src="/images/about.jpg" alt="Majid in the field with camera" style="width:100%;height:auto;display:block" loading="lazy" decoding="async" width="1200" height="800">
+            </div>
+            <div style="grid-column:span 5; display:flex; flex-direction:column; justify-content:center; gap:10px">
+              <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0">About</h3>
+              <p style="color:var(--muted); margin:0">Majid Mohamadi is a Canadian–Iranian fine art photographer and commercial pilot based in the Pacific Northwest. His work is shaped by long hours spent above coastlines, mountains, and desert horizons — where silence expands and time seems to slow. Through minimal compositions and meditative light, he explores stillness, reflection, and the quiet emotional landscapes that exist between places. Whether in the air or on the ground, Majid approaches the world with the same instinct: to look closely, to listen to silence, and to capture the moments when the visible world begins to feel like memory.</p>
+              <p style="color:var(--muted); margin:0">Prints are available in gallery editions. Commissions and licensing by request.</p>
+            </div>
+          </div>
         </div>
-        <div style="grid-column:span 5; display:flex; flex-direction:column; justify-content:center; gap:10px">
-          <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0">About</h3>
-          <p style="color:var(--muted); margin:0">Majid Mohamadi is a Canadian–Iranian fine art photographer and commercial pilot based in the Pacific Northwest. His work is shaped by long hours spent above coastlines, mountains, and desert horizons — where silence expands and time seems to slow. Through minimal compositions and meditative light, he explores stillness, reflection, and the quiet emotional landscapes that exist between places. Whether in the air or on the ground, Majid approaches the world with the same instinct: to look closely, to listen to silence, and to capture the moments when the visible world begins to feel like memory.</p>
-          <p style="color:var(--muted); margin:0">Prints are available in gallery editions. Commissions and licensing by request.</p>
-        </div>
-      </div>
+      </details>
     </section>
 
     <!-- AWARDS -->
     <section id="awards" style="margin-top: clamp(28px,6vw,64px);">
-      <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 12px">Awards &amp; Honors</h3>
-      <ul style="list-style:none; padding:0; margin:0; display:grid; gap:10px">
-        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-          <strong>Fine Art Photography Awards</strong> — Majid Mohamadi 1st Prize Winner in Travel. <a href="https://fineartphotoawards.com/winners-gallery/fapa-2019-2020/amateur/travel/gold-award/" target="_blank" rel="noopener">View</a>
-        </li>
-        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-          <strong>FIAP Honor Ribbon</strong>, 41st Trophy Torretes of Photography (Spain) 2018 — Recognized for excellence in international photography. <a href="https://www.festimatge.org/el-festival-2/" target="_blank" rel="noopener">View</a>
-        </li>
-        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-          <strong>LensCulture Art Photography Awards 2022</strong> — Featured and nominated for outstanding work in art photography. <a href="https://www.lensculture.com/photo-competitions/art-photography-awards/2022" target="_blank" rel="noopener">View</a>
-        </li>
-        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-          <strong>Kimia Photo Festival (Iran) 2019</strong> — Won first prize for creative photography. <a href="https://www.mehrnews.com/news/4463154/%D8%A7%D8%B9%D9%84%D8%A7%D9%85-%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B9%DA%A9%D8%B3-%D9%85%D8%B9%D8%AF%D9%86-%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D8%B3%D9%84%D8%A7%D9%85%DB%8C-%D8%B1%D8%A7%D8%AF-%D9%86%D8%B4%D8%A7%D9%86-%DA%A9%DB%8C%D9%85%DB%8C%D8%A7" target="_blank" rel="noopener">View</a>
-        </li>
-        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-          <strong>Blank Wall Gallery (Greece)</strong> — Received an honor diploma in 2020 for excellence in fine art photography. <a href="https://www.blankwallgallery.com/majid-mohammedi-iran-untitled/" target="_blank" rel="noopener">View</a>
-        </li>
-        <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
-          <strong>Focus Iran 2 — Craft and Folk Art Museum of Los Angeles (USA)</strong> — Honor diploma for artistic achievements in 2019. <a href="https://farhang.org/programs/focus-iran" target="_blank" rel="noopener">View</a>
-        </li>
-      </ul>
+      <div class="section-card">
+        <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 12px">Awards &amp; Honors</h3>
+        <ul style="list-style:none; padding:0; margin:0; display:grid; gap:10px">
+          <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+            <strong>Fine Art Photography Awards</strong> — Majid Mohamadi 1st Prize Winner in Travel. <a href="https://fineartphotoawards.com/winners-gallery/fapa-2019-2020/amateur/travel/gold-award/" target="_blank" rel="noopener">View</a>
+          </li>
+          <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+            <strong>FIAP Honor Ribbon</strong>, 41st Trophy Torretes of Photography (Spain) 2018 — Recognized for excellence in international photography. <a href="https://www.festimatge.org/el-festival-2/" target="_blank" rel="noopener">View</a>
+          </li>
+          <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+            <strong>LensCulture Art Photography Awards 2022</strong> — Featured and nominated for outstanding work in art photography. <a href="https://www.lensculture.com/photo-competitions/art-photography-awards/2022" target="_blank" rel="noopener">View</a>
+          </li>
+          <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+            <strong>Kimia Photo Festival (Iran) 2019</strong> — Won first prize for creative photography. <a href="https://www.mehrnews.com/news/4463154/%D8%A7%D8%B9%D9%84%D8%A7%D9%85-%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B9%DA%A9%D8%B3-%D9%85%D8%B9%D8%AF%D9%86-%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D8%B3%D9%84%D8%A7%D9%85%DB%8C-%D8%B1%D8%A7%D8%AF-%D9%86%D8%B4%D8%A7%D9%86-%DA%A9%DB%8C%D9%85%DB%8C%D8%A7" target="_blank" rel="noopener">View</a>
+          </li>
+          <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+            <strong>Blank Wall Gallery (Greece)</strong> — Received an honor diploma in 2020 for excellence in fine art photography. <a href="https://www.blankwallgallery.com/majid-mohammedi-iran-untitled/" target="_blank" rel="noopener">View</a>
+          </li>
+          <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+            <strong>Focus Iran 2 — Craft and Folk Art Museum of Los Angeles (USA)</strong> — Honor diploma for artistic achievements in 2019. <a href="https://farhang.org/programs/focus-iran" target="_blank" rel="noopener">View</a>
+          </li>
+        </ul>
+      </div>
     </section>
 
     <!-- INTERIOR CONSULTATION -->
     <section id="consult" style="margin-top: clamp(28px,6vw,64px);">
-      <div class="grid" style="align-items:start; gap: var(--gap);">
-        <div style="grid-column: span 12; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
-          <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 8px">On-site Consultation</h3>
-          <p style="color:var(--muted); margin:0 0 12px">
-            Prefer a personal visit? I’ll come to your space, take measurements and reference photos, and prepare
-            tailored illustrations with suggested photographs and framing options. There’s <strong>no purchase obligation</strong>;
-            a small service fee applies to cover travel and time.
-          </p>
-          <a href="#" class="cta js-book-visit" style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">Book a Site Visit →</a>
-          <br><small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
-        </div>
+      <div class="section-card">
+        <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 8px">On-site Consultation</h3>
+        <p style="color:var(--muted); margin:0 0 12px">
+          Prefer a personal visit? I’ll come to your space, take measurements and reference photos, and prepare
+          tailored illustrations with suggested photographs and framing options. There’s <strong>no purchase obligation</strong>;
+          a small service fee applies to cover travel and time.
+        </p>
+        <a href="#" class="cta js-book-visit" style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">Book a Site Visit →</a>
+        <br><small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
       </div>
     </section>
 
-    <!-- ===== FAQ ===== -->
-    <section id="faq" class="faq" aria-label="Frequently Asked Questions">
-      <h3>FAQ</h3>
-      <div class="faq-list">
-        <details id="q-paper">
-          <summary>What type of paper are the prints made on?<span class="caret">▸</span></summary>
-          <div class="answer">Each print is produced on <strong>museum-grade, archival matte fine-art paper</strong>. It has a soft texture, rich detail, and is designed to last for decades without fading.</div>
-        </details>
+    <!-- ===== FAQ (now in a section-card wrapper; items stay collapsible) ===== -->
+    <section id="faq" aria-label="Frequently Asked Questions" style="margin-top: clamp(28px,6vw,64px);">
+      <details class="collapsible" open>
+        <summary>
+          FAQ
+          <span class="caret">▸</span>
+        </summary>
+        <div class="content">
+          <div class="faq-list">
+            <details id="q-paper">
+              <summary>What type of paper are the prints made on?<span class="caret">▸</span></summary>
+              <div class="answer">Each print is produced on <strong>museum-grade, archival matte fine-art paper</strong>. It has a soft texture, rich detail, and is designed to last for decades without fading.</div>
+            </details>
 
-        <details id="q-editions">
-          <summary>Are the prints limited edition?<span class="caret">▸</span></summary>
-          <div class="answer">Many pieces are offered in <strong>small, limited runs</strong>. Each one is <strong>signed</strong> and, when applicable, <strong>numbered</strong>, so you’re receiving a piece that’s truly personal and collectible. Each work also includes an artist statement and a short note about the experience of making the photograph.</div>
-        </details>
+            <details id="q-editions">
+              <summary>Are the prints limited edition?<span class="caret">▸</span></summary>
+              <div class="answer">Many pieces are offered in <strong>small, limited runs</strong>. Each one is <strong>signed</strong> and, when applicable, <strong>numbered</strong>, so you’re receiving a piece that’s truly personal and collectible. Each work also includes an artist statement and a short note about the experience of making the photograph.</div>
+            </details>
 
-        <details id="q-framed">
-          <summary>Do the prints come framed?<span class="caret">▸</span></summary>
-          <div class="answer">Prints are usually offered <strong>unframed</strong> so you can choose a frame that fits your home. If you prefer, <strong>framing can be arranged</strong> on request — I’ll share options and pricing before you commit.</div>
-        </details>
+            <details id="q-framed">
+              <summary>Do the prints come framed?<span class="caret">▸</span></summary>
+              <div class="answer">Prints are usually offered <strong>unframed</strong> so you can choose a frame that fits your home. If you prefer, <strong>framing can be arranged</strong> on request — I’ll share options and pricing before you commit.</div>
+            </details>
 
-        <details id="q-custom-size">
-          <summary>Can I request a custom size?<span class="caret">▸</span></summary>
-          <div class="answer">Absolutely. Many artworks can be printed in <strong>custom dimensions</strong> to fit your wall perfectly. Just mention the size you have in mind when you inquire.</div>
-        </details>
+            <details id="q-custom-size">
+              <summary>Can I request a custom size?<span class="caret">▸</span></summary>
+              <div class="answer">Absolutely. Many artworks can be printed in <strong>custom dimensions</strong> to fit your wall perfectly. Just mention the size you have in mind when you inquire.</div>
+            </details>
 
-        <details id="q-framing-options">
-          <summary>Do you offer different framing options?<span class="caret">▸</span></summary>
-          <div class="answer">Yes — I work with professional framers in Vancouver. <strong>Natural wood, black, and white</strong> frames are the most popular choices. I’m happy to help you pick a style that suits the piece and your space.</div>
-        </details>
+            <details id="q-framing-options">
+              <summary>Do you offer different framing options?<span class="caret">▸</span></summary>
+              <div class="answer">Yes — I work with professional framers in Vancouver. <strong>Natural wood, black, and white</strong> frames are the most popular choices. I’m happy to help you pick a style that suits the piece and your space.</div>
+            </details>
 
-        <details id="q-process">
-          <summary>What is the purchase process?<span class="caret">▸</span></summary>
-          <div class="answer">
-            1) Click <strong>“Purchase This Photo”</strong> and send your request with the size and framing preference.<br>
-            2) I’ll reply by email with a <strong>personal quote</strong>, including print details and shipping or delivery costs.<br>
-            3) Once you’re happy with everything, <strong>full payment</strong> is made to begin production.<br>
-            4) Your artwork is <strong>professionally printed</strong> (and framed if selected).<br>
-            5) It will be <strong>shipped</strong>, or you can arrange <strong>local pickup or delivery</strong> in Vancouver.<br>
-            <small class="muted">Shipping and delivery are calculated separately.</small>
+            <details id="q-process">
+              <summary>What is the purchase process?<span class="caret">▸</span></summary>
+              <div class="answer">
+                1) Click <strong>“Purchase This Photo”</strong> and send your request with the size and framing preference.<br>
+                2) I’ll reply by email with a <strong>personal quote</strong>, including print details and shipping or delivery costs.<br>
+                3) Once you’re happy with everything, <strong>full payment</strong> is made to begin production.<br>
+                4) Your artwork is <strong>professionally printed</strong> (and framed if selected).<br>
+                5) It will be <strong>shipped</strong>, or you can arrange <strong>local pickup or delivery</strong> in Vancouver.<br>
+                <small class="muted">Shipping and delivery are calculated separately.</small>
+              </div>
+            </details>
+
+            <details id="q-timing">
+              <summary>How long does production take?<span class="caret">▸</span></summary>
+              <div class="answer">Printing usually takes <strong>5–10 business days</strong>. Framed works may require a little longer. If you need something by a specific date, just let me know.</div>
+            </details>
+
+            <details id="q-international">
+              <summary>Do you ship internationally?<span class="caret">▸</span></summary>
+              <div class="answer">Yes — I ship worldwide. Prints are packaged carefully in protective tubes or flat archival sleeves to ensure they arrive safely.</div>
+            </details>
+
+            <details id="q-shipping">
+              <summary>What are the shipping or delivery costs?<span class="caret">▸</span></summary>
+              <div class="answer"><strong>Shipping and local delivery are extra</strong> and calculated based on your location and order size. This is clearly included in your quote <strong>before</strong> you make any payment.</div>
+            </details>
+
+            <details id="q-pickup">
+              <summary>Can I pick up my print locally in Vancouver?<span class="caret">▸</span></summary>
+              <div class="answer">Yes — <strong>local pickup</strong> can be arranged at no cost. Local delivery in Vancouver is also available for an additional fee.</div>
+            </details>
+
+            <details id="q-returns">
+              <summary>What is your return or exchange policy?<span class="caret">▸</span></summary>
+              <div class="answer">Each print is made to order. If your piece arrives <strong>damaged</strong>, I will replace it at no charge. Otherwise, <strong>all sales are final</strong> — thank you for understanding.</div>
+            </details>
+
+            <details id="q-colors">
+              <summary>Will the colors look the same as what I see on my screen?<span class="caret">▸</span></summary>
+              <div class="answer">Prints are produced with professional color standards, but screens vary in brightness. Expect the artwork to feel <strong>more natural, soft, and tactile</strong> than a backlit display — that’s part of the beauty of fine-art printing.</div>
+            </details>
+
+            <details id="q-help">
+              <summary>Can you help me choose the right piece or size for my space?<span class="caret">▸</span></summary>
+              <div class="answer">Yes — I love doing this. Send a photo of your wall, and I’ll suggest artworks and sizes that fit the atmosphere and proportions of your room.</div>
+            </details>
+
+            <details id="q-b2b">
+              <summary>Do you work with interior designers, hotels, or businesses?<span class="caret">▸</span></summary>
+              <div class="answer">Yes. I frequently work with designers and commercial spaces. If you’re planning a project, I’d be happy to discuss scale, editioning, and pricing.</div>
+            </details>
+
+            <details id="q-authentic">
+              <summary>Are all photographs taken by you?<span class="caret">▸</span></summary>
+              <div class="answer">Yes — every image is photographed and curated personally by me. Each piece carries a place, a story, and a moment I witnessed.</div>
+            </details>
           </div>
-        </details>
-
-        <details id="q-timing">
-          <summary>How long does production take?<span class="caret">▸</span></summary>
-          <div class="answer">Printing usually takes <strong>5–10 business days</strong>. Framed works may require a little longer. If you need something by a specific date, just let me know.</div>
-        </details>
-
-        <details id="q-international">
-          <summary>Do you ship internationally?<span class="caret">▸</span></summary>
-          <div class="answer">Yes — I ship worldwide. Prints are packaged carefully in protective tubes or flat archival sleeves to ensure they arrive safely.</div>
-        </details>
-
-        <details id="q-shipping">
-          <summary>What are the shipping or delivery costs?<span class="caret">▸</span></summary>
-          <div class="answer"><strong>Shipping and local delivery are extra</strong> and calculated based on your location and order size. This is clearly included in your quote <strong>before</strong> you make any payment.</div>
-        </details>
-
-        <details id="q-pickup">
-          <summary>Can I pick up my print locally in Vancouver?<span class="caret">▸</span></summary>
-          <div class="answer">Yes — <strong>local pickup</strong> can be arranged at no cost. Local delivery in Vancouver is also available for an additional fee.</div>
-        </details>
-
-        <details id="q-returns">
-          <summary>What is your return or exchange policy?<span class="caret">▸</span></summary>
-          <div class="answer">Each print is made to order. If your piece arrives <strong>damaged</strong>, I will replace it at no charge. Otherwise, <strong>all sales are final</strong> — thank you for understanding.</div>
-        </details>
-
-        <details id="q-colors">
-          <summary>Will the colors look the same as what I see on my screen?<span class="caret">▸</span></summary>
-          <div class="answer">Prints are produced with professional color standards, but screens vary in brightness. Expect the artwork to feel <strong>more natural, soft, and tactile</strong> than a backlit display — that’s part of the beauty of fine-art printing.</div>
-        </details>
-
-        <details id="q-help">
-          <summary>Can you help me choose the right piece or size for my space?<span class="caret">▸</span></summary>
-          <div class="answer">Yes — I love doing this. Send a photo of your wall, and I’ll suggest artworks and sizes that fit the atmosphere and proportions of your room.</div>
-        </details>
-
-        <details id="q-b2b">
-          <summary>Do you work with interior designers, hotels, or businesses?<span class="caret">▸</span></summary>
-          <div class="answer">Yes. I frequently work with designers and commercial spaces. If you’re planning a project, I’d be happy to discuss scale, editioning, and pricing.</div>
-        </details>
-
-        <details id="q-authentic">
-          <summary>Are all photographs taken by you?<span class="caret">▸</span></summary>
-          <div class="answer">Yes — every image is photographed and curated personally by me. Each piece carries a place, a story, and a moment I witnessed.</div>
-        </details>
-      </div>
+        </div>
+      </details>
     </section>
 
     <!-- CONTACT -->
     <section id="contact" style="margin-top: clamp(28px,6vw,64px);">
-      <div class="grid" style="align-items:center">
-        <div style="grid-column: span 8; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
-          <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin-top:0">Contact</h3>
-          <p style="color:var(--muted); margin:0 0 12px">For print inquiries, commissions, or exhibitions:</p>
-          <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:madjid.mohamadi@gmail.com">madjid.mohamadi@gmail.com</a></p>
-          <p style="margin:0 0 6px"><strong>Instagram:</strong> <a href="https://www.instagram.com/madjidmohamadi" target="_blank" rel="noopener">@madjidmohamadi</a></p>
-        </div>
-        <div style="grid-column: span 4; text-align:center; color:var(--muted)">
-          <p style="margin:6px 0 0">© <span id="year"></span> By Majid. All rights reserved.</p>
-        </div>
+      <div class="section-card">
+        <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin-top:0">Contact</h3>
+        <p style="color:var(--muted); margin:0 0 12px">For print inquiries, commissions, or exhibitions:</p>
+        <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:madjid.mohamadi@gmail.com">madjid.mohamadi@gmail.com</a></p>
+        <p style="margin:0 0 6px"><strong>Instagram:</strong> <a href="https://www.instagram.com/madjidmohamadi" target="_blank" rel="noopener">@madjidmohamadi</a></p>
+        <p style="margin:6px 0 0">© <span id="year"></span> By Majid. All rights reserved.</p>
       </div>
     </section>
   </main>
@@ -539,6 +585,7 @@
       setTimeout(()=>toast.classList.remove('show'), 3200);
     }
 
+    /* Lightbox + Quote + Visit (unchanged behavior) */
     (function(){
       const lb = document.querySelector('.lightbox');
       if (!lb) return;
@@ -594,7 +641,7 @@
       addEventListener('resize', fitLightbox, { passive:true });
       addEventListener('orientationchange', fitLightbox, { passive:true });
 
-      // Quote modal hooks
+      // Quote modal
       const quoteModal = document.getElementById('quoteModal');
       const quoteForm  = document.getElementById('quoteForm');
       const cancelQuote = document.getElementById('cancelQuote');
@@ -695,7 +742,7 @@
         }
       });
 
-      // FAQ hash open
+      // FAQ: open if linked via hash (e.g., #q-process)
       if (location.hash) {
         const el = document.querySelector(location.hash);
         if (el && el.tagName === 'DETAILS') {
@@ -713,7 +760,7 @@
 
     })();
 
-    // Improve --vh updates when browser chrome shows/hides
+    // Improve --vh with visualViewport chrome show/hide
     if (window.visualViewport) {
       const updateVh = () => {
         document.documentElement.style.setProperty('--vh', (visualViewport.height * 0.01) + 'px');
