@@ -103,6 +103,20 @@
 
     .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:#111; color:#fff; padding:10px 14px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,.4); display:none; z-index:10001; font-weight:600 }
     .toast.show{ display:block }
+
+    /* ===== FAQ (accordion) ===== */
+    .faq{ margin-top: clamp(28px,6vw,64px); }
+    .faq h3{ font-family:"Playfair Display",serif; font-size:clamp(20px,3vw,28px); margin:0 0 12px }
+    .faq-list{ display:grid; gap:10px; }
+    .faq details{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:0; overflow:hidden }
+    .faq summary{
+      list-style:none; cursor:pointer; padding:14px 16px; font-weight:700; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .faq summary::-webkit-details-marker{ display:none }
+    .faq .answer{ padding:0 16px 16px; color:var(--muted) }
+    .faq .caret{ flex:0 0 auto; transition: transform .2s ease; opacity:.8 }
+    details[open] .caret{ transform:rotate(90deg) }
+    .faq small.muted{ color:var(--muted) }
   </style>
 
   <script type="application/ld+json">
@@ -115,6 +129,28 @@
     "image":"https://bymajid.com/images/about.jpg",
     "sameAs":["https://www.instagram.com/madjidmohamadi"],
     "brand":{"@type":"Brand","name":"By Majid"}
+  }
+  </script>
+
+  <!-- FAQPage schema for rich results -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"What type of paper are the prints made on?","acceptedAnswer":{"@type":"Answer","text":"Each print is produced on museum-grade, archival matte fine-art paper with a soft texture and long-lasting color."}},
+      {"@type":"Question","name":"Are the prints limited edition?","acceptedAnswer":{"@type":"Answer","text":"Many works are offered in small, limited runs. Each one is signed and, when applicable, numbered."}},
+      {"@type":"Question","name":"Do the prints come framed?","acceptedAnswer":{"@type":"Answer","text":"Prints are usually offered unframed so you can choose a frame that suits your space. Framing can be arranged on request."}},
+      {"@type":"Question","name":"Can I request a custom size?","acceptedAnswer":{"@type":"Answer","text":"Yes. Many artworks can be printed to custom dimensions. Mention your preferred size when you inquire."}},
+      {"@type":"Question","name":"Do you offer different framing options?","acceptedAnswer":{"@type":"Answer","text":"Yes. I work with professional framers in Vancouver and can suggest natural wood, black, or white options."}},
+      {"@type":"Question","name":"What is the purchase process?","acceptedAnswer":{"@type":"Answer","text":"Click “Purchase This Photo” to request a quote. I’ll confirm size and options by email, then full payment is made to begin production. Shipping/delivery is extra."}},
+      {"@type":"Question","name":"How long does production take?","acceptedAnswer":{"@type":"Answer","text":"Printing typically takes 5–10 business days. Framed works may take a little longer."}},
+      {"@type":"Question","name":"Do you ship internationally?","acceptedAnswer":{"@type":"Answer","text":"Yes. Prints are packaged securely for safe worldwide shipping."}},
+      {"@type":"Question","name":"What are the shipping or delivery costs?","acceptedAnswer":{"@type":"Answer","text":"Shipping and local delivery are calculated separately based on your location and order size. Costs are included in the quote before payment."}},
+      {"@type":"Question","name":"Can I pick up locally in Vancouver?","acceptedAnswer":{"@type":"Answer","text":"Yes. Local pickup is available at no cost. Local delivery can be arranged for an additional fee."}},
+      {"@type":"Question","name":"What is your return policy?","acceptedAnswer":{"@type":"Answer","text":"Each print is made to order. If your piece arrives damaged, I’ll replace it at no charge. Otherwise, all sales are final."}},
+      {"@type":"Question","name":"Can you help me choose a piece or size?","acceptedAnswer":{"@type":"Answer","text":"Yes. Send a photo of your wall and I’ll make size and artwork recommendations to fit your space."}}
+    ]
   }
   </script>
 </head>
@@ -132,6 +168,7 @@
         <a href="#about">About</a>
         <a href="#awards">Awards</a>
         <a href="#consult">Consult</a>
+        <a href="#faq">FAQ</a><!-- NEW -->
         <a href="#contact">Contact</a>
       </nav>
     </div>
@@ -259,6 +296,94 @@
           <a href="#" class="cta js-book-visit" style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">Book a Site Visit →</a>
           <br><small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
         </div>
+      </div>
+    </section>
+
+    <!-- ===== FAQ (NEW) ===== -->
+    <section id="faq" class="faq" aria-label="Frequently Asked Questions">
+      <h3>FAQ</h3>
+      <div class="faq-list">
+        <details id="q-paper">
+          <summary>What type of paper are the prints made on?<span class="caret">▸</span></summary>
+          <div class="answer">Each print is produced on <strong>museum-grade, archival matte fine-art paper</strong>. It has a soft texture, rich detail, and is designed to last for decades without fading.</div>
+        </details>
+
+        <details id="q-editions">
+          <summary>Are the prints limited edition?<span class="caret">▸</span></summary>
+          <div class="answer">Many pieces are offered in <strong>small, limited runs</strong>. Each one is <strong>signed</strong> and, when applicable, <strong>numbered</strong>, so you’re receiving a piece that’s truly personal and collectible.</div>
+        </details>
+
+        <details id="q-framed">
+          <summary>Do the prints come framed?<span class="caret">▸</span></summary>
+          <div class="answer">Prints are usually offered <strong>unframed</strong> so you can choose a frame that fits your home. If you prefer, <strong>framing can be arranged</strong> on request — I’ll share options and pricing before you commit.</div>
+        </details>
+
+        <details id="q-custom-size">
+          <summary>Can I request a custom size?<span class="caret">▸</span></summary>
+          <div class="answer">Absolutely. Many artworks can be printed in <strong>custom dimensions</strong> to fit your wall perfectly. Just mention the size you have in mind when you inquire.</div>
+        </details>
+
+        <details id="q-framing-options">
+          <summary>Do you offer different framing options?<span class="caret">▸</span></summary>
+          <div class="answer">Yes — I work with professional framers in Vancouver. <strong>Natural wood, black, and white</strong> frames are the most popular choices. I’m happy to help you pick a style that suits the piece and your space.</div>
+        </details>
+
+        <details id="q-process">
+          <summary>What is the purchase process?<span class="caret">▸</span></summary>
+          <div class="answer">
+            1) Click <strong>“Purchase This Photo”</strong> and send your request with the size and framing preference.<br>
+            2) I’ll reply by email with a <strong>personal quote</strong>, including print details and shipping or delivery costs.<br>
+            3) Once you’re happy with everything, <strong>full payment</strong> is made to begin production.<br>
+            4) Your artwork is <strong>professionally printed</strong> (and framed if selected).<br>
+            5) It will be <strong>shipped</strong>, or you can arrange <strong>local pickup or delivery</strong> in Vancouver.<br>
+            <small class="muted">Shipping and delivery are calculated separately.</small>
+          </div>
+        </details>
+
+        <details id="q-timing">
+          <summary>How long does production take?<span class="caret">▸</span></summary>
+          <div class="answer">Printing usually takes <strong>5–10 business days</strong>. Framed works may require a little longer. If you need something by a specific date, just let me know.</div>
+        </details>
+
+        <details id="q-international">
+          <summary>Do you ship internationally?<span class="caret">▸</span></summary>
+          <div class="answer">Yes — I ship worldwide. Prints are packaged carefully in protective tubes or flat archival sleeves to ensure they arrive safely.</div>
+        </details>
+
+        <details id="q-shipping">
+          <summary>What are the shipping or delivery costs?<span class="caret">▸</span></summary>
+          <div class="answer"><strong>Shipping and local delivery are extra</strong> and calculated based on your location and order size. This is clearly included in your quote <strong>before</strong> you make any payment.</div>
+        </details>
+
+        <details id="q-pickup">
+          <summary>Can I pick up my print locally in Vancouver?<span class="caret">▸</span></summary>
+          <div class="answer">Yes — <strong>local pickup</strong> can be arranged at no cost. Local delivery in Vancouver is also available for an additional fee.</div>
+        </details>
+
+        <details id="q-returns">
+          <summary>What is your return or exchange policy?<span class="caret">▸</span></summary>
+          <div class="answer">Each print is made to order. If your piece arrives <strong>damaged</strong>, I will replace it at no charge. Otherwise, <strong>all sales are final</strong> — thank you for understanding.</div>
+        </details>
+
+        <details id="q-colors">
+          <summary>Will the colors look the same as what I see on my screen?<span class="caret">▸</span></summary>
+          <div class="answer">Prints are produced with professional color standards, but screens vary in brightness. Expect the artwork to feel <strong>more natural, soft, and tactile</strong> than a backlit display — that’s part of the beauty of fine-art printing.</div>
+        </details>
+
+        <details id="q-help">
+          <summary>Can you help me choose the right piece or size for my space?<span class="caret">▸</span></summary>
+          <div class="answer">Yes — I love doing this. Send a photo of your wall, and I’ll suggest artworks and sizes that fit the atmosphere and proportions of your room.</div>
+        </details>
+
+        <details id="q-b2b">
+          <summary>Do you work with interior designers, hotels, or businesses?<span class="caret">▸</span></summary>
+          <div class="answer">Yes. I frequently work with designers and commercial spaces. If you’re planning a project, I’d be happy to discuss scale, editioning, and pricing.</div>
+        </details>
+
+        <details id="q-authentic">
+          <summary>Are all photographs taken by you?<span class="caret">▸</span></summary>
+          <div class="answer">Yes — every image is photographed and curated personally by me. Each piece carries a place, a story, and a moment I witnessed.</div>
+        </details>
       </div>
     </section>
 
@@ -530,6 +655,23 @@
           showToast('Something went wrong. Please try again.');
         }
       });
+
+      // Open a specific FAQ if linked via hash (e.g., #q-process)
+      if (location.hash) {
+        const el = document.querySelector(location.hash);
+        if (el && el.tagName === 'DETAILS') {
+          el.setAttribute('open','');
+          el.scrollIntoView({ behavior:'smooth', block:'start' });
+        }
+      }
+      window.addEventListener('hashchange', ()=>{
+        const el = document.querySelector(location.hash);
+        if (el && el.tagName === 'DETAILS') {
+          el.setAttribute('open','');
+          el.scrollIntoView({ behavior:'smooth', block:'start' });
+        }
+      }, { passive:true });
+
     })();
   </script>
 </body>
