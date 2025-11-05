@@ -174,12 +174,17 @@
     details[open] > summary .caret{ transform:rotate(90deg) }
     .collapsible .content{ padding:16px; }
 
-    /* FAQ lists — set QUESTIONS to use body font (same as Awards sentences) */
-    .faq-list{ display:grid; gap:10px; margin:0; padding:0; }
-    .faq-list details{
-      background:var(--card); border-radius:12px; box-shadow:var(--shadow);
-      overflow:hidden; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent);
+    /* === FAQ typography to match Awards section === */
+.faq-list summary{
+  font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif !important;
+  font-weight: 700 !important;   /* same as <strong> in Awards */
+  letter-spacing: 0;              /* keep clean like body text */
     }
+    .faq-list .answer{
+  font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif !important;
+  font-weight: 400 !important;   /* same as normal sentence in Awards line */
+  color: var(--muted);           /* already set, kept for consistency */
+}
     .faq-list summary{
       list-style:none; cursor:pointer; padding:14px 16px;
       display:flex; align-items:center; justify-content:space-between; gap:12px;
@@ -810,3 +815,4 @@
   </script>
 </body>
 </html>
+
