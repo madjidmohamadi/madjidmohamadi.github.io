@@ -152,6 +152,34 @@
       .cap{ padding:14px 16px; font-size: clamp(12px, 3.6vw, 15px); background: linear-gradient(180deg, transparent 0, rgba(0,0,0,.65) 40%); }
     }
     html, body{ overflow-x: hidden; }
+
+    /* ===== TAB BAR ===== */
+    .tabbar-toggle{
+      position:fixed; left:50%; transform:translateX(-50%);
+      bottom: max(16px, env(safe-area-inset-bottom,0px) + 16px);
+      z-index:1100; /* below modals (10k), above page */
+      background:var(--fg); color:var(--bg);
+      border:none; border-radius:999px; padding:12px 16px; font-weight:800; cursor:pointer;
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    .tabbar{
+      position:fixed; left:50%; transform:translate(-50%, 20px); opacity:0; pointer-events:none;
+      bottom: calc(max(16px, env(safe-area-inset-bottom,0px) + 16px) + 56px);
+      z-index:1099; background:var(--card); color:var(--fg);
+      border:1px solid color-mix(in oklab, var(--fg) 12%, transparent);
+      border-radius:18px; box-shadow:0 20px 60px rgba(0,0,0,.45);
+      padding:10px; display:flex; gap:8px; flex-wrap:wrap; width:min(92vw, 560px);
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .tabbar.open{ opacity:1; transform:translate(-50%, 0); pointer-events:auto; }
+    .tabbar a{
+      flex:1 1 auto; text-align:center; padding:10px 12px; border-radius:12px;
+      background:color-mix(in oklab, var(--fg) 8%, transparent); color:var(--fg); font-weight:700;
+    }
+    .tabbar a:active{ transform:scale(.98) }
+    @media (hover:hover){
+      .tabbar a:hover{ background:color-mix(in oklab, var(--fg) 14%, transparent); }
+    }
   </style>
 
   <script type="application/ld+json">
@@ -457,6 +485,17 @@
     <button class="buy" type="button" aria-label="Purchase this photo">Purchase this Photo</button>
   </div>
 
+  <!-- Floating TAB BAR -->
+  <nav class="tabbar" id="tabbar" aria-label="Quick sections" aria-hidden="true">
+    <a href="#work">Portfolio</a>
+    <a href="#about">About</a>
+    <a href="#awards">Awards</a>
+    <a href="#consult">Consult</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <button class="tabbar-toggle" id="tabbarToggle" aria-expanded="false" aria-controls="tabbar" type="button">Menu ▾</button>
+
   <!-- Quote dialog -->
   <div class="modal" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quote-title" aria-hidden="true">
     <form class="modal-card" id="quoteForm">
@@ -693,7 +732,7 @@
         }
       });
 
-      // Open a specific FAQ if linked via hash (e.g., #q-process)
+      // Open FAQ item via hash
       if (location.hash) {
         const el = document.querySelector(location.hash);
         if (el && el.tagName === 'DETAILS') {
@@ -711,7 +750,7 @@
 
     })();
 
-    // Improve --vh updates when browser chrome shows/hides
+    // Improve --vh with visualViewport chrome changes
     if (window.visualViewport) {
       const updateVh = () => {
         document.documentElement.style.setProperty('--vh', (visualViewport.height * 0.01) + 'px');
@@ -720,6 +759,51 @@
       visualViewport.addEventListener('scroll', updateVh, { passive:true });
       updateVh();
     }
+
+    // ===== TAB BAR JS =====
+    (function(){
+      const toggle = document.getElementById('tabbarToggle');
+      const bar = document.getElementById('tabbar');
+      if(!toggle || !bar) return;
+
+      function openBar(){
+        bar.classList.add('open');
+        bar.setAttribute('aria-hidden','false');
+        toggle.setAttribute('aria-expanded','true');
+        toggle.textContent = 'Menu ▴';
+      }
+      function closeBar(){
+        bar.classList.remove('open');
+        bar.setAttribute('aria-hidden','true');
+        toggle.setAttribute('aria-expanded','false');
+        toggle.textContent = 'Menu ▾';
+      }
+      function toggleBar(){
+        if(bar.classList.contains('open')) closeBar(); else openBar();
+      }
+
+      toggle.addEventListener('click', toggleBar, { passive:true });
+
+      // Close after selecting a target
+      bar.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click', ()=> { closeBar(); }, { passive:true });
+      });
+
+      // Click outside to close
+      document.addEventListener('click', (e)=>{
+        if(!bar.classList.contains('open')) return;
+        if(!bar.contains(e.target) && e.target !== toggle) closeBar();
+      }, { passive:true });
+
+      // Hide bar beneath modals/lightbox automatically
+      const observer = new MutationObserver(()=>{
+        const anyModalOpen = document.querySelector('.lightbox.open, .modal.open');
+        toggle.style.display = anyModalOpen ? 'none' : '';
+        bar.style.display = anyModalOpen ? 'none' : '';
+        if(anyModalOpen) closeBar();
+      });
+      observer.observe(document.body, { attributes:true, subtree:true, attributeFilter:['class'] });
+    })();
   </script>
 </body>
 </html>
