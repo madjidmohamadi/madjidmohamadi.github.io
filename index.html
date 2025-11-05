@@ -41,7 +41,7 @@
     a:hover{opacity:.9}
     .wrap{max-width:var(--maxw); margin-inline:auto; padding:clamp(16px,4vw,32px)}
 
-    /* Skip link hidden unless focused */
+    /* Skip link */
     .skip-link{
       position:fixed; left:8px; top:8px; z-index:10000;
       transform:translateY(-200%); transition:transform .2s ease;
@@ -54,8 +54,6 @@
     .brand{display:flex; align-items:baseline; gap:10px}
     .brand h1{font-family:"Playfair Display",serif; font-weight:700; letter-spacing:.5px; margin:0; font-size:clamp(18px,2.4vw,26px)}
     .brand small{color:var(--muted); letter-spacing:2px; text-transform:uppercase; font-size:.72rem}
-    .links{display:flex; gap:18px}
-    .links a{color:var(--muted); font-weight:600; font-size:.92rem}
 
     /* HERO */
     .hero{display:grid; grid-template-columns:1.2fr .8fr; gap:var(--gap); align-items:center; padding-block:clamp(28px,6vw,64px)}
@@ -66,13 +64,12 @@
     .hero-copy p{color:var(--muted); margin:0 0 14px}
     .cta{display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700}
 
-    /* Option B: stack on mobile, center text; no forced aspect ratio (prevents distortion) */
     @media (max-width:900px){
       .hero{grid-template-columns:1fr}
       .hero-copy{ text-align:center }
     }
 
-    /* ===== PORTFOLIO ===== */
+    /* ===== GRID ===== */
     .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gap); align-items:start }
     .card{ grid-column:span 6; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative; align-self:start }
     .card img{ width:100%; height:auto; display:block; cursor:zoom-in }
@@ -86,7 +83,7 @@
     .social a{color:var(--muted)}
     .card a.zoom{display:block; touch-action:manipulation}
 
-    /* Lightbox + Purchase */
+    /* Lightbox */
     .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.95); display:none; align-items:center; justify-content:center; z-index:9999; padding: calc(env(safe-area-inset-top,0px) + 48px) 16px calc(env(safe-area-inset-bottom,0px) + 96px); overscroll-behavior:contain; overflow:auto; }
     .lightbox.open{display:flex}
     .lightbox img{
@@ -108,7 +105,7 @@
     .buy{ position:fixed; left:50%; transform:translateX(-50%); bottom: max(12px, env(safe-area-inset-bottom,0px) + 12px); background:#fff; color:#000; border:none; border-radius:999px; padding:10px 16px; font-weight:800; cursor:pointer; box-shadow:0 10px 30px rgba(0,0,0,.4) }
     body.no-scroll{overflow:hidden}
 
-    /* Shared modal styles (quote + site visit) */
+    /* Modals */
     .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:10000; background:rgba(0,0,0,.6) }
     .modal.open{display:flex}
     .modal-card{ background:#fff; color:#111; border-radius:14px; width:min(92vw,420px); padding:18px 16px; box-shadow:0 20px 60px rgba(0,0,0,.6); font-size:16px }
@@ -123,52 +120,25 @@
     .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:#111; color:#fff; padding:10px 14px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,.4); display:none; z-index:10001; font-weight:600 }
     .toast.show{ display:block }
 
-    /* ===== FAQ (accordion) ===== */
-    .faq{ margin-top: clamp(28px,6vw,64px); }
-    .faq h3{ font-family:"Playfair Display",serif; font-size:clamp(20px,3vw,28px); margin:0 0 12px }
-    .faq-list{ display:grid; gap:10px; }
-    .faq details{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:0; overflow:hidden }
-    .faq summary{
-      list-style:none; cursor:pointer; padding:14px 16px; font-weight:700; display:flex; align-items:center; justify-content:space-between; gap:12px;
-    }
-    .faq summary::-webkit-details-marker{ display:none }
-    .faq .answer{ padding:0 16px 16px; color:var(--muted) }
-    .faq .caret{ flex:0 0 auto; transition: transform .2s ease; opacity:.8 }
-    details[open] .caret{ transform:rotate(90deg) }
-    .faq small.muted{ color:var(--muted) }
-
     /* Mobile polish */
     :root{ --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px); }
     header{ padding-top: max(0px, var(--safe-top)/2); }
     footer{ padding-bottom: max(24px, var(--safe-bottom)); }
     @media (max-width: 600px){ .wrap{ padding-inline: clamp(14px, 4vw, 22px); } }
-    .links{ flex-wrap: wrap; row-gap: 8px; }
-    @media (max-width: 520px){
-      .links{ overflow-x:auto; white-space:nowrap; gap:14px; -webkit-overflow-scrolling:touch; }
-      .links a{ flex:0 0 auto; }
-    }
-    @media (max-width: 900px){ .grid{ grid-template-columns: repeat(6, 1fr); } .card{ grid-column: span 3; } }
-    @media (max-width: 680px){
-      .grid{ grid-template-columns: repeat(4, 1fr); }
-      .card{ grid-column: span 4; }
-      .cap{ padding:14px 16px; font-size: clamp(12px, 3.6vw, 15px); background: linear-gradient(180deg, transparent 0, rgba(0,0,0,.65) 40%); }
-    }
     html, body{ overflow-x: hidden; }
 
-    /* === Fixed Sections button + drawer (top-right) === */
+    /* === Header "☰ Sections" button + drawer === */
     .sections-btn{
-      position:fixed; z-index:10001;
-      top: max(12px, env(safe-area-inset-top,0px) + 8px);
-      right: max(12px, env(safe-area-inset-right,0px) + 8px);
       padding:10px 14px; border-radius:999px; font-weight:800;
       background:var(--fg); color:var(--bg); border:0; cursor:pointer;
-      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      box-shadow:0 10px 30px rgba(0,0,0,.15);
     }
     .sections-btn:focus{ outline:2px solid color-mix(in oklab, var(--fg) 50%, transparent) }
+
     .sections-drawer{
       position:fixed; z-index:10000; display:none;
-      top: calc(max(12px, env(safe-area-inset-top,0px) + 8px) + 46px);
-      right: max(12px, env(safe-area-inset-right,0px) + 8px);
+      top: calc(var(--headerH) + max(8px, env(safe-area-inset-top,0px)));
+      right: max(16px, env(safe-area-inset-right,0px) + 12px);
       background:var(--card); color:var(--fg); border-radius:14px;
       box-shadow:0 20px 60px rgba(0,0,0,.45);
       padding:10px; min-width:220px;
@@ -183,9 +153,8 @@
       background:color-mix(in oklab, var(--fg) 10%, transparent);
       outline: none;
     }
-    /* Hide long header links on small screens (button replaces them) */
-    @media (max-width: 900px){ header .links{ display:none; } }
-    /* Nice smooth scroll for drawer links */
+
+    /* Smooth scroll */
     html{ scroll-behavior:smooth; }
   </style>
 
@@ -202,7 +171,7 @@
   }
   </script>
 
-  <!-- FAQPage schema for rich results -->
+  <!-- FAQPage schema -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -217,9 +186,7 @@
       {"@type":"Question","name":"How long does production take?","acceptedAnswer":{"@type":"Answer","text":"Printing typically takes 5–10 business days. Framed works may take a little longer."}},
       {"@type":"Question","name":"Do you ship internationally?","acceptedAnswer":{"@type":"Answer","text":"Yes. Prints are packaged securely for safe worldwide shipping."}},
       {"@type":"Question","name":"What are the shipping or delivery costs?","acceptedAnswer":{"@type":"Answer","text":"Shipping and local delivery are calculated separately based on your location and order size. Costs are included in the quote before payment."}},
-      {"@type":"Question","name":"Can I pick up locally in Vancouver?","acceptedAnswer":{"@type":"Answer","text":"Yes. Local pickup is available at no cost. Local delivery can be arranged for an additional fee."}},
-      {"@type":"Question","name":"What is your return policy?","acceptedAnswer":{"@type":"Answer","text":"Each print is made to order. If your piece arrives damaged, I’ll replace it at no charge. Otherwise, all sales are final."}},
-      {"@type":"Question","name":"Can you help me choose a piece or size?","acceptedAnswer":{"@type":"Answer","text":"Yes. Send a photo of your wall and I’ll make size and artwork recommendations to fit your space."}}
+      {"@type":"Question","name":"Can I pick up locally in Vancouver?","acceptedAnswer":{"@type":"Answer","text":"Yes. Local pickup is available at no cost. Local delivery can be arranged for an additional fee."}}
     ]
   }
   </script>
@@ -233,21 +200,15 @@
         <h1>By Majid</h1>
         <small>Fine Art Photography</small>
       </div>
-      <nav class="links" aria-label="Primary">
-        <a href="#work">Portfolio</a>
-        <a href="#about">About</a>
-        <a href="#awards">Awards</a>
-        <a href="#consult">Consult</a>
-        <a href="#faq">FAQ</a>
-        <a href="#contact">Contact</a>
-      </nav>
+
+      <!-- Replaced text links with the Sections button -->
+      <button class="sections-btn" id="sectionsBtn" aria-haspopup="true" aria-expanded="false" aria-controls="sectionsDrawer" aria-label="Open sections menu">
+        ☰ Sections
+      </button>
     </div>
   </header>
 
-  <!-- Fixed “Sections” control (top-right) -->
-  <button class="sections-btn" id="sectionsBtn" aria-haspopup="true" aria-expanded="false" aria-controls="sectionsDrawer">
-    ☰ Sections
-  </button>
+  <!-- Drawer for sections -->
   <nav class="sections-drawer" id="sectionsDrawer" aria-label="Sections menu">
     <a href="#work">Portfolio</a>
     <a href="#about">About</a>
@@ -549,14 +510,12 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    // dynamic --vh for mobile (prefers visualViewport when available)
     function setVh(){
       var h = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
       document.documentElement.style.setProperty('--vh', (h * 0.01) + 'px');
     }
     setVh(); addEventListener('resize', setVh); addEventListener('orientationchange', setVh);
 
-    // anchor offset
     function setHeaderOffset(){
       const h = document.getElementById('siteHeader');
       const px = h ? (h.offsetHeight || 64) : 64;
@@ -564,10 +523,8 @@
     }
     setHeaderOffset(); addEventListener('resize', setHeaderOffset);
 
-    // year
     const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
 
-    // EmailJS init
     (function(){
       const s = document.createElement('script');
       s.src = 'https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js';
@@ -575,7 +532,6 @@
       document.head.appendChild(s);
     })();
 
-    // Toast
     const toast = document.getElementById('toast');
     function showToast(msg){
       toast.textContent = msg;
@@ -583,7 +539,6 @@
       setTimeout(()=>toast.classList.remove('show'), 3200);
     }
 
-    // Lightbox + Quote
     (function(){
       const lb = document.querySelector('.lightbox');
       if (!lb) return;
@@ -625,7 +580,6 @@
         if (lastFocus) lastFocus.focus();
       }
 
-      // Open by tapping any grid image (reliable on Samsung/Chrome)
       document.querySelectorAll('.card img').forEach(img => {
         img.addEventListener('click', (e) => {
           e.preventDefault();
@@ -741,7 +695,7 @@
         }
       });
 
-      // Open a specific FAQ if linked via hash (e.g., #q-process)
+      // FAQ hash open
       if (location.hash) {
         const el = document.querySelector(location.hash);
         if (el && el.tagName === 'DETAILS') {
@@ -769,7 +723,7 @@
       updateVh();
     }
 
-    // === Sections fixed button (top-right) ===
+    // === Sections drawer logic ===
     (function(){
       const btn = document.getElementById('sectionsBtn');
       const drawer = document.getElementById('sectionsDrawer');
@@ -789,7 +743,6 @@
 
       btn.addEventListener('click', (e)=>{ e.preventDefault(); toggleDrawer(); }, { passive:false });
 
-      // Close on Esc or when clicking a link
       document.addEventListener('keydown', (e)=>{
         if(e.key === 'Escape' && drawer.classList.contains('open')) toggleDrawer(false);
       }, { passive:true });
@@ -799,7 +752,6 @@
         if(a){ toggleDrawer(false); }
       }, { passive:true });
 
-      // Close if user clicks outside
       document.addEventListener('click', (e)=>{
         if(!drawer.classList.contains('open')) return;
         if(e.target === btn || drawer.contains(e.target)) return;
