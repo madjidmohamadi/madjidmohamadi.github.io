@@ -143,6 +143,10 @@
       border:1px solid color-mix(in oklab, var(--fg) 12%, transparent);
     }
     .sections-drawer.open{ display:block; }
+    /* Safety: prevent overlay from intercepting clicks when closed */
+    .sections-drawer { pointer-events: auto; }
+    .sections-drawer:not(.open) { pointer-events: none; }
+
     .sections-drawer a{
       display:block; padding:10px 12px; border-radius:10px; font-weight:700;
       color:var(--fg); text-decoration:none;
@@ -812,119 +816,70 @@
         toggleDrawer(false);
       }, { passive:true });
     })();
-    <script>
-  // Open the right collapsible when the hash changes (or on load)
+  
+  // === Open matching section from menu/hash & close drawer ===
   (function () {
     function closeAllTopLevel() {
-      document.querySelectorAll('section details.collapsible[open]')
+      document.querySelectorAll('section > details.collapsible[open]')
         .forEach(d => d.removeAttribute('open'));
     }
 
-    function openSectionForHash(hash) {
-      if (!hash) return;
+    function closeDrawer() {
+      const drawer = document.getElementById('sectionsDrawer');
+      const btn = document.getElementById('sectionsBtn');
+      if (drawer) drawer.classList.remove('open');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    }
 
-      // If user targets a specific FAQ item (e.g., #q-paper)
-      const maybeDetails = document.querySelector(hash);
-      if (maybeDetails && maybeDetails.tagName === 'DETAILS') {
-        // Ensure parent FAQ section opens
-        const faqSection = document.getElementById('faq');
-        if (faqSection) {
-          const faqTop = faqSection.querySelector('details.collapsible');
-          if (faqTop) faqTop.setAttribute('open', '');
-        }
-        // Open the specific FAQ item
-        maybeDetails.setAttribute('open', '');
-        maybeDetails.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    function openForHash(rawHash) {
+      const hash = typeof rawHash === 'string' ? rawHash : location.hash;
+      if (!hash) return;
+      const node = document.querySelector(hash);
+      if (!node) return;
+
+      // If targeting an individual FAQ <details>, open FAQ + that item
+      if (node.tagName === 'DETAILS') {
+        const faqTop = document.querySelector('#faq > details.collapsible');
+        if (faqTop) faqTop.setAttribute('open', '');
+        node.setAttribute('open', '');
+        node.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        closeDrawer();
         return;
       }
 
-      // Otherwise, assume a top-level <section id="...">
-      const section = document.querySelector(hash);
-      if (!section) return;
-
-      const top = section.querySelector('details.collapsible');
-      closeAllTopLevel();
-      if (top) top.setAttribute('open', '');
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // If targeting a top-level <section id="...">
+      if (node.tagName === 'SECTION') {
+        const top = node.querySelector(':scope > details.collapsible');
+        closeAllTopLevel();
+        if (top) top.setAttribute('open', '');
+        (top || node).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        closeDrawer();
+        return;
+      }
     }
 
-    // Handle initial load (if URL already has a hash)
-    if (location.hash) openSectionForHash(location.hash);
+    // Open on load if there’s a hash (e.g., #about or #q-paper)
+    if (location.hash) openForHash();
 
-    // Handle future hash changes (clicking menu items, etc.)
-    window.addEventListener('hashchange', () => openSectionForHash(location.hash), { passive: true });
+    // Sync on future hash changes
+    window.addEventListener('hashchange', () => openForHash(), { passive: true });
 
-    // Also intercept clicks inside the sections drawer to avoid any race conditions
+    // Intercept clicks in the drawer: open section, push hash, close drawer
     const drawer = document.getElementById('sectionsDrawer');
     if (drawer) {
       drawer.addEventListener('click', (e) => {
         const a = e.target.closest('a[href^="#"]');
         if (!a) return;
-        // Let the hash update first, then open the right section
-        // (microtask delay ensures location.hash is updated)
-        Promise.resolve().then(() => openSectionForHash(a.getAttribute('href')));
-      }, { passive: true });
-    }
-  })();
-<script>
-  // Open the right collapsible when the hash changes (or on load)
-  (function () {
-    function closeAllTopLevel() {
-      document.querySelectorAll('section details.collapsible[open]')
-        .forEach(d => d.removeAttribute('open'));
-    }
-
-    function openSectionForHash(hash) {
-      if (!hash) return;
-
-      // If user targets a specific FAQ item (e.g., #q-paper)
-      const maybeDetails = document.querySelector(hash);
-      if (maybeDetails && maybeDetails.tagName === 'DETAILS') {
-        // Ensure parent FAQ section opens
-        const faqSection = document.getElementById('faq');
-        if (faqSection) {
-          const faqTop = faqSection.querySelector('details.collapsible');
-          if (faqTop) faqTop.setAttribute('open', '');
-        }
-        // Open the specific FAQ item
-        maybeDetails.setAttribute('open', '');
-        maybeDetails.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        return;
-      }
-
-      // Otherwise, assume a top-level <section id="...">
-      const section = document.querySelector(hash);
-      if (!section) return;
-
-      const top = section.querySelector('details.collapsible');
-      closeAllTopLevel();
-      if (top) top.setAttribute('open', '');
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    // Handle initial load (if URL already has a hash)
-    if (location.hash) openSectionForHash(location.hash);
-
-    // Handle future hash changes (clicking menu items, etc.)
-    window.addEventListener('hashchange', () => openSectionForHash(location.hash), { passive: true });
-
-    // Also intercept clicks inside the sections drawer to avoid any race conditions
-    const drawer = document.getElementById('sectionsDrawer');
-    if (drawer) {
-      drawer.addEventListener('click', (e) => {
-        const a = e.target.closest('a[href^="#"]');
-        if (!a) return;
-        // Let the hash update first, then open the right section
-        // (microtask delay ensures location.hash is updated)
-        Promise.resolve().then(() => openSectionForHash(a.getAttribute('href')));
-      }, { passive: true });
+        e.preventDefault();
+        const href = a.getAttribute('href');
+        openForHash(href);
+        try { history.pushState(null, '', href); } catch(_) { location.hash = href.slice(1); }
+      }, { passive: false });
     }
   })();
 </script>
 </body>
 </html>
-
-
 
 
 
