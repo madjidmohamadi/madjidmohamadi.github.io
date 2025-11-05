@@ -23,10 +23,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@500;700&display=swap"
         onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@500;700&display=swap">
   </noscript>
 
   <style>
@@ -41,6 +41,7 @@
     a:hover{opacity:.9}
     .wrap{max-width:var(--maxw); margin-inline:auto; padding:clamp(16px,4vw,32px)}
 
+    /* Skip link hidden unless focused */
     .skip-link{
       position:fixed; left:8px; top:8px; z-index:10000;
       transform:translateY(-200%); transition:transform .2s ease;
@@ -48,15 +49,65 @@
     }
     .skip-link:focus{ transform:none; }
 
-    header{position:sticky; top:0; backdrop-filter:saturate(180%) blur(12px); background:color-mix(in oklab, var(--bg) 90%, transparent); z-index:20; border-bottom:1px solid color-mix(in oklab, var(--fg) 12%, transparent)}
+    header{
+      position:sticky; top:0; z-index:30;
+      backdrop-filter:saturate(180%) blur(12px);
+      background:color-mix(in oklab, var(--bg) 90%, transparent);
+      border-bottom:1px solid color-mix(in oklab, var(--fg) 12%, transparent)
+    }
     .nav{display:flex; align-items:center; justify-content:space-between}
     .brand{display:flex; align-items:baseline; gap:10px}
     .brand h1{font-family:"Playfair Display",serif; font-weight:700; letter-spacing:.5px; margin:0; font-size:clamp(18px,2.4vw,26px)}
     .brand small{color:var(--muted); letter-spacing:2px; text-transform:uppercase; font-size:.72rem}
 
-    /* HERO */
+    /* ☰ button (top-right) */
+    .sections-btn{
+      background:transparent;
+      color:var(--fg);
+      border:1px solid color-mix(in oklab, var(--fg) 20%, transparent);
+      border-radius:999px;
+      padding:8px 12px;
+      font-weight:700;
+      cursor:pointer;
+      line-height:1;
+      display:inline-flex; align-items:center; justify-content:center;
+      min-width:44px; min-height:36px;
+    }
+
+    /* Slide-down Sections panel */
+    .sections-panel{
+      position:sticky;
+      top:var(--headerH);
+      z-index:25;
+      background: color-mix(in oklab, var(--bg) 92%, transparent);
+      backdrop-filter: saturate(180%) blur(10px);
+      border-bottom: 1px solid color-mix(in oklab, var(--fg) 10%, transparent);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .sections-panel[hidden]{ display:none !important; }
+    .sections-panel ul{
+      list-style:none; margin:0; padding:10px clamp(12px, 4vw, 22px);
+      display:flex; flex-wrap:wrap; gap:10px 14px;
+    }
+    .sections-panel a{
+      display:inline-block;
+      padding:10px 14px;
+      border-radius:999px;
+      background:var(--card);
+      color:var(--fg);
+      text-decoration:none;
+      font-weight:700;
+      border: 1px solid color-mix(in oklab, var(--fg) 10%, transparent);
+    }
+    .sections-panel a:active{ opacity:.85 }
+    @media (max-width:560px){
+      .sections-panel ul{ overflow-x:auto; -webkit-overflow-scrolling:touch; white-space:nowrap; }
+      .sections-panel li{ display:inline-block; }
+    }
+
+    /* Hero */
     .hero{display:grid; grid-template-columns:1.2fr .8fr; gap:var(--gap); align-items:center; padding-block:clamp(28px,6vw,64px)}
-    .hero-card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative}
+    .hero-card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; min-height:280px; position:relative}
     .hero-card img{ display:block; width:100%; height:auto; }
     .hero-copy{padding:clamp(16px,3vw,28px)}
     .hero-copy h2{font-family:"Playfair Display",serif; font-size:clamp(26px,4vw,46px); margin:0 0 6px}
@@ -65,10 +116,12 @@
 
     @media (max-width:900px){
       .hero{grid-template-columns:1fr}
-      .hero-copy{ text-align:center }
+      /* Mobile: lock ratio; center crop to avoid distortion */
+      .hero-card{ aspect-ratio:3/2; min-height:220px; }
+      .hero-card img{ width:100%; height:100% !important; object-fit:cover; object-position:center; }
     }
 
-    /* GRID */
+    /* ===== PORTFOLIO ===== */
     .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gap); align-items:start }
     .card{ grid-column:span 6; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative; align-self:start }
     .card img{ width:100%; height:auto; display:block; cursor:zoom-in }
@@ -80,9 +133,8 @@
     footer{margin-top:clamp(28px,6vw,64px); padding:24px 0 40px; color:var(--muted); border-top:1px solid color-mix(in oklab, var(--fg) 10%, transparent)}
     .footer-grid{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px}
     .social a{color:var(--muted)}
-    .card a.zoom{display:block; touch-action:manipulation}
 
-    /* Lightbox */
+    /* Lightbox + Purchase */
     .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.95); display:none; align-items:center; justify-content:center; z-index:9999; padding: calc(env(safe-area-inset-top,0px) + 48px) 16px calc(env(safe-area-inset-bottom,0px) + 96px); overscroll-behavior:contain; overflow:auto; }
     .lightbox.open{display:flex}
     .lightbox img{
@@ -104,7 +156,7 @@
     .buy{ position:fixed; left:50%; transform:translateX(-50%); bottom: max(12px, env(safe-area-inset-bottom,0px) + 12px); background:#fff; color:#000; border:none; border-radius:999px; padding:10px 16px; font-weight:800; cursor:pointer; box-shadow:0 10px 30px rgba(0,0,0,.4) }
     body.no-scroll{overflow:hidden}
 
-    /* Modals */
+    /* Shared modal styles (quote + site visit) */
     .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:10000; background:rgba(0,0,0,.6) }
     .modal.open{display:flex}
     .modal-card{ background:#fff; color:#111; border-radius:14px; width:min(92vw,420px); padding:18px 16px; box-shadow:0 20px 60px rgba(0,0,0,.6); font-size:16px }
@@ -119,82 +171,62 @@
     .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:18px; background:#111; color:#fff; padding:10px 14px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,.4); display:none; z-index:10001; font-weight:600 }
     .toast.show{ display:block }
 
+    /* ===== Collapsible sections (About, Awards, Consult, FAQ, Contact) ===== */
+    details.collapsible{
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      margin-top: clamp(28px,6vw,64px);
+    }
+    details.collapsible > summary{
+      list-style:none; cursor:pointer;
+      padding:14px 16px; font-weight:700;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      font-family:"Playfair Display",serif; /* section title */
+    }
+    details.collapsible > summary::-webkit-details-marker{ display:none }
+    details.collapsible .inner{ padding: 0 clamp(16px,3vw,24px) clamp(16px,3vw,24px); color:var(--muted) }
+    details.collapsible .caret{ flex:0 0 auto; transition: transform .2s ease; opacity:.8 }
+    details[open] .caret{ transform:rotate(90deg) }
+
+    /* ===== FAQ (accordion) ===== */
+    .faq-list{ display:grid; gap:10px; }
+    .faq details{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:0; overflow:hidden }
+    .faq summary{
+      list-style:none; cursor:pointer; padding:14px 16px; font-weight:700; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .faq summary::-webkit-details-marker{ display:none }
+    .faq .answer{ padding:0 16px 16px; color:var(--muted) }
+    .faq .caret{ flex:0 0 auto; transition: transform .2s ease; opacity:.8 }
+    .faq details[open] .caret{ transform:rotate(90deg) }
+    .faq small.muted{ color:var(--muted) }
+
+    /* FAQ typography to match Awards line */
+    .faq-list summary{
+      font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif !important;
+      font-weight: 700 !important;
+      letter-spacing: 0;
+    }
+    .faq-list .answer{
+      font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif !important;
+      font-weight: 400 !important;
+    }
+
+    /* Mobile polish & safe areas */
     :root{ --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px); }
     header{ padding-top: max(0px, var(--safe-top)/2); }
     footer{ padding-bottom: max(24px, var(--safe-bottom)); }
     @media (max-width: 600px){ .wrap{ padding-inline: clamp(14px, 4vw, 22px); } }
     html, body{ overflow-x: hidden; }
 
-    /* Header "☰ Sections" */
-    .sections-btn{
-      padding:10px 14px; border-radius:999px; font-weight:800;
-      background:var(--fg); color:var(--bg); border:0; cursor:pointer;
-      box-shadow:0 10px 30px rgba(0,0,0,.15);
+    /* Responsive grid adjustments */
+    @media (max-width: 900px){ .grid{ grid-template-columns: repeat(6, 1fr); } .card{ grid-column: span 3; } }
+    @media (max-width: 680px){
+      .grid{ grid-template-columns: repeat(4, 1fr); }
+      .card{ grid-column: span 4; }
+      .cap{ padding:14px 16px; font-size: clamp(12px, 3.6vw, 15px); background: linear-gradient(180deg, transparent 0, rgba(0,0,0,.65) 40%); }
     }
-    .sections-btn:focus{ outline:2px solid color-mix(in oklab, var(--fg) 50%, transparent) }
-
-    .sections-drawer{
-      position:fixed; z-index:10000; display:none;
-      top: calc(var(--headerH) + max(8px, env(safe-area-inset-top,0px)));
-      right: max(16px, env(safe-area-inset-right,0px) + 12px);
-      background:var(--card); color:var(--fg); border-radius:14px;
-      box-shadow:0 20px 60px rgba(0,0,0,.45);
-      padding:10px; min-width:220px;
-      border:1px solid color-mix(in oklab, var(--fg) 12%, transparent);
-    }
-    .sections-drawer.open{ display:block; }
-    .sections-drawer a{
-      display:block; padding:10px 12px; border-radius:10px; font-weight:700;
-      color:var(--fg); text-decoration:none;
-    }
-    .sections-drawer a:hover, .sections-drawer a:focus{
-      background:color-mix(in oklab, var(--fg) 10%, transparent);
-      outline: none;
-    }
-
-    html{ scroll-behavior:smooth; }
-
-    /* Shared card/collapsible */
-    .section-card{
-      background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
-      padding: clamp(16px,3vw,24px);
-    }
-
-    .collapsible{
-      background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;
-    }
-    .collapsible summary{
-      list-style:none; cursor:pointer; padding:14px 16px; font-weight:800;
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      font-family:"Playfair Display",serif; font-size:clamp(20px,3vw,28px);
-      border-bottom:1px solid color-mix(in oklab, var(--fg) 10%, transparent);
-    }
-    .collapsible summary::-webkit-details-marker{ display:none }
-    .collapsible .caret{ flex:0 0 auto; transition: transform .2s ease; opacity:.8 }
-    details[open] > summary .caret{ transform:rotate(90deg) }
-    .collapsible .content{ padding:16px; }
-
-    /* === FAQ typography to match Awards section === */
-.faq-list summary{
-  font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif !important;
-  font-weight: 400 !important;   /* same as <strong> in Awards */
-  letter-spacing: 0;              /* keep clean like body text */
-    }
-    .faq-list .answer{
-  font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif !important;
-  font-weight: 400 !important;   /* same as normal sentence in Awards line */
-  color: var(--muted);           /* already set, kept for consistency */
-}
-    .faq-list summary{
-      list-style:none; cursor:pointer; padding:14px 16px;
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      font-family:inherit; /* <- matches body text like Awards sentences */
-      font-weight:700;
-    }
-    .faq-list summary::-webkit-details-marker{ display:none }
-    .faq-list .answer{ padding:0 16px 16px; color:var(--muted) }
-    .faq-list .caret{ flex:0 0 auto; transition: transform .2s ease; opacity:.8 }
-    .faq-list details[open] .caret{ transform:rotate(90deg) }
   </style>
 
   <script type="application/ld+json">
@@ -210,6 +242,7 @@
   }
   </script>
 
+  <!-- FAQPage schema for rich results -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -224,7 +257,9 @@
       {"@type":"Question","name":"How long does production take?","acceptedAnswer":{"@type":"Answer","text":"Printing typically takes 5–10 business days. Framed works may take a little longer."}},
       {"@type":"Question","name":"Do you ship internationally?","acceptedAnswer":{"@type":"Answer","text":"Yes. Prints are packaged securely for safe worldwide shipping."}},
       {"@type":"Question","name":"What are the shipping or delivery costs?","acceptedAnswer":{"@type":"Answer","text":"Shipping and local delivery are calculated separately based on your location and order size. Costs are included in the quote before payment."}},
-      {"@type":"Question","name":"Can I pick up locally in Vancouver?","acceptedAnswer":{"@type":"Answer","text":"Yes. Local pickup is available at no cost. Local delivery can be arranged for an additional fee."}}
+      {"@type":"Question","name":"Can I pick up locally in Vancouver?","acceptedAnswer":{"@type":"Answer","text":"Yes. Local pickup is available at no cost. Local delivery can be arranged for an additional fee."}},
+      {"@type":"Question","name":"What is your return policy?","acceptedAnswer":{"@type":"Answer","text":"Each print is made to order. If your piece arrives damaged, I’ll replace it at no charge. Otherwise, all sales are final."}},
+      {"@type":"Question","name":"Can you help me choose a piece or size?","acceptedAnswer":{"@type":"Answer","text":"Yes. Send a photo of your wall and I’ll make size and artwork recommendations to fit your space."}}
     ]
   }
   </script>
@@ -239,21 +274,26 @@
         <small>Fine Art Photography</small>
       </div>
 
-      <!-- “☰ Sections” button -->
-      <button class="sections-btn" id="sectionsBtn" aria-haspopup="true" aria-expanded="false" aria-controls="sectionsDrawer" aria-label="Open sections menu">
-        ☰ Sections
-      </button>
+      <!-- ☰ button only (no word “Sections”) -->
+      <button id="sectionsToggle"
+        class="sections-btn"
+        aria-haspopup="true"
+        aria-expanded="false"
+        aria-controls="sectionsPanel"
+        title="Open menu">☰</button>
     </div>
   </header>
 
-  <!-- Drawer -->
-  <nav class="sections-drawer" id="sectionsDrawer" aria-label="Sections menu">
-    <a href="#work">Portfolio</a>
-    <a href="#about">About</a>
-    <a href="#awards">Awards</a>
-    <a href="#consult">Consult</a>
-    <a href="#faq">FAQ</a>
-    <a href="#contact">Contact</a>
+  <!-- Slide-down Sections panel -->
+  <nav id="sectionsPanel" class="sections-panel" aria-label="Sections" hidden>
+    <ul>
+      <li><a href="#work"     data-section="work">Portfolio</a></li>
+      <li><a href="#about"    data-section="about">About</a></li>
+      <li><a href="#awards"   data-section="awards">Awards</a></li>
+      <li><a href="#consult"  data-section="consult">Consult</a></li>
+      <li><a href="#faq"      data-section="faq">FAQ</a></li>
+      <li><a href="#contact"  data-section="contact">Contact</a></li>
+    </ul>
   </nav>
 
   <main class="wrap">
@@ -271,7 +311,7 @@
       </div>
     </section>
 
-    <!-- PORTFOLIO -->
+    <!-- PORTFOLIO GRID -->
     <section id="work" aria-label="Portfolio">
       <div class="grid">
         <figure class="card">
@@ -304,7 +344,7 @@
           <figcaption class="cap"><span class="chip">Space: Shop</span> The Shape of Wind</figcaption>
         </figure>
 
-        <figure class="card">
+        <figure class="card>
           <img src="/images/the-tired-tree.png" alt="The Tired Tree" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
           <figcaption class="cap"><span class="chip">Space: Gallery</span> The Tired Tree</figcaption>
         </figure>
@@ -326,14 +366,14 @@
       </div>
     </section>
 
-    <!-- ABOUT (collapsed by default) -->
-    <section id="about" style="margin-top: clamp(28px,6vw,64px);">
+    <!-- ABOUT (collapsible, closed by default) -->
+    <section id="about">
       <details class="collapsible">
         <summary>
           About
           <span class="caret">▸</span>
         </summary>
-        <div class="content">
+        <div class="inner">
           <div class="grid" style="grid-template-columns:repeat(12,1fr); gap:var(--gap)">
             <div style="grid-column:span 7; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden">
               <img src="/images/about.jpg" alt="Majid in the field with camera" style="width:100%;height:auto;display:block" loading="lazy" decoding="async" width="1200" height="800">
@@ -348,31 +388,31 @@
       </details>
     </section>
 
-    <!-- AWARDS (collapsed by default) -->
-    <section id="awards" style="margin-top: clamp(28px,6vw,64px);">
+    <!-- AWARDS (collapsible, closed by default) -->
+    <section id="awards">
       <details class="collapsible">
         <summary>
           Awards &amp; Honors
           <span class="caret">▸</span>
         </summary>
-        <div class="content">
+        <div class="inner">
           <ul style="list-style:none; padding:0; margin:0; display:grid; gap:10px">
-            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
               <strong>Fine Art Photography Awards</strong> — Majid Mohamadi 1st Prize Winner in Travel. <a href="https://fineartphotoawards.com/winners-gallery/fapa-2019-2020/amateur/travel/gold-award/" target="_blank" rel="noopener">View</a>
             </li>
-            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
               <strong>FIAP Honor Ribbon</strong>, 41st Trophy Torretes of Photography (Spain) 2018 — Recognized for excellence in international photography. <a href="https://www.festimatge.org/el-festival-2/" target="_blank" rel="noopener">View</a>
             </li>
-            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
               <strong>LensCulture Art Photography Awards 2022</strong> — Featured and nominated for outstanding work in art photography. <a href="https://www.lensculture.com/photo-competitions/art-photography-awards/2022" target="_blank" rel="noopener">View</a>
             </li>
-            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
               <strong>Kimia Photo Festival (Iran) 2019</strong> — Won first prize for creative photography. <a href="https://www.mehrnews.com/news/4463154/%D8%A7%D8%B9%D9%84%D8%A7%D9%85-%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B9%DA%A9%D8%B3-%D9%85%D8%B9%D8%AF%D9%86-%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D8%B3%D9%84%D8%A7%D9%85%DB%8C-%D8%B1%D8%A7%D8%AF-%D9%86%D8%B4%D8%A7%D9%86-%DA%A9%DB%8C%D9%85%DB%8C%D8%A7" target="_blank" rel="noopener">View</a>
             </li>
-            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
               <strong>Blank Wall Gallery (Greece)</strong> — Received an honor diploma in 2020 for excellence in fine art photography. <a href="https://www.blankwallgallery.com/majid-mohammedi-iran-untitled/" target="_blank" rel="noopener">View</a>
             </li>
-            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
+            <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px">
               <strong>Focus Iran 2 — Craft and Folk Art Museum of Los Angeles (USA)</strong> — Honor diploma for artistic achievements in 2019. <a href="https://farhang.org/programs/focus-iran" target="_blank" rel="noopener">View</a>
             </li>
           </ul>
@@ -380,132 +420,146 @@
       </details>
     </section>
 
-    <!-- CONSULT (collapsed by default) -->
-    <section id="consult" style="margin-top: clamp(28px,6vw,64px);">
+    <!-- CONSULT (collapsible, closed by default) -->
+    <section id="consult">
       <details class="collapsible">
         <summary>
-          On-site Consultation
+          Consult
           <span class="caret">▸</span>
         </summary>
-        <div class="content">
-          <p style="color:var(--muted); margin:0 0 12px">
-            Prefer a personal visit? I’ll come to your space, take measurements and reference photos, and prepare
-            tailored illustrations with suggested photographs and framing options. There’s <strong>no purchase obligation</strong>;
-            a small service fee applies to cover travel and time.
-          </p>
-          <a href="#" class="cta js-book-visit" style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">Book a Site Visit →</a>
-          <br><small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
-        </div>
-      </details>
-    </section>
-
-    <!-- FAQ (collapsed by default; questions use Inter font) -->
-    <section id="faq" aria-label="Frequently Asked Questions" style="margin-top: clamp(28px,6vw,64px);">
-      <details class="collapsible">
-        <summary>
-          FAQ
-          <span class="caret">▸</span>
-        </summary>
-        <div class="content">
-          <div class="faq-list">
-            <details id="q-paper">
-              <summary>What type of paper are the prints made on?<span class="caret">▸</span></summary>
-              <div class="answer">Each print is produced on <strong>museum-grade, archival matte fine-art paper</strong>. It has a soft texture, rich detail, and is designed to last for decades without fading.</div>
-            </details>
-
-            <details id="q-editions">
-              <summary>Are the prints limited edition?<span class="caret">▸</span></summary>
-              <div class="answer">Many pieces are offered in <strong>small, limited runs</strong>. Each one is <strong>signed</strong> and, when applicable, <strong>numbered</strong>, so you’re receiving a piece that’s truly personal and collectible. Each work also includes an artist statement and a short note about the experience of making the photograph.</div>
-            </details>
-
-            <details id="q-framed">
-              <summary>Do the prints come framed?<span class="caret">▸</span></summary>
-              <div class="answer">Prints are usually offered <strong>unframed</strong> so you can choose a frame that fits your home. If you prefer, <strong>framing can be arranged</strong> on request — I’ll share options and pricing before you commit.</div>
-            </details>
-
-            <details id="q-custom-size">
-              <summary>Can I request a custom size?<span class="caret">▸</span></summary>
-              <div class="answer">Absolutely. Many artworks can be printed in <strong>custom dimensions</strong> to fit your wall perfectly. Just mention the size you have in mind when you inquire.</div>
-            </details>
-
-            <details id="q-framing-options">
-              <summary>Do you offer different framing options?<span class="caret">▸</span></summary>
-              <div class="answer">Yes — I work with professional framers in Vancouver. <strong>Natural wood, black, and white</strong> frames are the most popular choices. I’m happy to help you pick a style that suits the piece and your space.</div>
-            </details>
-
-            <details id="q-process">
-              <summary>What is the purchase process?<span class="caret">▸</span></summary>
-              <div class="answer">
-                1) Click <strong>“Purchase This Photo”</strong> and send your request with the size and framing preference.<br>
-                2) I’ll reply by email with a <strong>personal quote</strong>, including print details and shipping or delivery costs.<br>
-                3) Once you’re happy with everything, <strong>full payment</strong> is made to begin production.<br>
-                4) Your artwork is <strong>professionally printed</strong> (and framed if selected).<br>
-                5) It will be <strong>shipped</strong>, or you can arrange <strong>local pickup or delivery</strong> in Vancouver.<br>
-                <small class="muted">Shipping and delivery are calculated separately.</small>
-              </div>
-            </details>
-
-            <details id="q-timing">
-              <summary>How long does production take?<span class="caret">▸</span></summary>
-              <div class="answer">Printing usually takes <strong>5–10 business days</strong>. Framed works may require a little longer. If you need something by a specific date, just let me know.</div>
-            </details>
-
-            <details id="q-international">
-              <summary>Do you ship internationally?<span class="caret">▸</span></summary>
-              <div class="answer">Yes — I ship worldwide. Prints are packaged carefully in protective tubes or flat archival sleeves to ensure they arrive safely.</div>
-            </details>
-
-            <details id="q-shipping">
-              <summary>What are the shipping or delivery costs?<span class="caret">▸</span></summary>
-              <div class="answer"><strong>Shipping and local delivery are extra</strong> and calculated based on your location and order size. This is clearly included in your quote <strong>before</strong> you make any payment.</div>
-            </details>
-
-            <details id="q-pickup">
-              <summary>Can I pick up my print locally in Vancouver?<span class="caret">▸</span></summary>
-              <div class="answer">Yes — <strong>local pickup</strong> can be arranged at no cost. Local delivery in Vancouver is also available for an additional fee.</div>
-            </details>
-
-            <details id="q-returns">
-              <summary>What is your return or exchange policy?<span class="caret">▸</span></summary>
-              <div class="answer">Each print is made to order. If your piece arrives <strong>damaged</strong>, I will replace it at no charge. Otherwise, <strong>all sales are final</strong> — thank you for understanding.</div>
-            </details>
-
-            <details id="q-colors">
-              <summary>Will the colors look the same as what I see on my screen?<span class="caret">▸</span></summary>
-              <div class="answer">Prints are produced with professional color standards, but screens vary in brightness. Expect the artwork to feel <strong>more natural, soft, and tactile</strong> than a backlit display — that’s part of the beauty of fine-art printing.</div>
-            </details>
-
-            <details id="q-help">
-              <summary>Can you help me choose the right piece or size for my space?<span class="caret">▸</span></summary>
-              <div class="answer">Yes — I love doing this. Send a photo of your wall, and I’ll suggest artworks and sizes that fit the atmosphere and proportions of your room.</div>
-            </details>
-
-            <details id="q-b2b">
-              <summary>Do you work with interior designers, hotels, or businesses?<span class="caret">▸</span></summary>
-              <div class="answer">Yes. I frequently work with designers and commercial spaces. If you’re planning a project, I’d be happy to discuss scale, editioning, and pricing.</div>
-            </details>
-
-            <details id="q-authentic">
-              <summary>Are all photographs taken by you?<span class="caret">▸</span></summary>
-              <div class="answer">Yes — every image is photographed and curated personally by me. Each piece carries a place, a story, and a moment I witnessed.</div>
-            </details>
+        <div class="inner">
+          <div class="grid" style="align-items:start; gap: var(--gap);">
+            <div style="grid-column: span 12; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
+              <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 8px">On-site Consultation</h3>
+              <p style="color:var(--muted); margin:0 0 12px">
+                Prefer a personal visit? I’ll come to your space, take measurements and reference photos, and prepare
+                tailored illustrations with suggested photographs and framing options. There’s <strong>no purchase obligation</strong>;
+                a small service fee applies to cover travel and time.
+              </p>
+              <a href="#" class="cta js-book-visit" style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">Book a Site Visit →</a>
+              <br><small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
+            </div>
           </div>
         </div>
       </details>
     </section>
 
-    <!-- CONTACT (collapsed by default) -->
-    <section id="contact" style="margin-top: clamp(28px,6vw,64px);">
+    <!-- ===== FAQ (collapsible wrapper, closed by default) ===== -->
+    <section id="faq">
+      <details class="collapsible">
+        <summary>
+          FAQ
+          <span class="caret">▸</span>
+        </summary>
+        <div class="inner">
+          <div class="faq" aria-label="Frequently Asked Questions">
+            <div class="faq-list">
+              <details id="q-paper">
+                <summary>What type of paper are the prints made on?<span class="caret">▸</span></summary>
+                <div class="answer">Each print is produced on <strong>museum-grade, archival matte fine-art paper</strong>. It has a soft texture, rich detail, and is designed to last for decades without fading.</div>
+              </details>
+
+              <details id="q-editions">
+                <summary>Are the prints limited edition?<span class="caret">▸</span></summary>
+                <div class="answer">Many pieces are offered in <strong>small, limited runs</strong>. Each one is <strong>signed</strong> and, when applicable, <strong>numbered</strong>, so you’re receiving a piece that’s truly personal and collectible. Each work also includes an artist statement and a short note about the experience of making the photograph.</div>
+              </details>
+
+              <details id="q-framed">
+                <summary>Do the prints come framed?<span class="caret">▸</span></summary>
+                <div class="answer">Prints are usually offered <strong>unframed</strong> so you can choose a frame that fits your home. If you prefer, <strong>framing can be arranged</strong> on request — I’ll share options and pricing before you commit.</div>
+              </details>
+
+              <details id="q-custom-size">
+                <summary>Can I request a custom size?<span class="caret">▸</span></summary>
+                <div class="answer">Absolutely. Many artworks can be printed in <strong>custom dimensions</strong> to fit your wall perfectly. Just mention the size you have in mind when you inquire.</div>
+              </details>
+
+              <details id="q-framing-options">
+                <summary>Do you offer different framing options?<span class="caret">▸</span></summary>
+                <div class="answer">Yes — I work with professional framers in Vancouver. <strong>Natural wood, black, and white</strong> frames are the most popular choices. I’m happy to help you pick a style that suits the piece and your space.</div>
+              </details>
+
+              <details id="q-process">
+                <summary>What is the purchase process?<span class="caret">▸</span></summary>
+                <div class="answer">
+                  1) Click <strong>“Purchase This Photo”</strong> and send your request with the size and framing preference.<br>
+                  2) I’ll reply by email with a <strong>personal quote</strong>, including print details and shipping or delivery costs.<br>
+                  3) Once you’re happy with everything, <strong>full payment</strong> is made to begin production.<br>
+                  4) Your artwork is <strong>professionally printed</strong> (and framed if selected).<br>
+                  5) It will be <strong>shipped</strong>, or you can arrange <strong>local pickup or delivery</strong> in Vancouver.<br>
+                  <small class="muted">Shipping and delivery are calculated separately.</small>
+                </div>
+              </details>
+
+              <details id="q-timing">
+                <summary>How long does production take?<span class="caret">▸</span></summary>
+                <div class="answer">Printing usually takes <strong>5–10 business days</strong>. Framed works may require a little longer. If you need something by a specific date, just let me know.</div>
+              </details>
+
+              <details id="q-international">
+                <summary>Do you ship internationally?<span class="caret">▸</span></summary>
+                <div class="answer">Yes — I ship worldwide. Prints are packaged carefully in protective tubes or flat archival sleeves to ensure they arrive safely.</div>
+              </details>
+
+              <details id="q-shipping">
+                <summary>What are the shipping or delivery costs?<span class="caret">▸</span></summary>
+                <div class="answer"><strong>Shipping and local delivery are extra</strong> and calculated based on your location and order size. This is clearly included in your quote <strong>before</strong> you make any payment.</div>
+              </details>
+
+              <details id="q-pickup">
+                <summary>Can I pick up my print locally in Vancouver?<span class="caret">▸</span></summary>
+                <div class="answer">Yes — <strong>local pickup</strong> can be arranged at no cost. Local delivery in Vancouver is also available for an additional fee.</div>
+              </details>
+
+              <details id="q-returns">
+                <summary>What is your return or exchange policy?<span class="caret">▸</span></summary>
+                <div class="answer">Each print is made to order. If your piece arrives <strong>damaged</strong>, I will replace it at no charge. Otherwise, <strong>all sales are final</strong> — thank you for understanding.</div>
+              </details>
+
+              <details id="q-colors">
+                <summary>Will the colors look the same as what I see on my screen?<span class="caret">▸</span></summary>
+                <div class="answer">Prints are produced with professional color standards, but screens vary in brightness. Expect the artwork to feel <strong>more natural, soft, and tactile</strong> than a backlit display — that’s part of the beauty of fine-art printing.</div>
+              </details>
+
+              <details id="q-help">
+                <summary>Can you help me choose the right piece or size for my space?<span class="caret">▸</span></summary>
+                <div class="answer">Yes — I love doing this. Send a photo of your wall, and I’ll suggest artworks and sizes that fit the atmosphere and proportions of your room.</div>
+              </details>
+
+              <details id="q-b2b">
+                <summary>Do you work with interior designers, hotels, or businesses?<span class="caret">▸</span></summary>
+                <div class="answer">Yes. I frequently work with designers and commercial spaces. If you’re planning a project, I’d be happy to discuss scale, editioning, and pricing.</div>
+              </details>
+
+              <details id="q-authentic">
+                <summary>Are all photographs taken by you?<span class="caret">▸</span></summary>
+                <div class="answer">Yes — every image is photographed and curated personally by me. Each piece carries a place, a story, and a moment I witnessed.</div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- CONTACT (collapsible, closed by default) -->
+    <section id="contact">
       <details class="collapsible">
         <summary>
           Contact
           <span class="caret">▸</span>
         </summary>
-        <div class="content">
-          <p style="color:var(--muted); margin:0 0 12px">For print inquiries, commissions, or exhibitions:</p>
-          <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:madjid.mohamadi@gmail.com">madjid.mohamadi@gmail.com</a></p>
-          <p style="margin:0 0 6px"><strong>Instagram:</strong> <a href="https://www.instagram.com/madjidmohamadi" target="_blank" rel="noopener">@madjidmohamadi</a></p>
-          <p style="margin:6px 0 0">© <span id="year"></span> By Majid. All rights reserved.</p>
+        <div class="inner">
+          <div class="grid" style="align-items:center">
+            <div style="grid-column: span 8; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
+              <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin-top:0">Contact</h3>
+              <p style="color:var(--muted); margin:0 0 12px">For print inquiries, commissions, or exhibitions:</p>
+              <p style="margin:0 0 6px"><strong>Email:</strong> <a href="mailto:madjid.mohamadi@gmail.com">madjid.mohamadi@gmail.com</a></p>
+              <p style="margin:0 0 6px"><strong>Instagram:</strong> <a href="https://www.instagram.com/madjidmohamadi" target="_blank" rel="noopener">@madjidmohamadi</a></p>
+            </div>
+            <div style="grid-column: span 4; text-align:center; color:var(--muted)">
+              <p style="margin:6px 0 0">© <span id="year"></span> By Majid. All rights reserved.</p>
+            </div>
+          </div>
         </div>
       </details>
     </section>
@@ -522,7 +576,7 @@
     </div>
   </footer>
 
-  <!-- Lightbox -->
+  <!-- Lightbox + purchase -->
   <div class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lb-title">
     <h2 id="lb-title" class="sr-only">Image viewer</h2>
     <button class="close" aria-label="Close">Close ✕</button>
@@ -574,12 +628,14 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
+    // dynamic --vh for mobile (prefer visualViewport when available)
     function setVh(){
       var h = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
       document.documentElement.style.setProperty('--vh', (h * 0.01) + 'px');
     }
     setVh(); addEventListener('resize', setVh); addEventListener('orientationchange', setVh);
 
+    // anchor offset
     function setHeaderOffset(){
       const h = document.getElementById('siteHeader');
       const px = h ? (h.offsetHeight || 64) : 64;
@@ -587,8 +643,10 @@
     }
     setHeaderOffset(); addEventListener('resize', setHeaderOffset);
 
+    // year
     const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
 
+    // EmailJS init
     (function(){
       const s = document.createElement('script');
       s.src = 'https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js';
@@ -596,6 +654,7 @@
       document.head.appendChild(s);
     })();
 
+    // Toast
     const toast = document.getElementById('toast');
     function showToast(msg){
       toast.textContent = msg;
@@ -603,6 +662,62 @@
       setTimeout(()=>toast.classList.remove('show'), 3200);
     }
 
+    // ===== Sections menu logic (☰) =====
+    (function(){
+      const btn = document.getElementById('sectionsToggle');
+      const panel = document.getElementById('sectionsPanel');
+      if(!btn || !panel) return;
+
+      const collapsibleIds = ['about','awards','consult','faq','contact'];
+      function isDetails(el){ return !!el && el.tagName === 'DETAILS'; }
+      function closeAllDetails(exceptId){
+        collapsibleIds.forEach(id=>{
+          if(id === exceptId) return;
+          const dWrap = document.getElementById(id);
+          const d = dWrap ? dWrap.querySelector('details.collapsible') : null;
+          if(isDetails(d)) d.removeAttribute('open');
+        });
+      }
+      function openSection(id){
+        const wrap = document.getElementById(id);
+        if(!wrap) return;
+        const d = wrap.querySelector('details.collapsible');
+        if(isDetails(d)){
+          d.setAttribute('open','');
+          closeAllDetails(id);
+          // scroll to details element, offset by header
+          const top = d.getBoundingClientRect().top + window.scrollY - ((parseInt(getComputedStyle(document.documentElement).getPropertyValue('--headerH'))||64) + 12);
+          window.scrollTo({ top: Math.max(0,top), behavior:'smooth' });
+        }else{
+          // normal section (e.g., Portfolio/work)
+          const top = wrap.getBoundingClientRect().top + window.scrollY - ((parseInt(getComputedStyle(document.documentElement).getPropertyValue('--headerH'))||64) + 12);
+          window.scrollTo({ top: Math.max(0,top), behavior:'smooth' });
+        }
+      }
+      function openPanel(){ panel.hidden = false; btn.setAttribute('aria-expanded','true'); }
+      function closePanel(){ panel.hidden = true; btn.setAttribute('aria-expanded','false'); }
+      function togglePanel(){ (panel.hidden ? openPanel : closePanel)(); }
+
+      btn.addEventListener('click', (e)=>{ e.preventDefault(); togglePanel(); }, {passive:false});
+      panel.addEventListener('click', (e)=>{
+        const a = e.target.closest('a[data-section]');
+        if(!a) return;
+        e.preventDefault();
+        const id = a.getAttribute('data-section');
+        closePanel();
+        openSection(id);
+      }, {passive:false});
+      document.addEventListener('click', (e)=>{
+        if(panel.hidden) return;
+        if(e.target === btn || panel.contains(e.target)) return;
+        closePanel();
+      }, {passive:true});
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape' && !panel.hidden) closePanel();
+      }, {passive:true});
+    })();
+
+    // Lightbox + Quote + Visit
     (function(){
       const lb = document.querySelector('.lightbox');
       if (!lb) return;
@@ -644,6 +759,7 @@
         if (lastFocus) lastFocus.focus();
       }
 
+      // Tap any grid image -> open lightbox (reliable on Samsung/Chrome)
       document.querySelectorAll('.card img').forEach(img => {
         img.addEventListener('click', (e) => {
           e.preventDefault();
@@ -658,7 +774,7 @@
       addEventListener('resize', fitLightbox, { passive:true });
       addEventListener('orientationchange', fitLightbox, { passive:true });
 
-      // Quote
+      // Quote modal hooks
       const quoteModal = document.getElementById('quoteModal');
       const quoteForm  = document.getElementById('quoteForm');
       const cancelQuote = document.getElementById('cancelQuote');
@@ -710,7 +826,7 @@
         }
       });
 
-      // Site Visit
+      // Site Visit modal
       const visitModal = document.getElementById('visitModal');
       const visitForm = document.getElementById('visitForm');
       const cancelVisit = document.getElementById('cancelVisit');
@@ -759,7 +875,7 @@
         }
       });
 
-      // Open specific FAQ item by hash
+      // If the URL hashes to a FAQ item (<details>), open it and scroll
       if (location.hash) {
         const el = document.querySelector(location.hash);
         if (el && el.tagName === 'DETAILS') {
@@ -774,47 +890,17 @@
           el.scrollIntoView({ behavior:'smooth', block:'start' });
         }
       }, { passive:true });
-
     })();
 
-    // Sections drawer
-    (function(){
-      const btn = document.getElementById('sectionsBtn');
-      const drawer = document.getElementById('sectionsDrawer');
-      if(!btn || !drawer) return;
-
-      function toggleDrawer(force){
-        const willOpen = (typeof force === 'boolean') ? force : !drawer.classList.contains('open');
-        drawer.classList.toggle('open', willOpen);
-        btn.setAttribute('aria-expanded', String(willOpen));
-        if (willOpen){
-          const firstLink = drawer.querySelector('a');
-          if(firstLink) firstLink.focus();
-        } else {
-          btn.focus();
-        }
-      }
-
-      btn.addEventListener('click', (e)=>{ e.preventDefault(); toggleDrawer(); }, { passive:false });
-
-      document.addEventListener('keydown', (e)=>{
-        if(e.key === 'Escape' && drawer.classList.contains('open')) toggleDrawer(false);
-      }, { passive:true });
-
-      drawer.addEventListener('click', (e)=>{
-        const a = e.target.closest('a');
-        if(a){ toggleDrawer(false); }
-      }, { passive:true });
-
-      document.addEventListener('click', (e)=>{
-        if(!drawer.classList.contains('open')) return;
-        if(e.target === btn || drawer.contains(e.target)) return;
-        toggleDrawer(false);
-      }, { passive:true });
-    })();
+    // Improve --vh updates when browser chrome shows/hides
+    if (window.visualViewport) {
+      const updateVh = () => {
+        document.documentElement.style.setProperty('--vh', (visualViewport.height * 0.01) + 'px');
+      };
+      visualViewport.addEventListener('resize', updateVh, { passive:true });
+      visualViewport.addEventListener('scroll', updateVh, { passive:true });
+      updateVh();
+    }
   </script>
 </body>
 </html>
-
-
-
