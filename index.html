@@ -62,9 +62,16 @@
 
     .grid{display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gap)}
     .card{grid-column:span 6; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative}
-    .card img{width:100%; height:auto; display:block; object-fit:cover; aspect-ratio:4/3}
-    .card.portrait img{aspect-ratio:3/4}
-    .card.sq img{aspect-ratio:1/1}
+
+    /* ✅ Show full images (no cropping) */
+    .card img{width:100%; height:auto; display:block}
+
+    /* Removed the forced aspect ratios & cover that caused cropping:
+       .card img{object-fit:cover; aspect-ratio:4/3}
+       .card.portrait img{aspect-ratio:3/4}
+       .card.sq img{aspect-ratio:1/1}
+    */
+
     .cap{position:absolute; inset:auto 0 0 0; padding:12px 14px; background:linear-gradient(180deg, transparent, rgba(0,0,0,.65)); color:#fff; font-size:.95rem}
     .chip{display:inline-block; padding:.25rem .6rem; border:1px solid color-mix(in oklab, #fff 35%, transparent); border-radius:999px; font-size:.72rem; opacity:.9}
 
@@ -74,7 +81,7 @@
     .card img{cursor:zoom-in}
     .card a.zoom{display:block; touch-action: pan-y;}
 
-    /* Lightbox overlay (mobile + desktop) */
+    /* Lightbox overlay */
     .lightbox{position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:9999}
     .lightbox.open{display:flex}
     .lightbox img{max-width:90vw; max-height:90vh; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6)}
@@ -91,7 +98,7 @@
     }
   </style>
 
-  <!-- JSON-LD: Person (kept name as Majid Mohamadi by request) -->
+  <!-- JSON-LD: Person -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -135,20 +142,15 @@
     <!-- HERO -->
     <section class="hero" id="home">
       <figure class="hero-card" aria-label="Featured photograph">
-        <!-- Performance-optimized hero (AVIF/WebP + sizes) -->
-       <picture>
-  <source type="image/avif" srcset="/images/a-journey-to-the-unknown.avif">
-  <source type="image/webp" srcset="/images/a-journey-to-the-unknown.webp">
-  <img
-    src="/images/a-journey-to-the-unknown.jpg"  <!-- ensure this one exists -->
-    alt="A Journey to The Unknown"
-    width="1600" height="1067"
-    fetchpriority="high" decoding="async" loading="eager"
-    sizes="(max-width: 900px) 100vw, 60vw"
-    style="display:block;width:100%;height:auto"
-    onerror="this.onerror=null; this.src='/images/a-journey-to-the-unknown.png';"
-  />
-</picture>
+        <!-- ✅ Use the file you actually have; display:block avoids inline gaps -->
+        <img
+          src="/images/a-journey-to-the-unknown.png"
+          alt="A Journey to The Unknown"
+          width="1600" height="1067"
+          fetchpriority="high" decoding="async" loading="eager"
+          sizes="(max-width: 900px) 100vw, 60vw"
+          style="display:block;width:100%;height:auto"
+        />
       </figure>
       <div class="hero-copy">
         <h2>Quiet light. Honest places.</h2>
@@ -161,52 +163,52 @@
     <section id="work" aria-label="Portfolio">
       <div class="grid">
         <figure class="card">
-          <img src="images/how-earth-sees-the-leaves.png" alt="How Earth Sees the Leaves" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
+          <img src="/images/how-earth-sees-the-leaves.png" alt="How Earth Sees the Leaves" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
           <figcaption class="cap"><span class="chip">Space: Gallery</span> How Earth Sees the Leaves</figcaption>
         </figure>
 
-        <figure class="card portrait">
-          <img src="images/golden-breath.png" alt="Golden Breath" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
+        <figure class="card">
+          <img src="/images/golden-breath.png" alt="Golden Breath" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
           <figcaption class="cap"><span class="chip">Space: Lobby</span> Golden Breath</figcaption>
         </figure>
 
         <figure class="card">
-          <img src="images/moonlight-over-the-ocean.png" alt="Moonlight Over The Ocean" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
+          <img src="/images/moonlight-over-the-ocean.png" alt="Moonlight Over The Ocean" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
           <figcaption class="cap"><span class="chip">Space: Living room</span> Moonlight Over The Ocean</figcaption>
         </figure>
 
-        <figure class="card portrait">
-          <img src="images/immigrants.png" alt="Immigrants" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
+        <figure class="card">
+          <img src="/images/immigrants.png" alt="Immigrants" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
           <figcaption class="cap"><span class="chip">Space: Hotel lobby</span> Immigrants</figcaption>
         </figure>
 
-        <figure class="card portrait">
-          <img src="images/whisper-of-form.png" alt="Whisper of Form" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
+        <figure class="card">
+          <img src="/images/whisper-of-form.png" alt="Whisper of Form" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
           <figcaption class="cap"><span class="chip">Space: Shop</span> Whisper of Form</figcaption>
         </figure>
 
-        <figure class="card portrait">
-          <img src="images/the-shape-of-wind.png" alt="The Shape of Wind" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
+        <figure class="card">
+          <img src="/images/the-shape-of-wind.png" alt="The Shape of Wind" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
           <figcaption class="cap"><span class="chip">Space: Shop</span> The Shape of Wind</figcaption>
         </figure>
 
         <figure class="card">
-          <img src="images/the-tired-tree.png" alt="The Tired Tree" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
+          <img src="/images/the-tired-tree.png" alt="The Tired Tree" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
           <figcaption class="cap"><span class="chip">Space: Gallery</span> The Tired Tree</figcaption>
         </figure>
 
-        <figure class="card sq">
-          <img src="images/whispers-of-the-ghost-lake.png" alt="Whispers of the Ghost Lake" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
+        <figure class="card">
+          <img src="/images/whispers-of-the-ghost-lake.png" alt="Whispers of the Ghost Lake" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
           <figcaption class="cap"><span class="chip">Space: Living room</span> Whispers of the Ghost Lake</figcaption>
         </figure>
 
-        <figure class="card sq">
-          <img src="images/story-of-two-benches.png" alt="Story of Two Benches" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
+        <figure class="card">
+          <img src="/images/story-of-two-benches.png" alt="Story of Two Benches" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
           <figcaption class="cap"><span class="chip">Space: Wellness retreat</span> Story of Two Benches</figcaption>
         </figure>
 
         <figure class="card">
-          <img src="images/a-journey-to-the-unknown.png" alt="A Journey to The Unknown" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
+          <img src="/images/a-journey-to-the-unknown.png" alt="A Journey to The Unknown" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
           <figcaption class="cap"><span class="chip">Space: Living room</span> A Journey to The Unknown</figcaption>
         </figure>
       </div>
@@ -216,7 +218,7 @@
     <section id="about" style="margin-top: clamp(28px,6vw,64px);">
       <div class="grid" style="grid-template-columns:repeat(12,1fr); gap:var(--gap)">
         <div style="grid-column:span 7; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden">
-          <img src="images/about.jpg" alt="Majid in the field with camera" style="width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:3/2" loading="lazy" decoding="async" width="1200" height="800">
+          <img src="/images/about.jpg" alt="Majid in the field with camera" style="width:100%;height:auto;display:block" loading="lazy" decoding="async" width="1200" height="800">
         </div>
         <div style="grid-column:span 5; display:flex; flex-direction:column; justify-content:center; gap:10px">
           <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0">About</h3>
@@ -251,26 +253,26 @@
       </ul>
     </section>
 
-    <!-- INTERIOR CONSULTATION --><!-- INTERIOR CONSULTATION (simplified) -->
-<section id="consult" style="margin-top: clamp(28px,6vw,64px);">
-  <div class="grid" style="align-items:start; gap: var(--gap);">
-    <div style="grid-column: span 12; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
-      <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 8px">On-site Consultation</h3>
-      <p style="color:var(--muted); margin:0 0 12px">
-        Prefer a personal visit? I’ll come to your space, take measurements and reference photos, and prepare
-        tailored illustrations with suggested photographs and framing options. There’s <strong>no purchase obligation</strong>;
-        a small service fee applies to cover travel and time.
-      </p>
-     <a href="#"
-   class="cta js-book-visit"
-   style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">
-  Book a Site Visit →
-      </a>
-      <br>
-      <small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
-    </div>
-  </div>
-</section>
+    <!-- INTERIOR CONSULTATION -->
+    <section id="consult" style="margin-top: clamp(28px,6vw,64px);">
+      <div class="grid" style="align-items:start; gap: var(--gap);">
+        <div style="grid-column: span 12; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding: clamp(16px,3vw,24px)">
+          <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px); margin:0 0 8px">On-site Consultation</h3>
+          <p style="color:var(--muted); margin:0 0 12px">
+            Prefer a personal visit? I’ll come to your space, take measurements and reference photos, and prepare
+            tailored illustrations with suggested photographs and framing options. There’s <strong>no purchase obligation</strong>;
+            a small service fee applies to cover travel and time.
+          </p>
+          <a href="#"
+             class="cta js-book-visit"
+             style="display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:999px; background:var(--fg); color:var(--bg); font-weight:700; text-decoration:none;">
+            Book a Site Visit →
+          </a>
+          <br>
+          <small style="display:block; margin-top:8px; color:var(--muted);">Typical response within 24 hours.</small>
+        </div>
+      </div>
+    </section>
 
     <!-- CONTACT -->
     <section id="contact" style="margin-top: clamp(28px,6vw,64px);">
@@ -324,7 +326,6 @@
       document.body.classList.add('no-scroll');
       lb.classList.add('open');
 
-      // Hide background for assistive tech
       if ('inert' in HTMLElement.prototype) { main.inert = true; }
       else { main.setAttribute('aria-hidden','true'); }
 
@@ -334,7 +335,6 @@
       pre.onerror = () => { lbImg.src = src; };
       pre.src = src;
 
-      // Move focus to close button
       closeBtn.focus();
     }
 
@@ -413,44 +413,14 @@
     });
   })();
 
-  // Interior consult form → opens email compose with prefilled details (leave as-is if you use it)
-  const consult = document.getElementById('consultForm');
-  if (consult) {
-    consult.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const d = new FormData(consult);
-      const lines = [
-        `Name: ${d.get('name') || ''}`,
-        `Email: ${d.get('email') || ''}`,
-        `Room: ${d.get('room') || ''}`,
-        `Wall width: ${d.get('wall') || ''}`,
-        `Ceiling height: ${d.get('ceiling') || ''}`,
-        `Orientation: ${d.get('orientation') || ''}`,
-        `Frame: ${d.get('frame') || ''}`,
-        `Photo link: ${d.get('link') || ''}`,
-        '',
-        (d.get('notes') || '')
-      ];
-      const body = encodeURIComponent(lines.join('\n'));
-      const mailto = `mailto:hello@bymajid.com?subject=Interior Consultation — bymajid.com&body=${body}`;
-      window.location.href = mailto;
-    });
-  }
-
-  // === Book a Site Visit Popup ===
-
-  // 1) Load EmailJS SDK and init with your public key
+  // EmailJS booking popup
   (function(){
     const s = document.createElement('script');
     s.src = 'https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js';
-    s.onload = function(){
-      // ✅ You already added your public key below — good.
-      emailjs.init('mK0NVdRoob8JAczNU');
-    };
+    s.onload = function(){ emailjs.init('mK0NVdRoob8JAczNU'); };
     document.head.appendChild(s);
   })();
 
-  // 2) Attach click handler to button/link with id #bookBtn or class .js-book-visit
   document.querySelectorAll('#bookBtn, .js-book-visit').forEach(btn => {
     btn.addEventListener('click', e => {
       e.preventDefault();
@@ -458,7 +428,6 @@
     });
   });
 
-  // 3) Create a very small popup form and send via EmailJS
   function openSiteVisitPopup() {
     const modal = document.createElement('div');
     modal.innerHTML = `
@@ -481,8 +450,7 @@
       e.preventDefault();
       const data = Object.fromEntries(new FormData(e.target).entries());
       try {
-        // ✅ Your current IDs — keep if they match your EmailJS dashboard
-        await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', data); // to YOU
+        await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', data);
         alert('Your request was sent! we’ll get back to you very soon.');
       } catch(err){
         alert('Something went wrong. Please try again later.');
@@ -490,15 +458,6 @@
       modal.remove();
     };
   }
-</script>
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
