@@ -784,7 +784,7 @@ quoteForm.addEventListener('submit', async (e)=>{
   try{
     await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', params);
     document.getElementById('quoteModal').classList.remove('open');
-    showToast('Your quote request has been sent. I will reply soon.');
+    showToast('Your quote request has been sent. We will reply you with a quote very soon. Thank you!');
     quoteForm.reset();
   }catch(err){
     showToast('Something went wrong. Please try again.');
@@ -834,7 +834,7 @@ quoteForm.addEventListener('submit', async (e)=>{
         try{
           await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', params);
           closeVisit();
-          showToast('Your site visit request has been sent. I will reply within 24 hours.');
+          showToast('Your site visit request has been sent. We will reply within 24 hours. Thank you!');
           visitForm.reset();
         }catch(err){
           showToast('Something went wrong. Please try again.');
@@ -958,6 +958,7 @@ quoteForm.addEventListener('submit', async (e)=>{
 </script>
 </body>
 </html>
+
 
 
 
