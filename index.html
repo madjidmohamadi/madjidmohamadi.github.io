@@ -569,21 +569,54 @@
 
   <!-- Quote dialog -->
   <div class="modal" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quote-title" aria-hidden="true">
-    <form class="modal-card" id="quoteForm">
-      <h3 id="quote-title">Request a Quote</h3>
-      <p id="quote-photo" style="margin:.25rem 0 .5rem; font-size:.9rem; color:#444"></p>
-      <input type="hidden" name="photo_src" id="photo_src">
-      <input type="hidden" name="photo_title" id="photo_title">
-      <label for="buyer_email">Your Email</label>
-      <input id="buyer_email" name="email" type="email" required placeholder="you@example.com" inputmode="email" autocomplete="email">
-      <label for="buyer_note">Notes (optional)</label>
-      <textarea id="buyer_note" name="note" rows="4" placeholder="Size, frame preference, delivery city…"></textarea>
-      <div class="modal-actions">
-        <button type="button" class="btn cancel" id="cancelQuote">Cancel</button>
-        <button type="submit" class="btn submit">Submit</button>
-      </div>
-    </form>
-  </div>
+  <form class="modal-card" id="quoteForm">
+    <h3 id="quote-title">Request a Quote</h3>
+    <p id="quote-photo" style="margin:.25rem 0 .5rem; font-size:.9rem; color:#444"></p>
+
+    <input type="hidden" name="photo_src" id="photo_src">
+    <input type="hidden" name="photo_title" id="photo_title">
+
+    <label for="buyer_name">Your Name</label>
+    <input id="buyer_name" name="buyer_name" required placeholder="Full Name" autocomplete="name">
+
+    <label for="buyer_email">Your Email</label>
+    <input id="buyer_email" name="buyer_email" type="email" required placeholder="you@example.com" inputmode="email" autocomplete="email">
+
+    <label for="buyer_phone">Phone (optional)</label>
+    <input id="buyer_phone" name="buyer_phone" type="tel" placeholder="+1 604 …" inputmode="tel" autocomplete="tel">
+
+    <label for="buyer_city">City (for shipping/delivery estimate)</label>
+    <input id="buyer_city" name="buyer_city" placeholder="e.g., West Vancouver">
+
+    <label for="buyer_size">Preferred Size (optional)</label>
+    <select id="buyer_size" name="buyer_size">
+      <option value="">Select a size (optional)</option>
+      <option>8×12 in</option>
+      <option>12×18 in</option>
+      <option>16×24 in</option>
+      <option>20×30 in</option>
+      <option>24×36 in</option>
+      <option>Custom</option>
+    </select>
+
+    <label for="buyer_frame">Framing (optional)</label>
+    <select id="buyer_frame" name="buyer_frame">
+      <option value="">Unframed</option>
+      <option>Natural wood frame</option>
+      <option>Black frame</option>
+      <option>White frame</option>
+      <option>Custom framing</option>
+    </select>
+
+    <label for="buyer_note">Notes (optional)</label>
+    <textarea id="buyer_note" name="buyer_note" rows="4" placeholder="Anything else you'd like to share…"></textarea>
+
+    <div class="modal-actions">
+      <button type="button" class="btn cancel" id="cancelQuote">Cancel</button>
+      <button type="submit" class="btn submit">Submit</button>
+    </div>
+  </form>
+</div>
 
   <!-- Site visit dialog -->
   <div class="modal" id="visitModal" role="dialog" aria-modal="true" aria-labelledby="visit-title" aria-hidden="true">
@@ -721,31 +754,43 @@
       cancelQuote.addEventListener('click', ()=> closeQuote(), { passive:true });
       quoteModal.addEventListener('click', (e)=>{ if(e.target===quoteModal) closeQuote(); }, { passive:true });
 
-      quoteForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const fd = new FormData(quoteForm);
-        const data = Object.fromEntries(fd.entries());
-        const params = {
-          subject: 'Quote Request — bymajid.com',
-          from_email: data.email,
-          reply_to: data.email,
-          message: data.note || '',
-          photo_title: photoTitleInput.value || '',
-          photo_src: photoSrcInput.value || '',
-          page_url: location.href,
-          user_agent: navigator.userAgent,
-          timestamp: new Date().toISOString()
-        };
-        try{
-          await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', params);
-          closeQuote();
-          closeLightbox();
-          showToast('Your quote request has been sent. I will reply with a quote as soon as possible.');
-          quoteForm.reset();
-        }catch(err){
-          showToast('Something went wrong. Please try again.');
-        }
-      });
+      
+quoteForm.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const fd = new FormData(quoteForm);
+  const v = Object.fromEntries(fd.entries());
+
+  const title = (document.getElementById('photo_title')?.value || '').trim();
+  const subj = title ? `Quote Request — “${title}”` : 'Quote Request — bymajid.com';
+  const params = {
+    subject: subj,
+    buyer_name: v.buyer_name || '',
+    buyer_email: v.buyer_email || '',
+    buyer_phone: v.buyer_phone || '',
+    buyer_city: v.buyer_city || '',
+    buyer_size: v.buyer_size || '',
+    buyer_frame: v.buyer_frame || '',
+    buyer_note: v.buyer_note || '',
+    photo_title: document.getElementById('photo_title').value || '',
+    photo_src: document.getElementById('photo_src').value || '',
+    from_email: v.buyer_email || '',
+    reply_to: v.buyer_email || '',
+    message: v.buyer_note || '',
+    page_url: location.href,
+    user_agent: navigator.userAgent,
+    timestamp: new Date().toISOString()
+  };
+
+  try{
+    await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', params);
+    document.getElementById('quoteModal').classList.remove('open');
+    showToast('Your quote request has been sent. I will reply soon.');
+    quoteForm.reset();
+  }catch(err){
+    showToast('Something went wrong. Please try again.');
+  }
+});
+
 
       // Site Visit
       const visitModal = document.getElementById('visitModal');
