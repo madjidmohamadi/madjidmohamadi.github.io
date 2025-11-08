@@ -223,6 +223,29 @@
   box-shadow: 0 -8px 20px rgba(0,0,0,.06);
 }
 
+
+/* === FAQ harmonization (questions same font as answers, slightly bold; keep size small) === */
+.faq-list details > summary { 
+  list-style: none; 
+  cursor: pointer; 
+  padding: 14px 16px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  gap: 12px; 
+  font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif !important; 
+  font-size: 0.95rem !important; 
+  font-weight: 600 !important; 
+}
+.faq-list .answer { 
+  padding: 0 16px 16px; 
+  color: var(--muted); 
+  font-size: 0.95rem !important; 
+}
+.faq-list details > summary::-webkit-details-marker { display: none; }
+.faq-list .caret { flex: 0 0 auto; transition: transform .2s ease; opacity: .8; }
+.faq-list details[open] .caret { transform: rotate(90deg); }
+
 </style>
 
   <script type="application/ld+json">
@@ -525,7 +548,24 @@
               <summary>Are all photographs taken by you?<span class="caret">▸</span></summary>
               <div class="answer">Yes — every image is photographed and curated personally by me. Each piece carries a place, a story, and a moment I witnessed.</div>
             </details>
-          </div>
+          
+            <details id="q-sessions">
+              <summary>Do you offer online or in-person photography sessions?<span class="caret">▸</span></summary>
+              <div class="answer">
+                Yes — I offer both <strong>online and in-person sessions</strong>. Whether you’re just beginning or looking to refine your visual voice, we can plan a session that fits your level and interests.
+                Feel free to reach out via email to discuss availability and the type of session you have in mind.
+              </div>
+            </details>
+
+            <details id="q-equipment">
+              <summary>Do I need any special equipment to begin?<span class="caret">▸</span></summary>
+              <div class="answer">
+                No — not at all. Photography starts with learning <strong>how to see</strong>.
+                You can begin with whatever you already have, even a mobile camera. As your eye grows, equipment can follow.
+              </div>
+            </details>
+
+</div>
         </div>
       </details>
     </section>
