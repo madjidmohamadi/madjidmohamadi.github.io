@@ -247,15 +247,13 @@
 .faq-list details[open] .caret { transform: rotate(90deg); }
 
 
-/* fade-in on scroll */
-.card {
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity .6s ease, transform .6s ease;
-}
-.card.visible {
-  opacity: 1;
-  transform: translateY(0);
+/* Prevent native mobile image viewer popups in the custom lightbox */
+.lightbox img{
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
 }
 
 </style>
@@ -341,28 +339,28 @@
 
       <div class="grid">
         <figure class="card">
-          <img src="/images/moonlight-over-the-ocean.png" alt="Moonlight Over The Ocean" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
-          <figcaption class="cap"><span class="chip">Space: Living room</span> Moonlight Over The Ocean</figcaption>
+          <img src="/images/how-earth-sees-the-leaves.png" alt="How Earth Sees the Leaves" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
+          <figcaption class="cap"><span class="chip">Space: Gallery</span> How Earth Sees the Leaves</figcaption>
         </figure>
         <figure class="card">
           <img src="/images/golden-breath.png" alt="Golden Breath" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
           <figcaption class="cap"><span class="chip">Space: Lobby</span> Golden Breath</figcaption>
         </figure>
         <figure class="card">
-          <img src="/images/the-tired-tree.png" alt="The Tired Tree" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
-          <figcaption class="cap"><span class="chip">Space: Gallery</span> The Tired Tree</figcaption>
+          <img src="/images/moonlight-over-the-ocean.png" alt="Moonlight Over The Ocean" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
+          <figcaption class="cap"><span class="chip">Space: Living room</span> Moonlight Over The Ocean</figcaption>
         </figure>
         <figure class="card">
           <img src="/images/immigrants.png" alt="Immigrants" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
           <figcaption class="cap"><span class="chip">Space: Hotel lobby</span> Immigrants</figcaption>
         </figure>
         <figure class="card">
-          <img src="/images/story-of-two-benches.png" alt="Story of Two Benches" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
-          <figcaption class="cap"><span class="chip">Space: Wellness retreat</span> Story of Two Benches</figcaption>
+          <img src="/images/whispers-of-the-ghost-lake.png" alt="Whispers of the Ghost Lake" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
+          <figcaption class="cap"><span class="chip">Space: Living room</span> Whispers of the Ghost Lake</figcaption>
         </figure>
         <figure class="card">
-          <img src="/images/how-earth-sees-the-leaves.png" alt="How Earth Sees the Leaves" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
-          <figcaption class="cap"><span class="chip">Space: Gallery</span> How Earth Sees the Leaves</figcaption>
+          <img src="/images/the-tired-tree.png" alt="The Tired Tree" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
+          <figcaption class="cap"><span class="chip">Space: Gallery</span> The Tired Tree</figcaption>
         </figure>
         <figure class="card">
           <img src="/images/whisper-of-form.png" alt="Whisper of Form" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
@@ -377,8 +375,40 @@
           <figcaption class="cap"><span class="chip">Space: Shop</span> The Shape of Wind</figcaption>
         </figure>
         <figure class="card">
-          <img src="/images/whispers-of-the-ghost-lake.png" alt="Whispers of the Ghost Lake" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
-          <figcaption class="cap"><span class="chip">Space: Living room</span> Whispers of the Ghost Lake</figcaption>
+          <img src="/images/story-of-two-benches.png" alt="Story of Two Benches" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
+          <figcaption class="cap"><span class="chip">Space: Wellness retreat</span> Story of Two Benches</figcaption>
+        </figure>
+        <figure class="card">
+          <img src="/images/a-misty-mind.png" alt="A Misty Mind" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1920" height="1272">
+          <figcaption class="cap"><span class="chip">Space: Gallery</span> A Misty Mind</figcaption>
+        </figure>
+        <figure class="card">
+          <img src="/images/Sliding-sky.png" alt="Sliding Sky" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1279" height="1920">
+          <figcaption class="cap"><span class="chip">Space: Gallery</span> Sliding Sky</figcaption>
+        </figure>
+        <figure class="card">
+          <img src="/images/Between-here-and-there.png" alt="Between Here and There" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1920" height="1263">
+          <figcaption class="cap"><span class="chip">Space: Gallery</span> Between Here and There</figcaption>
+        </figure>
+        <figure class="card">
+          <img src="/images/The-story-of-a-climb.png" alt="The Story of a Climb" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1280" height="1920">
+          <figcaption class="cap"><span class="chip">Space: Gallery</span> The Story of a Climb</figcaption>
+        </figure>
+        <figure class="card">
+          <img src="/images/Memory-of-bloom.png" alt="Memory of Bloom" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1920" height="1920">
+          <figcaption class="cap"><span class="chip">Space: Gallery</span> Memory of Bloom</figcaption>
+        </figure>
+        <figure class="card">
+          <img src="/images/Edge-of-Twilight.png" alt="Edge of Twilight" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1920" height="1280">
+          <figcaption class="cap"><span class="chip">Space: Gallery</span> Edge of Twilight</figcaption>
+        </figure>
+        <figure class="card">
+          <img src="/images/Under-the-weight-of-sky.png" alt="Under the Weight of Sky" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1920" height="1280">
+          <figcaption class="cap"><span class="chip">Space: Gallery</span> Under the Weight of Sky</figcaption>
+        </figure>
+        <figure class="card">
+          <img src="/images/Transience.png" alt="Transience" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1920" height="1920">
+          <figcaption class="cap"><span class="chip">Space: Gallery</span> Transience</figcaption>
         </figure>
       </div>
     
@@ -608,9 +638,8 @@
   </footer>
 
   <!-- Lightbox -->
-  <div class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lb-title">
-    <h2 id="lb-title" class="sr-only">Image viewer</h2>
-    <button class="close" aria-label="Close">Close ✕</button>
+  <div class="lightbox">
+<button class="close" aria-label="Close">Close ✕</button>
     <img src="" alt="" />
     <button class="buy" type="button" aria-label="Purchase this photo">Purchase this Photo</button>
   </div>
@@ -1004,22 +1033,6 @@ quoteForm.addEventListener('submit', async (e)=>{
     }
   })();
 </script>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const cards = document.querySelectorAll('.card');
-  const obs = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.classList.add('visible');
-        obs.unobserve(e.target);
-      }
-    });
-  }, {threshold: 0.1});
-  cards.forEach(c=>obs.observe(c));
-});
-</script>
-
 </body>
 </html>
 
