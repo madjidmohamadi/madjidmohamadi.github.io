@@ -246,6 +246,18 @@
 .faq-list .caret { flex: 0 0 auto; transition: transform .2s ease; opacity: .8; }
 .faq-list details[open] .caret { transform: rotate(90deg); }
 
+
+/* fade-in on scroll */
+.card {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 </style>
 
   <script type="application/ld+json">
@@ -329,53 +341,44 @@
 
       <div class="grid">
         <figure class="card">
-          <img src="/images/how-earth-sees-the-leaves.png" alt="How Earth Sees the Leaves" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
-          <figcaption class="cap"><span class="chip">Space: Gallery</span> How Earth Sees the Leaves</figcaption>
+          <img src="/images/moonlight-over-the-ocean.png" alt="Moonlight Over The Ocean" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
+          <figcaption class="cap"><span class="chip">Space: Living room</span> Moonlight Over The Ocean</figcaption>
         </figure>
-
         <figure class="card">
           <img src="/images/golden-breath.png" alt="Golden Breath" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
           <figcaption class="cap"><span class="chip">Space: Lobby</span> Golden Breath</figcaption>
         </figure>
-
-        <figure class="card">
-          <img src="/images/moonlight-over-the-ocean.png" alt="Moonlight Over The Ocean" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
-          <figcaption class="cap"><span class="chip">Space: Living room</span> Moonlight Over The Ocean</figcaption>
-        </figure>
-
-        <figure class="card">
-          <img src="/images/immigrants.png" alt="Immigrants" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
-          <figcaption class="cap"><span class="chip">Space: Hotel lobby</span> Immigrants</figcaption>
-        </figure>
-
-        <figure class="card">
-          <img src="/images/whisper-of-form.png" alt="Whisper of Form" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
-          <figcaption class="cap"><span class="chip">Space: Shop</span> Whisper of Form</figcaption>
-        </figure>
-
-        <figure class="card">
-          <img src="/images/the-shape-of-wind.png" alt="The Shape of Wind" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
-          <figcaption class="cap"><span class="chip">Space: Shop</span> The Shape of Wind</figcaption>
-        </figure>
-
         <figure class="card">
           <img src="/images/the-tired-tree.png" alt="The Tired Tree" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
           <figcaption class="cap"><span class="chip">Space: Gallery</span> The Tired Tree</figcaption>
         </figure>
-
         <figure class="card">
-          <img src="/images/whispers-of-the-ghost-lake.png" alt="Whispers of the Ghost Lake" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
-          <figcaption class="cap"><span class="chip">Space: Living room</span> Whispers of the Ghost Lake</figcaption>
+          <img src="/images/immigrants.png" alt="Immigrants" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
+          <figcaption class="cap"><span class="chip">Space: Hotel lobby</span> Immigrants</figcaption>
         </figure>
-
         <figure class="card">
           <img src="/images/story-of-two-benches.png" alt="Story of Two Benches" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
           <figcaption class="cap"><span class="chip">Space: Wellness retreat</span> Story of Two Benches</figcaption>
         </figure>
-
+        <figure class="card">
+          <img src="/images/how-earth-sees-the-leaves.png" alt="How Earth Sees the Leaves" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
+          <figcaption class="cap"><span class="chip">Space: Gallery</span> How Earth Sees the Leaves</figcaption>
+        </figure>
+        <figure class="card">
+          <img src="/images/whisper-of-form.png" alt="Whisper of Form" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
+          <figcaption class="cap"><span class="chip">Space: Shop</span> Whisper of Form</figcaption>
+        </figure>
         <figure class="card">
           <img src="/images/a-journey-to-the-unknown.png" alt="A Journey to The Unknown" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1200" height="900">
           <figcaption class="cap"><span class="chip">Space: Living room</span> A Journey to The Unknown</figcaption>
+        </figure>
+        <figure class="card">
+          <img src="/images/the-shape-of-wind.png" alt="The Shape of Wind" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="900" height="1200">
+          <figcaption class="cap"><span class="chip">Space: Shop</span> The Shape of Wind</figcaption>
+        </figure>
+        <figure class="card">
+          <img src="/images/whispers-of-the-ghost-lake.png" alt="Whispers of the Ghost Lake" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1000" height="1000">
+          <figcaption class="cap"><span class="chip">Space: Living room</span> Whispers of the Ghost Lake</figcaption>
         </figure>
       </div>
     
@@ -600,6 +603,7 @@
         <span aria-hidden="true"> · </span>
         <a href="mailto:madjid.mohamadi@gmail.com?subject=Prints%20Inquiry" aria-label="Prints" title="Prints">Prints</a>
       </div>
+      <div>Built on GitHub Pages</div>
     </div>
   </footer>
 
@@ -1000,6 +1004,22 @@ quoteForm.addEventListener('submit', async (e)=>{
     }
   })();
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const cards = document.querySelectorAll('.card');
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, {threshold: 0.1});
+  cards.forEach(c=>obs.observe(c));
+});
+</script>
+
 </body>
 </html>
 
