@@ -949,39 +949,41 @@
       }
 
       // thumbnail click → open + set index
-      thumbs.forEach((img, index) => {
-        img.addEventListener('click', (e) => {
-          e.preventDefault();
-          const src = img.currentSrc || img.src;
-          currentIndex = index;
-          openLightbox(src, img.alt || '');
-        }, { passive:false });
-      });
+     thumbs.forEach((img, index) => {
+  img.addEventListener('click', (e) => {
+    e.preventDefault();
+    const src = img.currentSrc || img.src;
+    const title = img.alt || '';
+    currentIndex = index;
+    openLightbox(src, title);
+  }, { passive: false });
+});
 
-      // Prev / Next buttons
       if (prevBtn){
-        prevBtn.addEventListener('click', (e)=>{
-          e.stopPropagation();
-          if (currentIndex > 0){
-            currentIndex -= 1;
-            const img = thumbs[currentIndex];
-            const src = img.currentSrc || img.src;
-            openLightbox(src, img.alt || '');
-          }
-        }, { passive:false });
-      }
+  prevBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    if (currentIndex > 0){
+      currentIndex -= 1;
+      const img = thumbs[currentIndex];
+      const src = img.currentSrc || img.src;
+      const title = img.alt || '';
+      openLightbox(src, title);
+    }
+  }, { passive:false });
+}
 
       if (nextBtn){
-        nextBtn.addEventListener('click', (e)=>{
-          e.stopPropagation();
-          if (currentIndex < thumbs.length - 1){
-            currentIndex += 1;
-            const img = thumbs[currentIndex];
-            const src = img.currentSrc || img.src;
-            openLightbox(src, img.alt || '');
-          }
-        }, { passive:false });
-      }
+  nextBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    if (currentIndex < thumbs.length - 1){
+      currentIndex += 1;
+      const img = thumbs[currentIndex];
+      const src = img.currentSrc || img.src;
+      const title = img.alt || '';
+      openLightbox(src, title);
+    }
+  }, { passive:false });
+}
 
       // Existing lightbox listeners unchanged
       closeBtn.addEventListener('click', closeLightbox, { passive:true });
@@ -1220,6 +1222,7 @@ quoteForm.addEventListener('submit', async (e)=>{
 </script>
 </body>
 </html>
+
 
 
 
