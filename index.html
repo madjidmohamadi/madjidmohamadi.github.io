@@ -919,25 +919,26 @@
         nextBtn.style.display = (currentIndex >= thumbs.length - 1 || currentIndex === -1) ? 'none' : '';
       }
 
-      function openLightbox(src, title){
-        lastFocus = document.activeElement;
-        document.body.classList.add('no-scroll');
-        lb.classList.add('open');
-        if (main) main.setAttribute('aria-hidden','true');
+function openLightbox(src, title){
+  lastFocus = document.activeElement;
+  document.body.classList.add('no-scroll');
+  lb.classList.add('open');
+  if (main) main.setAttribute('aria-hidden','true');
 
-        lbImg.alt = title || '';
-        currentPhoto = { src, title: title || '' };
+  // ✅ keep title in the image + state
+  lbImg.alt = title || '';
+  currentPhoto = { src, title: title || '' };
 
-        lbImg.src = '';
-        const pre = new Image();
-        pre.onload = () => { lbImg.src = src; fitLightbox(); };
-        pre.onerror = () => { lbImg.src = src; fitLightbox(); };
-        pre.src = src;
+  lbImg.src = '';
+  const pre = new Image();
+  pre.onload = () => { lbImg.src = src; fitLightbox(); };
+  pre.onerror = () => { lbImg.src = src; fitLightbox(); };
+  pre.src = src;
 
-        closeBtn.focus();
-        fitLightbox();
-        updateNavButtons();
-      }
+  closeBtn.focus();
+  fitLightbox();
+  updateNavButtons && updateNavButtons();
+}
 
       function closeLightbox(){
         lb.classList.remove('open');
@@ -1222,6 +1223,7 @@ quoteForm.addEventListener('submit', async (e)=>{
 </script>
 </body>
 </html>
+
 
 
 
