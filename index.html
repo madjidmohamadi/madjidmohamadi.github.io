@@ -306,6 +306,26 @@
     padding: 8px 10px !important;
   }
 }
+    /* Lightbox previous/next navigation buttons */
+    .lightbox .nav{
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,.65);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.4);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 10000;
+    }
+    .lightbox .nav.prev{
+      left: max(10px, env(safe-area-inset-left,0px) + 8px);
+    }
+    .lightbox .nav.next{
+      right: max(10px, env(safe-area-inset-right,0px) + 8px);
+    }
 
 </style>
 
@@ -757,10 +777,11 @@
     </div>
   </footer>
 
-  <!-- Lightbox -->
+    <!-- Lightbox -->
   <div class="lightbox">
-<button class="close" aria-label="Close">Close ✕</button>
-    <div class="lb-title" id="lbTitle" aria-hidden="true"></div>
+    <button class="nav prev" type="button" aria-label="Previous photo">‹ Previous</button>
+    <button class="close" aria-label="Close">Close ✕</button>
+    <button class="nav next" type="button" aria-label="Next photo">Next ›</button>
     <img src="" alt="" />
     <button class="buy" type="button" aria-label="Purchase this photo">Purchase this Photo</button>
   </div>
@@ -871,20 +892,31 @@
       setTimeout(()=>toast.classList.remove('show'), 3200);
     }
 
-    (function(){
+        (function(){
       const lb = document.querySelector('.lightbox');
       if (!lb) return;
       const lbImg = lb.querySelector('img');
       const closeBtn = lb.querySelector('button.close');
       const buyBtn = lb.querySelector('button.buy');
-      const lbTitle = lb.querySelector('#lbTitle');
+      const prevBtn = lb.querySelector('button.nav.prev');
+      const nextBtn = lb.querySelector('button.nav.next');
       const main = document.querySelector('main');
+      const thumbs = Array.from(document.querySelectorAll('.card img'));
       let lastFocus = null;
       let currentPhoto = { src:'', title:'' };
+      let currentIndex = -1;
 
       function fitLightbox(){
         const vb = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
         lbImg.style.maxHeight = (vb - 160) + 'px';
+      }
+
+      function updateNavButtons(){
+        if (!prevBtn || !nextBtn) return;
+        // Hide Prev for first image or if no current index
+        prevBtn.style.display = (currentIndex <= 0) ? 'none' : '';
+        // Hide Next for last image or if no current index
+        nextBtn.style.display = (currentIndex >= thumbs.length - 1 || currentIndex === -1) ? 'none' : '';
       }
 
       function openLightbox(src, title){
@@ -896,8 +928,6 @@
         lbImg.alt = title || '';
         currentPhoto = { src, title: title || '' };
 
-        if (lbTitle) lbTitle.textContent = currentPhoto.title || '';
-
         lbImg.src = '';
         const pre = new Image();
         pre.onload = () => { lbImg.src = src; fitLightbox(); };
@@ -906,24 +936,54 @@
 
         closeBtn.focus();
         fitLightbox();
+        updateNavButtons();
       }
+
       function closeLightbox(){
         lb.classList.remove('open');
         lbImg.src = '';
-        if (lbTitle) lbTitle.textContent = '';
         document.body.classList.remove('no-scroll');
         if (main) main.removeAttribute('aria-hidden');
+        currentIndex = -1;
         if (lastFocus) lastFocus.focus();
       }
 
-      document.querySelectorAll('.card img').forEach(img => {
+      // thumbnail click → open + set index
+      thumbs.forEach((img, index) => {
         img.addEventListener('click', (e) => {
           e.preventDefault();
           const src = img.currentSrc || img.src;
+          currentIndex = index;
           openLightbox(src, img.alt || '');
         }, { passive:false });
       });
 
+      // Prev / Next buttons
+      if (prevBtn){
+        prevBtn.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          if (currentIndex > 0){
+            currentIndex -= 1;
+            const img = thumbs[currentIndex];
+            const src = img.currentSrc || img.src;
+            openLightbox(src, img.alt || '');
+          }
+        }, { passive:false });
+      }
+
+      if (nextBtn){
+        nextBtn.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          if (currentIndex < thumbs.length - 1){
+            currentIndex += 1;
+            const img = thumbs[currentIndex];
+            const src = img.currentSrc || img.src;
+            openLightbox(src, img.alt || '');
+          }
+        }, { passive:false });
+      }
+
+      // Existing lightbox listeners unchanged
       closeBtn.addEventListener('click', closeLightbox, { passive:true });
       lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLightbox(); }, { passive:true });
       addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLightbox(); }, { passive:true });
@@ -1160,6 +1220,7 @@ quoteForm.addEventListener('submit', async (e)=>{
 </script>
 </body>
 </html>
+
 
 
 
