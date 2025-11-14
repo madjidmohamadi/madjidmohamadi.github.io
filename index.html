@@ -307,25 +307,30 @@
   }
 }
     /* Lightbox previous/next navigation buttons */
-    .lightbox .nav{
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,.65);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,.4);
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-weight: 700;
-      cursor: pointer;
-      z-index: 10000;
-    }
+    .lightbox .nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,.65);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.4);
+  border-radius: 999px;
+  padding: 10px 18px;      /* larger button */
+  font-size: 2rem;         /* bigger arrow */
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 10000;
+}
     .lightbox .nav.prev{
       left: max(10px, env(safe-area-inset-left,0px) + 8px);
     }
     .lightbox .nav.next{
       right: max(10px, env(safe-area-inset-right,0px) + 8px);
     }
+    .lightbox .nav:hover {
+  background: rgba(0,0,0,.85);
+  transform: translateY(-50%) scale(1.1);
+}
     /* Lightbox title caption */
 .lightbox .lb-caption{
   position: fixed;
@@ -794,9 +799,9 @@
 
     <!-- Lightbox -->
   <div class="lightbox">
-  <button class="nav prev" type="button" aria-label="Previous photo">‹ Previous</button>
+  <button class="nav prev" type="button" aria-label="Previous photo">‹</button>
   <button class="close" aria-label="Close">Close ✕</button>
-  <button class="nav next" type="button" aria-label="Next photo">Next ›</button>
+  <button class="nav next" type="button" aria-label="Next photo">›</button>
 
   <img src="" alt="" />
 
@@ -1247,6 +1252,7 @@ quoteForm.addEventListener('submit', async (e)=>{
 </script>
 </body>
 </html>
+
 
 
 
