@@ -371,7 +371,7 @@
     "@context":"https://schema.org",
     "@type":"FAQPage",
     "mainEntity":[
-      {"@type":"Question","name":"What type of paper are the prints made on?","acceptedAnswer":{"@type":"Answer","text":"Each print is produced on museum-grade, archival matte fine-art paper with a soft texture and long-lasting color."}}
+      {"@type":"Question","name":"What type of paper are the prints made on?","acceptedAnswer":{"@type":"Answer","text":"Each print is produced on museum-grade, archival matte fine-art paper with a soft texture and long-lasting color."}},
       {"@type":"Question","name":"Are the prints limited edition?","acceptedAnswer":{"@type":"Answer","text":"Many works are offered in small, limited runs. Each one is signed and, when applicable, numbered. Each work also includes an artist statement and a short note about the experience of making the photograph."}},
       {"@type":"Question","name":"Do the prints come framed?","acceptedAnswer":{"@type":"Answer","text":"Prints are usually offered unframed so you can choose a frame that suits your space. Framing can be arranged on request."}},
       {"@type":"Question","name":"Can I request a custom size?","acceptedAnswer":{"@type":"Answer","text":"Yes. Many artworks can be printed to custom dimensions. Mention your preferred size when you inquire."}},
@@ -1202,14 +1202,15 @@ window.addEventListener('hashchange', ()=>{
       }, { passive:true });
     })();
   
-  // === Open matching section from menu/hash & close drawer ===
+    // === Open matching section from menu/hash & close drawer ===
   (function () {
     function closeAllTopLevel() {
-      document.querySelectorAll('section > details.collapsible[open]')
+      document
+        .querySelectorAll('section > details.collapsible[open]')
         .forEach(d => d.removeAttribute('open'));
     }
 
-     function closeDrawer() {
+    function closeDrawer() {
       const drawer = document.getElementById('sectionsDrawer');
       const btn = document.getElementById('sectionsBtn');
       if (drawer) drawer.classList.remove('open');
@@ -1221,6 +1222,7 @@ window.addEventListener('hashchange', ()=>{
       try {
         node.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } catch (err) {
+        // Older browsers that don’t support the options object
         node.scrollIntoView(true);
       }
     }
@@ -1228,6 +1230,7 @@ window.addEventListener('hashchange', ()=>{
     function openForHash(rawHash) {
       const hash = typeof rawHash === 'string' ? rawHash : location.hash;
       if (!hash) return;
+
       const node = document.querySelector(hash);
       if (!node) return;
 
@@ -1236,13 +1239,13 @@ window.addEventListener('hashchange', ()=>{
         const faqTop = document.querySelector('#faq > details.collapsible');
         if (faqTop) faqTop.setAttribute('open', '');
         node.setAttribute('open', '');
-        node.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        smoothScroll(node);
         closeDrawer();
         return;
       }
 
       // If targeting a top-level <section id="...">
-  if (node.tagName === 'SECTION') {
+      if (node.tagName === 'SECTION') {
         const top = node.querySelector(':scope > details.collapsible');
         closeAllTopLevel();
         if (top) top.setAttribute('open', '');
@@ -1250,6 +1253,7 @@ window.addEventListener('hashchange', ()=>{
         closeDrawer();
         return;
       }
+    }
 
     // Open on load if there’s a hash (e.g., #about or #q-paper)
     if (location.hash) openForHash();
@@ -1260,19 +1264,29 @@ window.addEventListener('hashchange', ()=>{
     // Intercept clicks in the drawer: open section, push hash, close drawer
     const drawer = document.getElementById('sectionsDrawer');
     if (drawer) {
-      drawer.addEventListener('click', (e) => {
-        const a = e.target.closest('a[href^="#"]');
-        if (!a) return;
-        e.preventDefault();
-        const href = a.getAttribute('href');
-        openForHash(href);
-        try { history.pushState(null, '', href); } catch(_) { location.hash = href.slice(1); }
-      }, { passive: false });
+      drawer.addEventListener(
+        'click',
+        (e) => {
+          const a = e.target.closest('a[href^="#"]');
+          if (!a) return;
+          e.preventDefault();
+          const href = a.getAttribute('href');
+          openForHash(href);
+          try {
+            history.pushState(null, '', href);
+          } catch (_) {
+            // Fallback if history API is restricted
+            location.hash = href.slice(1);
+          }
+        },
+        { passive: false }
+      );
     }
   })();
 </script>
 </body>
 </html>
+
 
 
 
