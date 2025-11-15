@@ -1203,6 +1203,7 @@ window.addEventListener('hashchange', ()=>{
     })();
   
     // === Open matching section from menu/hash & close drawer ===
+  // === Open matching section from menu/hash & close drawer ===
   (function () {
     function closeAllTopLevel() {
       document
@@ -1217,13 +1218,21 @@ window.addEventListener('hashchange', ()=>{
       if (btn) btn.setAttribute('aria-expanded', 'false');
     }
 
-    function smoothScroll(node) {
-      if (!node || typeof node.scrollIntoView !== 'function') return;
+    // Manual scroll with header offset – more reliable on Android than scrollIntoView
+    function smoothScrollTo(node) {
+      if (!node) return;
+
+      const header = document.getElementById('siteHeader');
+      const headerH = header ? (header.offsetHeight || 64) : 64;
+
+      const rect = node.getBoundingClientRect();
+      const targetY = rect.top + window.pageYOffset - (headerH + 12);
+
       try {
-        node.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
       } catch (err) {
-        // Older browsers that don’t support the options object
-        node.scrollIntoView(true);
+        // Older browsers that don't support the options object
+        window.scrollTo(0, targetY);
       }
     }
 
@@ -1239,7 +1248,7 @@ window.addEventListener('hashchange', ()=>{
         const faqTop = document.querySelector('#faq > details.collapsible');
         if (faqTop) faqTop.setAttribute('open', '');
         node.setAttribute('open', '');
-        smoothScroll(node);
+        smoothScrollTo(node);
         closeDrawer();
         return;
       }
@@ -1249,9 +1258,16 @@ window.addEventListener('hashchange', ()=>{
         const top = node.querySelector(':scope > details.collapsible');
         closeAllTopLevel();
         if (top) top.setAttribute('open', '');
-        smoothScroll(top || node);
+        smoothScrollTo(top || node);
         closeDrawer();
         return;
+      }
+
+      // Fallback: if it’s some element inside a section, scroll to its section
+      const parentSection = node.closest('section');
+      if (parentSection) {
+        smoothScrollTo(parentSection);
+        closeDrawer();
       }
     }
 
@@ -1286,6 +1302,7 @@ window.addEventListener('hashchange', ()=>{
 </script>
 </body>
 </html>
+
 
 
 
