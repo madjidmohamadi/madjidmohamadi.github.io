@@ -1138,32 +1138,6 @@ quoteForm.addEventListener('submit', async (e)=>{
           showToast('Something went wrong. Please try again.');
         }
       });
-
-      // Open specific FAQ item by hash
-if (location.hash) {
-  const el = document.querySelector(location.hash);
-  if (el && el.tagName === 'DETAILS') {
-    el.setAttribute('open','');
-    try {
-      el.scrollIntoView({ behavior:'smooth', block:'start' });
-    } catch (err) {
-      el.scrollIntoView(true);
-    }
-  }
-}
-window.addEventListener('hashchange', ()=>{
-  const el = document.querySelector(location.hash);
-  if (el && el.tagName === 'DETAILS') {
-    el.setAttribute('open','');
-    try {
-      el.scrollIntoView({ behavior:'smooth', block:'start' });
-    } catch (err) {
-      el.scrollIntoView(true);
-    }
-  }
-}, { passive:true });
-
-
     })();
 
     // Sections drawer
@@ -1202,7 +1176,6 @@ window.addEventListener('hashchange', ()=>{
       }, { passive:true });
     })();
   
-    // === Open matching section from menu/hash & close drawer ===
   // === Open matching section from menu/hash & close drawer ===
   (function () {
     function closeAllTopLevel() {
@@ -1302,6 +1275,7 @@ window.addEventListener('hashchange', ()=>{
 </script>
 </body>
 </html>
+
 
 
 
