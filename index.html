@@ -1140,20 +1140,29 @@ quoteForm.addEventListener('submit', async (e)=>{
       });
 
       // Open specific FAQ item by hash
-      if (location.hash) {
-        const el = document.querySelector(location.hash);
-        if (el && el.tagName === 'DETAILS') {
-          el.setAttribute('open','');
-          el.scrollIntoView({ behavior:'smooth', block:'start' });
-        }
-      }
-      window.addEventListener('hashchange', ()=>{
-        const el = document.querySelector(location.hash);
-        if (el && el.tagName === 'DETAILS') {
-          el.setAttribute('open','');
-          el.scrollIntoView({ behavior:'smooth', block:'start' });
-        }
-      }, { passive:true });
+if (location.hash) {
+  const el = document.querySelector(location.hash);
+  if (el && el.tagName === 'DETAILS') {
+    el.setAttribute('open','');
+    try {
+      el.scrollIntoView({ behavior:'smooth', block:'start' });
+    } catch (err) {
+      el.scrollIntoView(true);
+    }
+  }
+}
+window.addEventListener('hashchange', ()=>{
+  const el = document.querySelector(location.hash);
+  if (el && el.tagName === 'DETAILS') {
+    el.setAttribute('open','');
+    try {
+      el.scrollIntoView({ behavior:'smooth', block:'start' });
+    } catch (err) {
+      el.scrollIntoView(true);
+    }
+  }
+}, { passive:true });
+
 
     })();
 
@@ -1200,11 +1209,20 @@ quoteForm.addEventListener('submit', async (e)=>{
         .forEach(d => d.removeAttribute('open'));
     }
 
-    function closeDrawer() {
+     function closeDrawer() {
       const drawer = document.getElementById('sectionsDrawer');
       const btn = document.getElementById('sectionsBtn');
       if (drawer) drawer.classList.remove('open');
       if (btn) btn.setAttribute('aria-expanded', 'false');
+    }
+
+    function smoothScroll(node) {
+      if (!node || typeof node.scrollIntoView !== 'function') return;
+      try {
+        node.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (err) {
+        node.scrollIntoView(true);
+      }
     }
 
     function openForHash(rawHash) {
@@ -1224,15 +1242,14 @@ quoteForm.addEventListener('submit', async (e)=>{
       }
 
       // If targeting a top-level <section id="...">
-      if (node.tagName === 'SECTION') {
+  if (node.tagName === 'SECTION') {
         const top = node.querySelector(':scope > details.collapsible');
         closeAllTopLevel();
         if (top) top.setAttribute('open', '');
-        (top || node).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        smoothScroll(top || node);
         closeDrawer();
         return;
       }
-    }
 
     // Open on load if there’s a hash (e.g., #about or #q-paper)
     if (location.hash) openForHash();
@@ -1256,6 +1273,7 @@ quoteForm.addEventListener('submit', async (e)=>{
 </script>
 </body>
 </html>
+
 
 
 
