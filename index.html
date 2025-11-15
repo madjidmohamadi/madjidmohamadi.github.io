@@ -944,9 +944,9 @@
       function updateNavButtons(){
         if (!prevBtn || !nextBtn) return;
         // Hide Prev for first image or if no current index
-        prevBtn.style.display = (currentIndex <= 0) ? 'none' : '';
+        prevBtn.style.display = (currentIndex === 0) ? 'none' : '';
         // Hide Next for last image or if no current index
-        nextBtn.style.display = (currentIndex >= thumbs.length - 1 || currentIndex === -1) ? 'none' : '';
+        nextBtn.style.display = (currentIndex === thumbs.length - 1) ? 'none' : '';
       }
 
 function openLightbox(src, title){
@@ -1256,6 +1256,7 @@ quoteForm.addEventListener('submit', async (e)=>{
 </script>
 </body>
 </html>
+
 
 
 
