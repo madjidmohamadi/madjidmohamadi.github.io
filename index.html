@@ -168,7 +168,7 @@ section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
       outline: none;
     }
 
-    html{ scroll-behavior:smooth; }
+    /* html{ scroll-behavior:smooth; } */
 
     /* Shared card/collapsible */
     .section-card{
@@ -1163,27 +1163,26 @@ quoteForm.addEventListener('submit', async (e)=>{
     return header ? (header.offsetHeight || 64) : 64;
   }
 
-  function smoothScrollTo(target) {
-    if (!target) return;
+ function smoothScrollTo(target) {
+  if (!target) return;
 
-    // Prefer native smooth scrolling + CSS scroll-margin-top
-    if (typeof target.scrollIntoView === 'function') {
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-      return;
-    }
+  const rect   = target.getBoundingClientRect();
+  const offset = window.pageYOffset + rect.top - (getHeaderHeight() + 12);
+  const top    = Math.max(offset, 0);
 
-    // Fallback (older browsers)
-    const rect   = target.getBoundingClientRect();
-    const offset = window.pageYOffset + rect.top - (getHeaderHeight() + 12);
+  // Android-safe: use the correct scrolling element
+  const scroller = document.scrollingElement || document.documentElement || document.body;
 
-    window.scrollTo({
-      top: Math.max(offset, 0),
+  try {
+    scroller.scrollTo({
+      top,
       behavior: 'smooth'
     });
+  } catch (err) {
+    // Fallback
+    scroller.scrollTop = top;
   }
+}
 
   // Open the correct <details> for a node (section or FAQ item)
   function ensureSectionOpenFor(node) {
@@ -1219,13 +1218,13 @@ quoteForm.addEventListener('submit', async (e)=>{
 
   const target = ensureSectionOpenFor(node) || node;
 
-  // Android-friendly delayed scroll (wait for <details> to finish opening)
+  // Android-friendly: wait for <details> to open, then scroll
   requestAnimationFrame(() => {
     setTimeout(() => {
       smoothScrollTo(target);
-    }, 60);
+    }, 80); // a tiny bit more margin than 60ms
   });
-}
+
   function toggleDrawer(force) {
     const willOpen =
       typeof force === 'boolean'
@@ -1383,6 +1382,7 @@ quoteForm.addEventListener('submit', async (e)=>{
   </script>
 </body>
 </html>
+
 
 
 
