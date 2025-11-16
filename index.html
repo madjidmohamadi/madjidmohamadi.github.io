@@ -1144,11 +1144,28 @@ quoteForm.addEventListener('submit', async (e)=>{
         }
       });
     })();
-       // Sections drawer + auto-open sections + internal link handling
+          // Sections drawer + auto-open sections + internal link handling
     (function () {
       const btn    = document.getElementById('sectionsBtn');
       const drawer = document.getElementById('sectionsDrawer');
       if (!btn || !drawer) return;
+
+      // Smooth scroll that accounts for sticky header (works better on Android/iOS)
+      function scrollToNode(node) {
+        if (!node) return;
+
+        const rootStyles = getComputedStyle(document.documentElement);
+        const headerH =
+          parseFloat(rootStyles.getPropertyValue('--headerH')) || 64;
+
+        const rect = node.getBoundingClientRect();
+        const offset = window.pageYOffset + rect.top - (headerH + 12);
+
+        window.scrollTo({
+          top: offset < 0 ? 0 : offset,
+          behavior: 'smooth'
+        });
+      }
 
       function toggleDrawer(force) {
         const willOpen =
@@ -1186,23 +1203,6 @@ quoteForm.addEventListener('submit', async (e)=>{
         }
       }
 
-           // Smooth scroll that accounts for sticky header (more reliable on Android/iOS)
-      function scrollToTarget(node) {
-        if (!node) return;
-
-        const rootStyles = getComputedStyle(document.documentElement);
-        const headerH =
-          parseFloat(rootStyles.getPropertyValue('--headerH')) || 64;
-
-        const rect = node.getBoundingClientRect();
-        const offset = window.pageYOffset + rect.top - (headerH + 12);
-
-        window.scrollTo({
-          top: offset < 0 ? 0 : offset,
-          behavior: 'smooth'
-        });
-      }
-
       // Central helper for any hash link: #work, #consult, #faq, #q-paper, etc.
       function openForHash(href) {
         if (!href) return;
@@ -1221,7 +1221,7 @@ quoteForm.addEventListener('submit', async (e)=>{
           const target  = details || node;
 
           // wait a tick so <details> fully opens, then scroll
-          setTimeout(() => scrollToTarget(target), 0);
+          setTimeout(() => scrollToNode(target), 0);
           return;
         }
 
@@ -1232,7 +1232,7 @@ quoteForm.addEventListener('submit', async (e)=>{
             openSectionForId(parentSection.id);
           }
           node.setAttribute('open', '');
-          setTimeout(() => scrollToTarget(node), 0);
+          setTimeout(() => scrollToNode(node), 0);
           return;
         }
 
@@ -1242,7 +1242,7 @@ quoteForm.addEventListener('submit', async (e)=>{
           openSectionForId(parentSection.id);
         }
 
-        setTimeout(() => scrollToTarget(node), 0);
+        setTimeout(() => scrollToNode(node), 0);
       }
 
       // ☰ button toggles drawer
@@ -1328,6 +1328,7 @@ quoteForm.addEventListener('submit', async (e)=>{
         openForHash(location.hash);
       }
     })();
+
     // === Daily hero image rotation (Option A: based on calendar day) ===
 (function () {
   const heroImg = document.querySelector('.hero-card img');
@@ -1398,6 +1399,7 @@ quoteForm.addEventListener('submit', async (e)=>{
   </script>
 </body>
 </html>
+
 
 
 
