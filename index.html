@@ -1210,19 +1210,22 @@ quoteForm.addEventListener('submit', async (e)=>{
 
   // Central handler for any hash: #work, #about, #faq, #q-paper, etc.
   function handleHash(hash) {
-    if (!hash || hash === '#') return;
-    const id   = hash.charAt(0) === '#' ? hash.slice(1) : hash;
-    if (!id) return;
+  if (!hash || hash === '#') return;
+  const id = hash.charAt(0) === '#' ? hash.slice(1) : hash;
+  if (!id) return;
 
-    const node = document.getElementById(id);
-    if (!node) return;
+  const node = document.getElementById(id);
+  if (!node) return;
 
-    const target = ensureSectionOpenFor(node) || node;
+  const target = ensureSectionOpenFor(node) || node;
 
-    // Use rAF to ensure layout is settled before scrolling
-    requestAnimationFrame(() => smoothScrollTo(target));
-  }
-
+  // Android-friendly delayed scroll (wait for <details> to finish opening)
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      smoothScrollTo(target);
+    }, 60);
+  });
+}
   function toggleDrawer(force) {
     const willOpen =
       typeof force === 'boolean'
@@ -1380,6 +1383,7 @@ quoteForm.addEventListener('submit', async (e)=>{
   </script>
 </body>
 </html>
+
 
 
 
