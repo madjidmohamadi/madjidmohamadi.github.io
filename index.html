@@ -1186,19 +1186,21 @@ quoteForm.addEventListener('submit', async (e)=>{
         }
       }
 
-      // Use browser scroll + scroll-margin-top instead of manual offsets
-      function scrollToNode(node) {
+           // Smooth scroll that accounts for sticky header (more reliable on Android/iOS)
+      function scrollToTarget(node) {
         if (!node) return;
 
-        try {
-          node.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        } catch (err) {
-          // fallback
-          node.scrollIntoView();
-        }
+        const rootStyles = getComputedStyle(document.documentElement);
+        const headerH =
+          parseFloat(rootStyles.getPropertyValue('--headerH')) || 64;
+
+        const rect = node.getBoundingClientRect();
+        const offset = window.pageYOffset + rect.top - (headerH + 12);
+
+        window.scrollTo({
+          top: offset < 0 ? 0 : offset,
+          behavior: 'smooth'
+        });
       }
 
       // Central helper for any hash link: #work, #consult, #faq, #q-paper, etc.
@@ -1219,7 +1221,7 @@ quoteForm.addEventListener('submit', async (e)=>{
           const target  = details || node;
 
           // wait a tick so <details> fully opens, then scroll
-          setTimeout(() => scrollToNode(target), 0);
+          setTimeout(() => scrollToTarget(target), 0);
           return;
         }
 
@@ -1230,7 +1232,7 @@ quoteForm.addEventListener('submit', async (e)=>{
             openSectionForId(parentSection.id);
           }
           node.setAttribute('open', '');
-          setTimeout(() => scrollToNode(node), 0);
+          setTimeout(() => scrollToTarget(node), 0);
           return;
         }
 
@@ -1240,7 +1242,7 @@ quoteForm.addEventListener('submit', async (e)=>{
           openSectionForId(parentSection.id);
         }
 
-        setTimeout(() => scrollToNode(node), 0);
+        setTimeout(() => scrollToTarget(node), 0);
       }
 
       // ☰ button toggles drawer
@@ -1396,6 +1398,7 @@ quoteForm.addEventListener('submit', async (e)=>{
   </script>
 </body>
 </html>
+
 
 
 
