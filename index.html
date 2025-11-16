@@ -13,7 +13,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>By Majid — Fine Art Photography</title>
-  <meta name="description" content="By Majid — Fine Art Photography portfolio" />
+  <meta name="description" content="By Majid is the fine art photography portfolio of Majid Mohamadi in Vancouver, BC – minimalist landscapes and nature scenes available as museum-grade fine art prints for homes, galleries, and interior design projects." />
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#0e0e10">
 
@@ -80,7 +80,17 @@
     /* GRID */
     .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:var(--gap); align-items:start }
     .card{ grid-column:span 6; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative; align-self:start }
-    .card img{ width:100%; height:auto; display:block; cursor:zoom-in }
+.card img{
+  width:100%;
+  height:auto;
+  display:block;
+  cursor:zoom-in;
+  transition: transform 0.2s ease-out;
+}
+
+.card:hover img{
+  transform: scale(1.02);
+}
     .cap{ position:absolute; left:0; right:0; bottom:0; max-width:100%; box-sizing:border-box; padding:12px 14px; background:linear-gradient(180deg, transparent, rgba(0,0,0,.65)); color:#fff; font-size:clamp(11px,2.8vw,15px); line-height:1.3; letter-spacing:.2px; overflow-wrap:anywhere; pointer-events:none }
     .chip{ display:inline-block; padding:.25rem .6rem; border:1px solid color-mix(in oklab, #fff 35%, transparent); border-radius:999px; font-size:.8em; opacity:.9 }
 
@@ -197,14 +207,20 @@ section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
   max-width: 900px;
   box-shadow: 0 4px 18px rgba(0,0,0,0.07);
 }
-
 .seo-card p {
   margin: 0;
   font-size: 1.05rem;
   line-height: 1.65;
   color: #333;
 }
+.seo-card a[href="#work"]{
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
 
+.seo-card a[href="#work"]:hover{
+  opacity: .9;
+}
     /* === FAQ typography to match Awards section === */
 .faq-list summary{
   font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji",sans-serif !important;
@@ -422,6 +438,7 @@ section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
       <div class="hero-copy">
         <h2>Quiet light. Honest places.</h2>
         <p>A visual meditation on stillness, space, and the quiet presence of the natural world.</p>
+        <a href="#work" class="cta">View Portfolio →</a>
         </div>
     </section>
    <section aria-label="Fine Art Photography in Vancouver" class="seo-card">
@@ -543,7 +560,7 @@ section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
         </figure>
 <figure class="card">
           <img src="/images/presistence.png" alt="Persistence" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1280" height="1920">
-          <figcaption class="cap"> Presistence</figcaption>
+          <figcaption class="cap"> Persistence</figcaption>
         </figure>
 <figure class="card">
           <img src="/images/roots-in-the-sky.png" alt="Roots in the Sky" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1280" height="1920">
@@ -551,7 +568,7 @@ section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
         </figure>
 <figure class="card">
           <img src="/images/presense-without-insistence.png" alt="Presence Without Insistence" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1280" height="1920">
-          <figcaption class="cap"> Presense Without Insistence</figcaption>
+          <figcaption class="cap"> Presence Without Insistence</figcaption>
         </figure>
 <figure class="card">
           <img src="/images/last-conversation.png" alt="Last Conversation" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" width="1920" height="1280">
@@ -600,7 +617,15 @@ section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
             </div>
             <div style="grid-column:span 5; display:flex; flex-direction:column; justify-content:center; gap:10px">
               <h3 style="font-family:'Playfair Display',serif; font-size:clamp(20px,3vw,28px);margin:0"></h3>
-              <p style="color:var(--muted); margin:0">Majid Mohamadi is a Canadian–Iranian fine art photographer and commercial pilot based in Vancouver. His work grows from long hours spent in silence — flying above coastlines, climbing mountains, walking deserts and abandoned forests, or standing alone before a horizon where nothing moves. Majid is self–taught, shaped not by classrooms, but by watching light change over time. His images are often minimal and quiet, focusing on the moments when the visible world starts to feel like memory — when a tree becomes a thought, a cloud echoes a dune, or a landscape begins to speak in silence. Whether in the sky or on the ground, he works with the same instinct: to pay attention. To stand still. To notice what is fading, what remains, and what can be felt but not explained. His photographs are not about places themselves, but about the inner landscapes they awaken — solitude without loneliness, presence without noise, and the delicate distance between what is seen and what is remembered.To explore more,<a href="#work">view selected works in the Portfolio section</a>.</p>
+              <p style="color:var(--muted); margin:0"><p style="color:var(--muted); margin:0">
+  Majid Mohamadi is a Canadian–Iranian fine art photographer and commercial pilot based in Vancouver. His work grows from long hours spent in silence — flying above coastlines, climbing mountains, walking deserts and abandoned forests, or standing alone before a horizon where nothing moves.
+</p>
+<p style="color:var(--muted); margin:0">
+  Majid is self–taught, shaped not by classrooms, but by watching light change over time. His images are often minimal and quiet, focusing on the moments when the visible world starts to feel like memory — when a tree becomes a thought, a cloud echoes a dune, or a landscape begins to speak in silence.
+</p>
+<p style="color:var(--muted); margin:0">
+  Whether in the sky or on the ground, he works with the same instinct: to pay attention. To stand still. To notice what is fading, what remains, and what can be felt but not explained. His photographs are not about places themselves, but about the inner landscapes they awaken — solitude without loneliness, presence without noise, and the delicate distance between what is seen and what is remembered. To explore more, <a href="#work">view selected works in the Portfolio section</a>.
+</p>
             </div>
           </div>
         </div>
@@ -617,31 +642,31 @@ section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
         <div class="content">
           <ul style="list-style:none; padding:0; margin:0; display:grid; gap:10px">
             <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-              <strong>Honor Diploma</strong>, LensCulture Art Photography Awards, 2022 (Netherlands). <a href="https://www.lensculture.com/photo-competitions/art-photography-awards/2022" target="_blank" rel="noopener">View</a>
+              <strong>Honor Diploma</strong>, LensCulture Art Photography Awards, 2022 (Netherlands). <a href="https://www.lensculture.com/photo-competitions/art-photography-awards/2022" target="_blank" rel="noopener noreferrer">View</a>
             </li>
             <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-              <strong>1st Prize Winner</strong>, Fine Art Photography Awards 2020, (UK). <a href="https://fineartphotoawards.com/winners-gallery/fapa-2019-2020/amateur/travel/gold-award/" target="_blank" rel="noopener">View</a>
+              <strong>1st Prize Winner</strong>, Fine Art Photography Awards 2020, (UK). <a href="https://fineartphotoawards.com/winners-gallery/fapa-2019-2020/amateur/travel/gold-award/" target="_blank" rel="noopener noreferrer">View</a>
             </li>
             <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-              <strong>1st Prize Winner</strong>, Kimia Photo Festival, 2019 (Iran). <a href="https://www.mehrnews.com/news/4463154/%D8%A7%D8%B9%D9%84%D8%A7%D9%85-%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B9%DA%A9%D8%B3-%D9%85%D8%B9%D8%AF%D9%86-%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D8%B3%D9%84%D8%A7%D9%85%DB%8C-%D8%B1%D8%A7%D8%AF-%D9%86%D8%B4%D8%A7%D9%86-%DA%A9%DB%8C%D9%85%DB%8C%D8%A7" target="_blank" rel="noopener">View</a>
+              <strong>1st Prize Winner</strong>, Kimia Photo Festival, 2019 (Iran). <a href="https://www.mehrnews.com/news/4463154/%D8%A7%D8%B9%D9%84%D8%A7%D9%85-%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B9%DA%A9%D8%B3-%D9%85%D8%B9%D8%AF%D9%86-%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D8%B3%D9%84%D8%A7%D9%85%DB%8C-%D8%B1%D8%A7%D8%AF-%D9%86%D8%B4%D8%A7%D9%86-%DA%A9%DB%8C%D9%85%DB%8C%D8%A7" target="_blank" rel="noopener noreferrer">View</a>
             </li>
             <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-              <strong>Honor Diploma</strong>, Blank Wall Gallery, 2018 (Greece). <a href="https://www.blankwallgallery.com/majid-mohammadi-iran-untitled/" target="_blank" rel="noopener">View</a>
+              <strong>Honor Diploma</strong>, Blank Wall Gallery, 2018 (Greece). <a href="https://www.blankwallgallery.com/majid-mohammadi-iran-untitled/" target="_blank" rel="noopener noreferrer">View</a>
             </li>
             <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-              <strong>FIAP Honor Ribbon</strong>, 41st Trophy Torretes of Photography, 2017 (Spain). <a href="https://www.festimatge.org/el-festival-2/" target="_blank" rel="noopener">View</a>
+              <strong>FIAP Honor Ribbon</strong>, 41st Trophy Torretes of Photography, 2017 (Spain). <a href="https://www.festimatge.org/el-festival-2/" target="_blank" rel="noopener noreferrer">View</a>
             </li>
             <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-              <strong>Honor Diploma</strong>, Hellenic Photographic Society, 2017 (Greece). <a href="https://www.tehrantimes.com/news/417401/Athens-photo-exhibit-highlights-ancient-Iranian-civilization#:~:text=October%208%2C%202017%20%2D%2018:,participating%20guests%20at%20the%20ceremony." target="_blank" rel="noopener">View</a>
+              <strong>Honor Diploma</strong>, Hellenic Photographic Society, 2017 (Greece). <a href="https://www.tehrantimes.com/news/417401/Athens-photo-exhibit-highlights-ancient-Iranian-civilization#:~:text=October%208%2C%202017%20%2D%2018:,participating%20guests%20at%20the%20ceremony." target="_blank" rel="noopener noreferrer">View</a>
             </li>
             <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-              <strong>Honor Diploma</strong>, Focus Iran 2 — Craft and Folk Art Museum of Los Angeles, 2016 (USA). <a href="https://farhang.org/programs/focus-iran" target="_blank" rel="noopener">View</a>
+              <strong>Honor Diploma</strong>, Focus Iran 2 — Craft and Folk Art Museum of Los Angeles, 2016 (USA). <a href="https://farhang.org/programs/focus-iran" target="_blank" rel="noopener noreferrer">View</a>
             </li>
             <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-              <strong>Honor Diploma</strong>, Road and Off-Road 2 Photography Festival, 2014 (Iran). <a href="https://www.akkasee.com/photography-compeition/1393/29215/%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AF%D9%88%D9%85%DB%8C%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B3%D8%B1%D8%A7%D8%B3%D8%B1%DB%8C-%D8%B9%DA%A9%D8%B3-%D8%B1%D8%A7%D9%87-%D9%88-%D8%A8%DB%8C%E2%80%8C%D8%B1%D8%A7%D9%87/" target="_blank" rel="noopener">View</a>
+              <strong>Honor Diploma</strong>, Road and Off-Road 2 Photography Festival, 2014 (Iran). <a href="https://www.akkasee.com/photography-compeition/1393/29215/%D8%A8%D8%B1%DA%AF%D8%B2%DB%8C%D8%AF%DA%AF%D8%A7%D9%86-%D8%AF%D9%88%D9%85%DB%8C%D9%86-%D8%AC%D8%B4%D9%86%D9%88%D8%A7%D8%B1%D9%87-%D8%B3%D8%B1%D8%A7%D8%B3%D8%B1%DB%8C-%D8%B9%DA%A9%D8%B3-%D8%B1%D8%A7%D9%87-%D9%88-%D8%A8%DB%8C%E2%80%8C%D8%B1%D8%A7%D9%87/" target="_blank" rel="noopener noreferrer">View</a>
             </li>
             <li style="background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; border:1px solid color-mix(in oklab, var(--fg) 10%, transparent)">
-              <strong>Honor Diploma</strong>, Theater Photography Competition 91913, 2013 (Iran) . <a href="https://itpforum.ir/?cat=3" target="_blank" rel="noopener">View</a>
+              <strong>Honor Diploma</strong>, Theater Photography Competition 91913, 2013 (Iran) . <a href="https://itpforum.ir/?cat=3" target="_blank" rel="noopener noreferrer">View</a>
             </li>
           </ul>
         </div>
@@ -1435,6 +1460,7 @@ document.addEventListener("DOMContentLoaded", () => {
   </script>
 </body>
 </html>
+
 
 
 
