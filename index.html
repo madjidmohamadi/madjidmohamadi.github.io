@@ -889,12 +889,16 @@
     setHeaderOffset(); addEventListener('resize', setHeaderOffset);
 
     const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.classList.remove("no-scroll");
+});
 
     (function(){
       const s = document.createElement('script');
       s.src = 'https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js';
       s.onload = function(){ emailjs.init('mK0NVdRoob8JAczNU'); };
       document.head.appendChild(s);
+      
     })();
 
     const toast = document.getElementById('toast');
@@ -1072,7 +1076,6 @@ quoteForm.addEventListener('submit', async (e)=>{
   }
 });
 
-
       // Site Visit
       const visitModal = document.getElementById('visitModal');
       const visitForm = document.getElementById('visitForm');
@@ -1123,141 +1126,101 @@ quoteForm.addEventListener('submit', async (e)=>{
       });
     })();
 
-    // Sections drawer
-    (function(){
+    // Sections drawer + auto-open sections
+    (function () {
       const btn = document.getElementById('sectionsBtn');
       const drawer = document.getElementById('sectionsDrawer');
-      if(!btn || !drawer) return;
+      if (!btn || !drawer) return;
 
-      function toggleDrawer(force){
-        const willOpen = (typeof force === 'boolean') ? force : !drawer.classList.contains('open');
-        drawer.classList.toggle('open', willOpen);
-        btn.setAttribute('aria-expanded', String(willOpen));
-        if (willOpen){
-          const firstLink = drawer.querySelector('a');
-          if(firstLink) firstLink.focus();
+      function toggleDrawer(force) {
+        const willOpen =
+          typeof force === "boolean" ? force : !drawer.classList.contains("open");
+        drawer.classList.toggle("open", willOpen);
+        btn.setAttribute("aria-expanded", String(willOpen));
+        if (willOpen) {
+          const firstLink = drawer.querySelector("a");
+          if (firstLink) firstLink.focus();
         } else {
           btn.focus();
         }
       }
 
-      btn.addEventListener('click', (e)=>{ e.preventDefault(); toggleDrawer(); }, { passive:false });
+      function openSectionForId(id) {
+        if (!id) return;
+        const section = document.getElementById(id);
+        if (!section) return;
 
-      document.addEventListener('keydown', (e)=>{
-        if(e.key === 'Escape' && drawer.classList.contains('open')) toggleDrawer(false);
-      }, { passive:true });
+        const targetDetails = section.querySelector(":scope > details.collapsible");
 
-      drawer.addEventListener('click', (e)=>{
-        const a = e.target.closest('a');
-        if(a){ toggleDrawer(false); }
-      }, { passive:true });
+        // Close any other open top-level collapsibles
+        document
+          .querySelectorAll("section > details.collapsible[open]")
+          .forEach((d) => {
+            if (d !== targetDetails) d.removeAttribute("open");
+          });
 
-      document.addEventListener('click', (e)=>{
-        if(!drawer.classList.contains('open')) return;
-        if(e.target === btn || drawer.contains(e.target)) return;
-        toggleDrawer(false);
-      }, { passive:true });
-    })();
-  
-  // === Open matching section from menu/hash & close drawer ===
-  (function () {
-    function closeAllTopLevel() {
-      document
-        .querySelectorAll('section > details.collapsible[open]')
-        .forEach(d => d.removeAttribute('open'));
-    }
-
-    function closeDrawer() {
-      const drawer = document.getElementById('sectionsDrawer');
-      const btn = document.getElementById('sectionsBtn');
-      if (drawer) drawer.classList.remove('open');
-      if (btn) btn.setAttribute('aria-expanded', 'false');
-    }
-
-    // Manual scroll with header offset – more reliable on Android than scrollIntoView
-    function smoothScrollTo(node) {
-      if (!node) return;
-
-      const header = document.getElementById('siteHeader');
-      const headerH = header ? (header.offsetHeight || 64) : 64;
-
-      const rect = node.getBoundingClientRect();
-      const targetY = rect.top + window.pageYOffset - (headerH + 12);
-
-      try {
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
-      } catch (err) {
-        // Older browsers that don't support the options object
-        window.scrollTo(0, targetY);
-      }
-    }
-
-    function openForHash(rawHash) {
-      const hash = typeof rawHash === 'string' ? rawHash : location.hash;
-      if (!hash) return;
-
-      const node = document.querySelector(hash);
-      if (!node) return;
-
-      // If targeting an individual FAQ <details>, open FAQ + that item
-      if (node.tagName === 'DETAILS') {
-        const faqTop = document.querySelector('#faq > details.collapsible');
-        if (faqTop) faqTop.setAttribute('open', '');
-        node.setAttribute('open', '');
-        smoothScrollTo(node);
-        closeDrawer();
-        return;
+        if (targetDetails) targetDetails.setAttribute("open", "");
       }
 
-      // If targeting a top-level <section id="...">
-      if (node.tagName === 'SECTION') {
-        const top = node.querySelector(':scope > details.collapsible');
-        closeAllTopLevel();
-        if (top) top.setAttribute('open', '');
-        smoothScrollTo(top || node);
-        closeDrawer();
-        return;
-      }
-
-      // Fallback: if it’s some element inside a section, scroll to its section
-      const parentSection = node.closest('section');
-      if (parentSection) {
-        smoothScrollTo(parentSection);
-        closeDrawer();
-      }
-    }
-
-    // Open on load if there’s a hash (e.g., #about or #q-paper)
-    if (location.hash) openForHash();
-
-    // Sync on future hash changes
-    window.addEventListener('hashchange', () => openForHash(), { passive: true });
-
-    // Intercept clicks in the drawer: open section, push hash, close drawer
-    const drawer = document.getElementById('sectionsDrawer');
-    if (drawer) {
-      drawer.addEventListener(
-        'click',
+      // Toggle drawer from ☰ button
+      btn.addEventListener(
+        "click",
         (e) => {
-          const a = e.target.closest('a[href^="#"]');
-          if (!a) return;
           e.preventDefault();
-          const href = a.getAttribute('href');
-          openForHash(href);
-          try {
-            history.pushState(null, '', href);
-          } catch (_) {
-            // Fallback if history API is restricted
-            location.hash = href.slice(1);
-          }
+          toggleDrawer();
         },
         { passive: false }
       );
-    }
-  })();
+
+      // ESC closes drawer
+      document.addEventListener(
+        "keydown",
+        (e) => {
+          if (e.key === "Escape" && drawer.classList.contains("open")) {
+            toggleDrawer(false);
+          }
+        },
+        { passive: true }
+      );
+
+      // Clicking a link in the drawer:
+      //  - open the correct section
+      //  - let the browser handle scrolling (no preventDefault)
+      //  - close the drawer
+      drawer.addEventListener(
+        "click",
+        (e) => {
+          const a = e.target.closest('a[href^="#"]');
+          if (!a) return;
+          const id = a.getAttribute("href").slice(1);
+          openSectionForId(id);
+          toggleDrawer(false);
+          // Important: we do NOT call preventDefault here,
+          // so normal anchor scrolling + scroll-margin-top will work.
+        },
+        { passive: false }
+      );
+
+      // Click outside closes drawer
+      document.addEventListener(
+        "click",
+        (e) => {
+          if (!drawer.classList.contains("open")) return;
+          if (e.target === btn || drawer.contains(e.target)) return;
+          toggleDrawer(false);
+        },
+        { passive: true }
+      );
+
+      // If page loads with a hash already (e.g., https://.../#faq), open that section too
+      if (location.hash && location.hash.length > 1) {
+        openSectionForId(location.hash.slice(1));
+      }
+    })();
 </script>
 </body>
 </html>
+
 
 
 
