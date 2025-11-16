@@ -168,7 +168,7 @@ section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
       outline: none;
     }
 
-    /* html{ scroll-behavior:smooth; } */
+    html{ scroll-behavior:smooth; }
 
     /* Shared card/collapsible */
     .section-card{
@@ -1147,7 +1147,7 @@ quoteForm.addEventListener('submit', async (e)=>{
         }
 });     
 
-// Sections drawer + auto-open sections + internal link handling (clean version)
+            // Sections drawer + auto-open sections + internal link handling (clean version)
 (function () {
   const btn    = document.getElementById('sectionsBtn');
   const drawer = document.getElementById('sectionsDrawer');
@@ -1156,6 +1156,7 @@ quoteForm.addEventListener('submit', async (e)=>{
   if (!btn || !drawer) return;
 
   function getHeaderHeight() {
+    // Prefer the CSS var, fall back to actual header height
     const rootStyles = getComputedStyle(document.documentElement);
     const varVal = parseFloat(rootStyles.getPropertyValue('--headerH'));
     if (!isNaN(varVal) && varVal > 0) return varVal;
@@ -1165,22 +1166,23 @@ quoteForm.addEventListener('submit', async (e)=>{
   function smoothScrollTo(target) {
     if (!target) return;
 
+    // Prefer native smooth scrolling + CSS scroll-margin-top
+    if (typeof target.scrollIntoView === 'function') {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+      return;
+    }
+
+    // Fallback (older browsers)
     const rect   = target.getBoundingClientRect();
     const offset = window.pageYOffset + rect.top - (getHeaderHeight() + 12);
-    const top    = Math.max(offset, 0);
 
-    // Android-safe: use the correct scrolling element
-    const scroller = document.scrollingElement || document.documentElement || document.body;
-
-    try {
-      scroller.scrollTo({
-        top,
-        behavior: 'smooth'
-      });
-    } catch (err) {
-      // Fallback
-      scroller.scrollTop = top;
-    }
+    window.scrollTo({
+      top: Math.max(offset, 0),
+      behavior: 'smooth'
+    });
   }
 
   // Open the correct <details> for a node (section or FAQ item)
@@ -1208,23 +1210,22 @@ quoteForm.addEventListener('submit', async (e)=>{
 
   // Central handler for any hash: #work, #about, #faq, #q-paper, etc.
   function handleHash(hash) {
-    if (!hash || hash === '#') return;
-    const id = hash.charAt(0) === '#' ? hash.slice(1) : hash;
-    if (!id) return;
+  if (!hash || hash === '#') return;
+  const id = hash.charAt(0) === '#' ? hash.slice(1) : hash;
+  if (!id) return;
 
-    const node = document.getElementById(id);
-    if (!node) return;
+  const node = document.getElementById(id);
+  if (!node) return;
 
-    const target = ensureSectionOpenFor(node) || node;
+  const target = ensureSectionOpenFor(node) || node;
 
-    // Android-friendly: wait for <details> to open, then scroll
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        smoothScrollTo(target);
-      }, 80);
-    });
-  }
-
+  // Android-friendly delayed scroll (wait for <details> to finish opening)
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      smoothScrollTo(target);
+    }, 60);
+  });
+}
   function toggleDrawer(force) {
     const willOpen =
       typeof force === 'boolean'
@@ -1296,88 +1297,92 @@ quoteForm.addEventListener('submit', async (e)=>{
 
   // Handle direct loads with hash (#faq, #q-paper, etc.)
   if (location.hash && location.hash.length > 1) {
+    // Give the page a moment to layout before scrolling + opening
     window.addEventListener('load', () => {
       handleHash(location.hash);
     });
   }
 
-  // React to manual hash changes
+  // Also react to manual hash changes
   window.addEventListener('hashchange', () => {
     handleHash(location.hash);
   });
 
-  // === Daily hero image rotation (Option A: based on calendar day) ===
-  (function () {
-    const heroImg = document.querySelector('.hero-card img');
-    if (!heroImg) return;
+    // === Daily hero image rotation (Option A: based on calendar day) ===
+(function () {
+  const heroImg = document.querySelector('.hero-card img');
+  if (!heroImg) return;
 
-    const heroImages = [
-      {
-        src: '/images/how-earth-sees-the-leaves.png',
-        alt: 'How Earth Sees the Leaves',
-        width: 1200,
-        height: 900
-      },
-      {
-        src: '/images/A-soul-that-reflects-the-sky.png',
-        alt: 'A Soul That Reflects The Sky',
-        width: 1920,
-        height: 1280
-      },
-      {
-        src: '/images/a-journey-to-the-unknown.png',
-        alt: 'A Journey to The Unknown',
-        width: 1200,
-        height: 900
-      },
-      {
-        src: '/images/out-of-season.png',
-        alt: 'Out of Season',
-        width: 1920,
-        height: 1280
-      },
-      {
-        src: '/images/Convergence-Divergence.png',
-        alt: 'Convergence / Divergence',
-        width: 1920,
-        height: 1280
-      },
-      {
-        src: '/images/what-remains.png',
-        alt: 'What Remains',
-        width: 1920,
-        height: 1280
-      },
-      {
-        src: '/images/shaped-by-life.png',
-        alt: 'Shaped by Life',
-        width: 1920,
-        height: 1280
-      }
-    ];
-
-    if (!heroImages.length) return;
-
-    const today = new Date();
-    const startOfYear = new Date(today.getFullYear(), 0, 1);
-    const dayOfYear = Math.floor((today - startOfYear) / 86400000);
-
-    const index = ((dayOfYear % heroImages.length) + heroImages.length) % heroImages.length;
-    const chosen = heroImages[index];
-
-    heroImg.src = chosen.src;
-    heroImg.alt = chosen.alt || '';
-    if (chosen.width && chosen.height) {
-      heroImg.width = chosen.width;
-      heroImg.height = chosen.height;
+  // Pool of hero images (order doesn't matter)
+  const heroImages = [
+    {
+      src: '/images/how-earth-sees-the-leaves.png',
+      alt: 'How Earth Sees the Leaves',
+      width: 1200,
+      height: 900
+    },
+    {
+      src: '/images/A-soul-that-reflects-the-sky.png',
+      alt: 'A Soul That Reflects The Sky',
+      width: 1920,
+      height: 1280
+    },
+    {
+      src: '/images/a-journey-to-the-unknown.png',
+      alt: 'A Journey to The Unknown',
+      width: 1200,
+      height: 900
+    },
+    {
+      src: '/images/out-of-season.png',
+      alt: 'Out of Season',
+      width: 1920,
+      height: 1280
+    },
+    {
+      src: '/images/Convergence-Divergence.png',
+      alt: 'Convergence / Divergence',
+      width: 1920,
+      height: 1280
+    },
+    {
+      src: '/images/what-remains.png',
+      alt: 'What Remains',
+      width: 1920,
+      height: 1280
+    },
+    {
+      src: '/images/shaped-by-life.png',
+      alt: 'Shaped by Life',
+      width: 1920,
+      height: 1280
     }
-  })();
+  ];
+
+  if (!heroImages.length) return;
+
+  const today = new Date();
+  const startOfYear = new Date(today.getFullYear(), 0, 1);
+  const dayOfYear = Math.floor((today - startOfYear) / 86400000); // ms → days
+
+  const index = ((dayOfYear % heroImages.length) + heroImages.length) % heroImages.length;
+  const chosen = heroImages[index];
+
+  heroImg.src = chosen.src;
+  heroImg.alt = chosen.alt || '';
+  if (chosen.width && chosen.height) {
+    heroImg.width = chosen.width;
+    heroImg.height = chosen.height;
+  }
+})();
+  // close Sections IIFE
+})();
+
+// close outer Lightbox/Modals IIFE
 })();
   </script>
 </body>
 </html>
-
-
 
 
 
