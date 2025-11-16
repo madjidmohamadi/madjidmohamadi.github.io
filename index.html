@@ -1144,8 +1144,7 @@ quoteForm.addEventListener('submit', async (e)=>{
         }
       });
     })();
-
-        // Sections drawer + auto-open sections + internal link handling
+    // Sections drawer + auto-open sections + internal link handling
     (function () {
       const btn    = document.getElementById('sectionsBtn');
       const drawer = document.getElementById('sectionsDrawer');
@@ -1175,7 +1174,7 @@ quoteForm.addEventListener('submit', async (e)=>{
 
         const targetDetails = section.querySelector(':scope > details.collapsible');
 
-        // Close any other open top-level collapsibles
+        // Close other open top-level collapsibles
         document
           .querySelectorAll('section > details.collapsible[open]')
           .forEach((d) => {
@@ -1186,22 +1185,30 @@ quoteForm.addEventListener('submit', async (e)=>{
           targetDetails.setAttribute('open', '');
         }
       }
-            // Smooth scroll that accounts for sticky header (more reliable on iOS/Android)
-    function scrollToTarget(el) {
+
+      // Smooth scroll that accounts for sticky header (works on mobile & desktop)
+      function scrollToTarget(el) {
         if (!el) return;
 
         const rootStyles = getComputedStyle(document.documentElement);
-        const headerH = parseFloat(rootStyles.getPropertyValue('--headerH')) || 64;
+        const headerH =
+          parseFloat(rootStyles.getPropertyValue('--headerH')) || 64;
 
-        const rect = el.getBoundingClientRect();
+        const rect   = el.getBoundingClientRect();
         const offset = window.pageYOffset + rect.top - (headerH + 12);
 
-        window.scrollTo({
-          top: offset,
-          behavior: 'smooth'
-        });
+        try {
+          window.scrollTo({
+            top: offset,
+            behavior: 'smooth'
+          });
+        } catch (err) {
+          // Fallback for older browsers
+          window.scrollTo(0, offset);
+        }
       }
-           // Central helper for any hash link: #work, #consult, #faq, #q-paper, etc.
+
+      // Central helper for any hash link: #work, #consult, #faq, #q-paper, etc.
       function openForHash(href) {
         if (!href) return;
 
@@ -1227,20 +1234,19 @@ quoteForm.addEventListener('submit', async (e)=>{
         if (node.tagName === 'DETAILS') {
           openSectionForId('faq'); // open FAQ block
           node.setAttribute('open', '');
-
           setTimeout(() => scrollToTarget(node), 0);
           return;
         }
 
-        // Case 3: any element inside a section
+        // Case 3: any element inside a section (links in SEO card, FAQ answers, etc.)
         const parentSection = node.closest('section');
         if (parentSection && parentSection.id) {
           openSectionForId(parentSection.id);
-
-          setTimeout(() => scrollToTarget(parentSection), 0);
+          setTimeout(() => scrollToTarget(node), 0);
+        } else {
+          setTimeout(() => scrollToTarget(node), 0);
         }
       }
-
 
       // ☰ button toggles drawer
       btn.addEventListener(
@@ -1295,7 +1301,7 @@ quoteForm.addEventListener('submit', async (e)=>{
         { passive: true }
       );
 
-      // Global internal-link handler: SEO card, About, FAQ answers, Contact, etc.
+      // Global internal-link handler: SEO card, About text, FAQ answers, Contact, etc.
       document.addEventListener(
         'click',
         (e) => {
@@ -1328,6 +1334,7 @@ quoteForm.addEventListener('submit', async (e)=>{
   </script>
 </body>
 </html>
+
 
 
 
