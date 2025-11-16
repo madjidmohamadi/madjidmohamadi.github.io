@@ -1145,7 +1145,8 @@ quoteForm.addEventListener('submit', async (e)=>{
       });
     })();
 
-    // Sections drawer + auto-open sections
+        <!-- Sections drawer + auto-open sections + internal link handling -->
+    <script>
     (function () {
       const btn = document.getElementById('sectionsBtn');
       const drawer = document.getElementById('sectionsDrawer');
@@ -1169,21 +1170,61 @@ quoteForm.addEventListener('submit', async (e)=>{
         const section = document.getElementById(id);
         if (!section) return;
 
-        const targetDetails = section.querySelector(":scope > details.collapsible");
+        const targetDetails = section.querySelector(':scope > details.collapsible');
 
         // Close any other open top-level collapsibles
         document
-          .querySelectorAll("section > details.collapsible[open]")
+          .querySelectorAll('section > details.collapsible[open]')
           .forEach((d) => {
-            if (d !== targetDetails) d.removeAttribute("open");
+            if (d !== targetDetails) d.removeAttribute('open');
           });
 
-        if (targetDetails) targetDetails.setAttribute("open", "");
+        if (targetDetails) {
+          targetDetails.setAttribute('open', '');
+        }
+      }
+
+      // Central helper that:
+      //  - opens the right section / FAQ item
+      //  - scrolls to it
+      function openForHash(hashOrHref) {
+        if (!hashOrHref) return;
+
+        const hash = hashOrHref.startsWith('#') ? hashOrHref : '#' + hashOrHref;
+        const id = hash.slice(1);
+        if (!id) return;
+
+        const node = document.getElementById(id);
+        if (!node) return;
+
+        // Case 1: targeting a full section (#work, #about, #consult, #faq, #contact, etc.)
+        if (node.tagName === 'SECTION') {
+          openSectionForId(id);
+          const details = node.querySelector(':scope > details.collapsible');
+          (details || node).scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+
+        // Case 2: targeting an individual FAQ <details> (e.g., #q-paper)
+        if (node.tagName === 'DETAILS') {
+          openSectionForId('faq');      // open the main FAQ accordion
+          node.setAttribute('open', '');
+          node.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+
+        // Case 3: some element inside a section (e.g., a heading with an id)
+        const parentSection = node.closest('section');
+        if (parentSection && parentSection.id) {
+          openSectionForId(parentSection.id);
+          parentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
       }
 
       // Toggle drawer from ☰ button
       btn.addEventListener(
-        "click",
+        'click',
         (e) => {
           e.preventDefault();
           toggleDrawer();
@@ -1193,9 +1234,9 @@ quoteForm.addEventListener('submit', async (e)=>{
 
       // ESC closes drawer
       document.addEventListener(
-        "keydown",
+        'keydown',
         (e) => {
-          if (e.key === "Escape" && drawer.classList.contains("open")) {
+          if (e.key === 'Escape' && drawer.classList.contains('open')) {
             toggleDrawer(false);
           }
         },
@@ -1204,41 +1245,74 @@ quoteForm.addEventListener('submit', async (e)=>{
 
       // Clicking a link in the drawer:
       //  - open the correct section
-      //  - let the browser handle scrolling (no preventDefault)
+      //  - scroll there
       //  - close the drawer
       drawer.addEventListener(
-        "click",
+        'click',
         (e) => {
           const a = e.target.closest('a[href^="#"]');
           if (!a) return;
-          const id = a.getAttribute("href").slice(1);
-          openSectionForId(id);
+          e.preventDefault();
+          const href = a.getAttribute('href');
+          openForHash(href);
           toggleDrawer(false);
-          // Important: we do NOT call preventDefault here,
-          // so normal anchor scrolling + scroll-margin-top will work.
+
+          try {
+            history.pushState(null, '', href);
+          } catch (_) {
+            location.hash = href.slice(1);
+          }
         },
         { passive: false }
       );
 
       // Click outside closes drawer
       document.addEventListener(
-        "click",
+        'click',
         (e) => {
-          if (!drawer.classList.contains("open")) return;
+          if (!drawer.classList.contains('open')) return;
           if (e.target === btn || drawer.contains(e.target)) return;
           toggleDrawer(false);
         },
         { passive: true }
       );
 
-      // If page loads with a hash already (e.g., https://.../#faq), open that section too
+      // NEW: handle internal links anywhere on the page
+      // (SEO block, About, FAQ answers, Contact text, etc.)
+      document.addEventListener(
+        'click',
+        (e) => {
+          const a = e.target.closest('a[href^="#"]');
+          if (!a) return;
+
+          // If the click was inside the drawer, the drawer handler above already handles it
+          if (drawer.contains(a)) return;
+
+          const href = a.getAttribute('href');
+          if (!href || href === '#') return;
+
+          e.preventDefault();
+          openForHash(href);
+
+          try {
+            history.pushState(null, '', href);
+          } catch (_) {
+            location.hash = href.slice(1);
+          }
+        },
+        { passive: false }
+      );
+
+      // If page loads with a hash already (e.g., https://.../#faq or #q-paper),
+      // open the proper section/item and scroll to it.
       if (location.hash && location.hash.length > 1) {
-        openSectionForId(location.hash.slice(1));
+        openForHash(location.hash);
       }
     })();
-</script>
-</body>
+    </script>
+  </body>
 </html>
+
 
 
 
