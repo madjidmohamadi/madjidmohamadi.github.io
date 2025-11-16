@@ -86,6 +86,9 @@
 
    section[id] > details.collapsible{scroll-margin-top: calc(var(--headerH) + 12px);
 }
+    /* Make all hash targets respect the sticky header */
+section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
+}
     footer{margin-top:clamp(28px,6vw,64px); padding:24px 0 40px; color:var(--muted); border-top:1px solid color-mix(in oklab, var(--fg) 10%, transparent)}
     .footer-grid{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px}
     .social a{color:var(--muted)}
@@ -1144,199 +1147,152 @@ quoteForm.addEventListener('submit', async (e)=>{
         }
       });
     })();
-             // Sections drawer + auto-open sections + internal link handling
-    (function () {
-      const btn     = document.getElementById('sectionsBtn');
-      const drawer  = document.getElementById('sectionsDrawer');
-      const header  = document.getElementById('siteHeader');
+            // Sections drawer + auto-open sections + internal link handling (clean version)
+(function () {
+  const btn    = document.getElementById('sectionsBtn');
+  const drawer = document.getElementById('sectionsDrawer');
+  const header = document.getElementById('siteHeader');
 
-      if (!btn || !drawer) return;
+  if (!btn || !drawer) return;
 
-      // ---- helpers ----
-      function getHeaderHeight() {
-        const rootStyles = getComputedStyle(document.documentElement);
-        const varVal = parseFloat(rootStyles.getPropertyValue('--headerH'));
-        if (!isNaN(varVal) && varVal > 0) return varVal;
-        return header ? (header.offsetHeight || 64) : 64;
-      }
+  function getHeaderHeight() {
+    // Prefer the CSS var, fall back to actual header height
+    const rootStyles = getComputedStyle(document.documentElement);
+    const varVal = parseFloat(rootStyles.getPropertyValue('--headerH'));
+    if (!isNaN(varVal) && varVal > 0) return varVal;
+    return header ? (header.offsetHeight || 64) : 64;
+  }
 
-      function scrollToElement(node) {
-        if (!node) return;
+  function smoothScrollTo(target) {
+    if (!target) return;
+    const rect   = target.getBoundingClientRect();
+    const offset = window.pageYOffset + rect.top - (getHeaderHeight() + 12);
 
-        const headerH = getHeaderHeight();
-        const rect    = node.getBoundingClientRect();
-        const offset  = window.pageYOffset + rect.top - (headerH + 12);
+    window.scrollTo({
+      top: Math.max(offset, 0),
+      behavior: 'smooth'
+    });
+  }
 
-        window.scrollTo({
-          top: offset < 0 ? 0 : offset,
-          behavior: 'smooth'
-        });
-      }
+  // Open the correct <details> for a node (section or FAQ item)
+  function ensureSectionOpenFor(node) {
+    if (!node) return null;
 
-      function setSectionOpen(sectionId) {
-        if (!sectionId) return null;
+    const section =
+      node.tagName === 'SECTION' ? node : node.closest('section[id]');
+    if (!section) return node;
 
-        const section = document.getElementById(sectionId);
-        if (!section) return null;
+    const targetDetails = section.querySelector('details.collapsible');
 
-        // open the matching <details>, close the rest
-        const targetDetails = section.querySelector('details.collapsible');
-        const openDetails   = document.querySelectorAll('section details.collapsible[open]');
+    // Close other open details
+    document.querySelectorAll('section details.collapsible[open]').forEach(d => {
+      if (d !== targetDetails) d.removeAttribute('open');
+    });
 
-        openDetails.forEach((d) => {
-          if (d !== targetDetails) d.removeAttribute('open');
-        });
+    if (targetDetails) {
+      targetDetails.setAttribute('open', '');
+      return targetDetails; // scroll to the card itself
+    }
 
-        if (targetDetails) {
-          targetDetails.setAttribute('open', '');
-          return targetDetails;
-        }
+    return section;
+  }
 
-        return section;
-      }
+  // Central handler for any hash: #work, #about, #faq, #q-paper, etc.
+  function handleHash(hash) {
+    if (!hash || hash === '#') return;
+    const id   = hash.charAt(0) === '#' ? hash.slice(1) : hash;
+    if (!id) return;
 
-      // Central helper for any hash link (#work, #faq, #q-paper, etc.)
-      function openForHash(href) {
-        if (!href) return;
+    const node = document.getElementById(id);
+    if (!node) return;
 
-        const hash = href.charAt(0) === '#' ? href : '#' + href;
-        const id   = hash.slice(1);
-        if (!id) return;
+    const target = ensureSectionOpenFor(node) || node;
 
-        const node = document.getElementById(id);
-        if (!node) return;
+    // Use rAF to ensure layout is settled before scrolling
+    requestAnimationFrame(() => smoothScrollTo(target));
+  }
 
-        let target = node;
+  function toggleDrawer(force) {
+    const willOpen =
+      typeof force === 'boolean'
+        ? force
+        : !drawer.classList.contains('open');
 
-        // Case 1: whole section (#work, #about, #consult, #faq, #contact)
-        if (node.tagName === 'SECTION') {
-          target = setSectionOpen(id) || node;
-          setTimeout(() => scrollToElement(target), 0);
-          return;
-        }
+    drawer.classList.toggle('open', willOpen);
+    btn.setAttribute('aria-expanded', String(willOpen));
 
-        // Case 2: individual FAQ <details> (#q-paper, etc.)
-        if (node.tagName === 'DETAILS') {
-          const parentSection = node.closest('section[id]');
-          if (parentSection && parentSection.id) {
-            setSectionOpen(parentSection.id);
-          }
-          node.setAttribute('open', '');
-          setTimeout(() => scrollToElement(node), 0);
-          return;
-        }
+    if (willOpen) {
+      const firstLink = drawer.querySelector('a[href^="#"]');
+      if (firstLink) firstLink.focus();
+    } else {
+      btn.focus();
+    }
+  }
 
-        // Case 3: any element inside a section
-        const parentSection = node.closest('section[id]');
-        if (parentSection && parentSection.id) {
-          setSectionOpen(parentSection.id);
-        }
+  // ☰ button
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleDrawer();
+  }, { passive: false });
 
-        setTimeout(() => scrollToElement(node), 0);
-      }
+  // ESC closes drawer
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('open')) {
+      toggleDrawer(false);
+    }
+  }, { passive: true });
 
-      function toggleDrawer(force) {
-        const willOpen =
-          typeof force === 'boolean'
-            ? force
-            : !drawer.classList.contains('open');
+  // Click inside drawer → open section, scroll, close
+  drawer.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
 
-        drawer.classList.toggle('open', willOpen);
-        btn.setAttribute('aria-expanded', String(willOpen));
+    e.preventDefault();
+    const href = a.getAttribute('href');
+    toggleDrawer(false);
 
-        if (willOpen) {
-          const firstLink = drawer.querySelector('a[href^="#"]');
-          if (firstLink) firstLink.focus();
-        } else {
-          btn.focus();
-        }
-      }
+    handleHash(href);
 
-      // ---- events ----
+    try {
+      history.pushState(null, '', href);
+    } catch (_) {
+      location.hash = href.slice(1);
+    }
+  }, { passive: false });
 
-      // ☰ button
-      btn.addEventListener(
-        'click',
-        (e) => {
-          e.preventDefault();
-          toggleDrawer();
-        },
-        { passive: false }
-      );
+  // Click on any other internal link (#work, #consult, #q-paper, etc.)
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
 
-      // ESC closes drawer
-      document.addEventListener(
-        'keydown',
-        (e) => {
-          if (e.key === 'Escape' && drawer.classList.contains('open')) {
-            toggleDrawer(false);
-          }
-        },
-        { passive: true }
-      );
+    // Ignore drawer links (handled above)
+    if (drawer.contains(a)) return;
 
-      // Click inside drawer → open section, scroll, close
-      drawer.addEventListener(
-        'click',
-        (e) => {
-          const a = e.target.closest('a[href^="#"]');
-          if (!a) return;
+    const href = a.getAttribute('href');
+    if (!href || href === '#') return;
 
-          e.preventDefault();
-          const href = a.getAttribute('href');
-          openForHash(href);
-          toggleDrawer(false);
+    e.preventDefault();
+    handleHash(href);
 
-          try {
-            history.pushState(null, '', href);
-          } catch (_) {
-            location.hash = href.slice(1);
-          }
-        },
-        { passive: false }
-      );
+    try {
+      history.pushState(null, '', href);
+    } catch (_) {
+      location.hash = href.slice(1);
+    }
+  }, { passive: false });
 
-      // Click outside drawer → close
-      document.addEventListener(
-        'click',
-        (e) => {
-          if (!drawer.classList.contains('open')) return;
-          if (e.target === btn || drawer.contains(e.target)) return;
-          toggleDrawer(false);
-        },
-        { passive: true }
-      );
+  // Handle direct loads with hash (#faq, #q-paper, etc.)
+  if (location.hash && location.hash.length > 1) {
+    // Give the page a moment to layout before scrolling + opening
+    window.addEventListener('load', () => {
+      handleHash(location.hash);
+    });
+  }
 
-      // Global internal-link handler: SEO card, About text, FAQ answers, Contact, etc.
-      document.addEventListener(
-        'click',
-        (e) => {
-          const a = e.target.closest('a[href^="#"]');
-          if (!a) return;
-
-          // Ignore drawer links (already handled above)
-          if (drawer.contains(a)) return;
-
-          const href = a.getAttribute('href');
-          if (!href || href === '#') return;
-
-          e.preventDefault();
-          openForHash(href);
-
-          try {
-            history.pushState(null, '', href);
-          } catch (_) {
-            location.hash = href.slice(1);
-          }
-        },
-        { passive: false }
-      );
-
-      // Initial load with hash (/ #faq or #q-paper)
-      if (location.hash && location.hash.length > 1) {
-        openForHash(location.hash);
-      }
-    })();
+  // Also react to manual hash changes
+  window.addEventListener('hashchange', () => {
+    handleHash(location.hash);
+  });
 
     // === Daily hero image rotation (Option A: based on calendar day) ===
 (function () {
@@ -1408,6 +1364,7 @@ quoteForm.addEventListener('submit', async (e)=>{
   </script>
 </body>
 </html>
+
 
 
 
