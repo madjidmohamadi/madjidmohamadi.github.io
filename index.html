@@ -930,468 +930,509 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(()=>toast.classList.remove('show'), 3200);
     }
 
-        (function(){
+    (function () {
+      // ============================
+      // LIGHTBOX + QUOTE / VISIT MODALS
+      // ============================
       const lb = document.querySelector('.lightbox');
-      if (!lb) return;
-      const lbImg = lb.querySelector('img');
-      const closeBtn = lb.querySelector('button.close');
-      const buyBtn = lb.querySelector('button.buy');
-      const titleLabel = lb.querySelector('.lb-caption');
-      const prevBtn = lb.querySelector('button.nav.prev');
-      const nextBtn = lb.querySelector('button.nav.next');
       const main = document.querySelector('main');
-      const thumbs = Array.from(document.querySelectorAll('.card img'));
+
       let lastFocus = null;
-      let currentPhoto = { src:'', title:'' };
+      let currentPhoto = { src: '', title: '' };
       let currentIndex = -1;
 
-      function fitLightbox(){
-        const vb = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
-        lbImg.style.maxHeight = (vb - 160) + 'px';
-      }
+      const thumbs = Array.from(document.querySelectorAll('.card img'));
 
-      function updateNavButtons(){
-        if (!prevBtn || !nextBtn) return;
-        // Hide Prev for first image or if no current index
-        prevBtn.style.display = (currentIndex === 0) ? 'none' : '';
-        // Hide Next for last image or if no current index
-        nextBtn.style.display = (currentIndex === thumbs.length - 1) ? 'none' : '';
-      }
+      if (lb && main && thumbs.length) {
+        const lbImg       = lb.querySelector('img');
+        const closeBtn    = lb.querySelector('button.close');
+        const buyBtn      = lb.querySelector('button.buy');
+        const titleLabel  = lb.querySelector('.lb-caption');
+        const prevBtn     = lb.querySelector('button.nav.prev');
+        const nextBtn     = lb.querySelector('button.nav.next');
 
-function openLightbox(src, title){
-  lastFocus = document.activeElement;
-  document.body.classList.add('no-scroll');
-  lb.classList.add('open');
-  if (main) main.setAttribute('aria-hidden','true');
+        function fitLightbox() {
+          const vb = (window.visualViewport && window.visualViewport.height) ?
+            window.visualViewport.height :
+            window.innerHeight;
 
-  lbImg.alt = title || '';
-  currentPhoto = { src, title: title || '' };
-
-  if (titleLabel) {
-    titleLabel.textContent = currentPhoto.title || '';
-  }
-
-  lbImg.src = '';
-  const pre = new Image();
-  pre.onload = () => { lbImg.src = src; fitLightbox(); };
-  pre.onerror = () => { lbImg.src = src; fitLightbox(); };
-  pre.src = src;
-
-  closeBtn.focus();
-  fitLightbox();
-  if (typeof updateNavButtons === 'function') updateNavButtons();
-}
-
-      function closeLightbox(){
-        lb.classList.remove('open');
-        lbImg.src = '';
-        document.body.classList.remove('no-scroll');
-        if (main) main.removeAttribute('aria-hidden');
-        currentIndex = -1;
-        if (lastFocus) lastFocus.focus();
-      }
-
-      // thumbnail click → open + set index
-     thumbs.forEach((img, index) => {
-  img.addEventListener('click', (e) => {
-    e.preventDefault();
-    const src = img.currentSrc || img.src;
-    const title = img.alt || '';
-    currentIndex = index;
-    openLightbox(src, title);
-  }, { passive: false });
-});
-
-      if (prevBtn){
-  prevBtn.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    if (currentIndex > 0){
-      currentIndex -= 1;
-      const img = thumbs[currentIndex];
-      const src = img.currentSrc || img.src;
-      const title = img.alt || '';
-      openLightbox(src, title);
-    }
-  }, { passive:false });
-}
-
-      if (nextBtn){
-  nextBtn.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    if (currentIndex < thumbs.length - 1){
-      currentIndex += 1;
-      const img = thumbs[currentIndex];
-      const src = img.currentSrc || img.src;
-      const title = img.alt || '';
-      openLightbox(src, title);
-    }
-  }, { passive:false });
-}
-
-      // Existing lightbox listeners unchanged
-      closeBtn.addEventListener('click', closeLightbox, { passive:true });
-      lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLightbox(); }, { passive:true });
-      addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLightbox(); }, { passive:true });
-      addEventListener('resize', fitLightbox, { passive:true });
-      addEventListener('orientationchange', fitLightbox, { passive:true });
-
-      // Quote
-      const quoteModal = document.getElementById('quoteModal');
-      const quoteForm  = document.getElementById('quoteForm');
-      const cancelQuote = document.getElementById('cancelQuote');
-      const photoSrcInput = document.getElementById('photo_src');
-      const photoTitleInput = document.getElementById('photo_title');
-      const photoLine = document.getElementById('quote-photo');
-
-      function openQuote(){
-        photoSrcInput.value = currentPhoto.src;
-        photoTitleInput.value = currentPhoto.title;
-        photoLine.textContent = currentPhoto.title ? `Photo: “${currentPhoto.title}”` : '';
-        quoteModal.classList.add('open');
-        quoteModal.setAttribute('aria-hidden','false');
-        const emailField = document.getElementById('buyer_email');
-        if (emailField) emailField.focus();
-      }
-      function closeQuote(){
-        quoteModal.classList.remove('open');
-        quoteModal.setAttribute('aria-hidden','true');
-      }
-
-      buyBtn.addEventListener('click', (e)=>{ e.stopPropagation(); openQuote(); }, { passive:false });
-      cancelQuote.addEventListener('click', ()=> closeQuote(), { passive:true });
-      quoteModal.addEventListener('click', (e)=>{ if(e.target===quoteModal) closeQuote(); }, { passive:true });
-
-      
-quoteForm.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  const fd = new FormData(quoteForm);
-  const v = Object.fromEntries(fd.entries());
-
-  const title = (document.getElementById('photo_title')?.value || '').trim();
-  const subj = title ? `Quote Request — “${title}”` : 'Quote Request — bymajid.com';
-  const params = {
-    subject: subj,
-    buyer_name: v.buyer_name || '',
-    buyer_email: v.buyer_email || '',
-    buyer_phone: v.buyer_phone || '',
-    buyer_city: v.buyer_city || '',
-    buyer_size: v.buyer_size || '',
-    buyer_frame: v.buyer_frame || '',
-    buyer_note: v.buyer_note || '',
-    photo_title: document.getElementById('photo_title').value || '',
-    photo_src: document.getElementById('photo_src').value || '',
-    from_email: v.buyer_email || '',
-    reply_to: v.buyer_email || '',
-    message: v.buyer_note || '',
-    page_url: location.href,
-    user_agent: navigator.userAgent,
-    timestamp: new Date().toISOString()
-  };
-
-  try{
-    await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', params);
-    document.getElementById('quoteModal').classList.remove('open');
-    showToast('Your quote request has been received. We will reply soon. Thank you!');
-    quoteForm.reset();
-  }catch(err){
-    showToast('Something went wrong. Please try again.');
-  }
-});
-
-      // Site Visit
-      const visitModal = document.getElementById('visitModal');
-      const visitForm = document.getElementById('visitForm');
-      const cancelVisit = document.getElementById('cancelVisit');
-
-      function openVisit(){
-        visitModal.classList.add('open');
-        visitModal.setAttribute('aria-hidden','false');
-        const f = document.getElementById('visit_name'); if (f) f.focus();
-      }
-      function closeVisit(){
-        visitModal.classList.remove('open');
-        visitModal.setAttribute('aria-hidden','true');
-      }
-
-      document.querySelectorAll('.js-book-visit').forEach(btn => {
-        btn.addEventListener('click', (e)=>{ e.preventDefault(); openVisit(); }, { passive:false });
-      });
-      cancelVisit.addEventListener('click', ()=> closeVisit(), { passive:true });
-      visitModal.addEventListener('click', (e)=>{ if(e.target===visitModal) closeVisit(); }, { passive:true });
-
-      visitForm.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const fd = new FormData(visitForm);
-        const v = Object.fromEntries(fd.entries());
-        const params = {
-          subject: 'Site Visit Request — bymajid.com',
-          visit_name: v.visit_name || '',
-          visit_email: v.visit_email || '',
-          visit_phone: v.visit_phone || '',
-          visit_city: v.visit_city || '',
-          visit_date: v.visit_date || '',
-          message: v.note || '',
-          from_email: v.visit_email || '',
-          reply_to: v.visit_email || '',
-          page_url: location.href,
-          user_agent: navigator.userAgent,
-          timestamp: new Date().toISOString()
-        };
-        try{
-          await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', params);
-          closeVisit();
-          showToast('Your site visit request has been received. We will reply within 24 hours. Thank you!');
-          visitForm.reset();
-        }catch(err){
-          showToast('Something went wrong. Please try again.');
+          if (lbImg) {
+            lbImg.style.maxHeight = (vb - 160) + 'px';
+          }
         }
-});     
 
-            // Sections drawer + auto-open sections + internal link handling (clean version)
-(function () {
-  const btn    = document.getElementById('sectionsBtn');
-  const drawer = document.getElementById('sectionsDrawer');
-  const header = document.getElementById('siteHeader');
+        function updateNavButtons() {
+          if (!prevBtn || !nextBtn) return;
+          prevBtn.style.display = (currentIndex <= 0) ? 'none' : '';
+          nextBtn.style.display = (currentIndex >= thumbs.length - 1) ? 'none' : '';
+        }
 
-  if (!btn || !drawer) return;
+        function openLightbox(src, title) {
+          if (!lbImg) return;
 
-  function getHeaderHeight() {
-    // Prefer the CSS var, fall back to actual header height
-    const rootStyles = getComputedStyle(document.documentElement);
-    const varVal = parseFloat(rootStyles.getPropertyValue('--headerH'));
-    if (!isNaN(varVal) && varVal > 0) return varVal;
-    return header ? (header.offsetHeight || 64) : 64;
-  }
+          lastFocus = document.activeElement;
+          document.body.classList.add('no-scroll');
+          lb.classList.add('open');
+          if (main) main.setAttribute('aria-hidden', 'true');
 
-  function smoothScrollTo(target) {
-    if (!target) return;
+          currentPhoto = { src, title: title || '' };
+          lbImg.alt = currentPhoto.title;
 
-    const headerOffset = getHeaderHeight() + 12;
-    const rect        = target.getBoundingClientRect();
-    const absoluteY   = window.pageYOffset + rect.top;
-    const y           = Math.max(absoluteY - headerOffset, 0);
+          if (titleLabel) {
+            titleLabel.textContent = currentPhoto.title || '';
+          }
 
-    // Single, consistent behavior on all platforms
-    window.scrollTo({
-      top: y,
-      behavior: 'smooth'
-    });
-  }
-  
-    // Everyone else: keep the original, working behavior
-    if (typeof target.scrollIntoView === 'function') {
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-      return;
-    }
+          lbImg.src = '';
+          const pre = new Image();
+          pre.onload = () => { lbImg.src = src; fitLightbox(); };
+          pre.onerror = () => { lbImg.src = src; fitLightbox(); };
+          pre.src = src;
 
-    // Fallback (older / weird browsers)
-    window.scrollTo({
-      top: y,
-      behavior: 'smooth'
-    });
-  }
+          if (closeBtn) closeBtn.focus();
+          fitLightbox();
+          updateNavButtons();
+        }
 
-  // Open the correct <details> for a node (section or FAQ item)
-  function ensureSectionOpenFor(node) {
-    if (!node) return null;
+        function closeLightbox() {
+          if (lbImg) lbImg.src = '';
+          lb.classList.remove('open');
+          document.body.classList.remove('no-scroll');
+          if (main) main.removeAttribute('aria-hidden');
+          currentIndex = -1;
+          if (lastFocus && typeof lastFocus.focus === 'function') {
+            lastFocus.focus();
+          }
+        }
 
-    const section =
-      node.tagName === 'SECTION' ? node : node.closest('section[id]');
-    if (!section) return node;
+        // Wire thumbs
+        thumbs.forEach((img, index) => {
+          img.addEventListener('click', (e) => {
+            e.preventDefault();
+            const src   = img.currentSrc || img.src;
+            const title = img.alt || '';
+            currentIndex = index;
+            openLightbox(src, title);
+          }, { passive: false });
+        });
 
-    const targetDetails = section.querySelector('details.collapsible');
+        // Prev / Next buttons
+        if (prevBtn) {
+          prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (currentIndex > 0) {
+              currentIndex -= 1;
+              const img   = thumbs[currentIndex];
+              const src   = img.currentSrc || img.src;
+              const title = img.alt || '';
+              openLightbox(src, title);
+            }
+          }, { passive: false });
+        }
 
-    // Close other open details
-    document.querySelectorAll('section details.collapsible[open]').forEach(d => {
-      if (d !== targetDetails) d.removeAttribute('open');
-    });
+        if (nextBtn) {
+          nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (currentIndex < thumbs.length - 1) {
+              currentIndex += 1;
+              const img   = thumbs[currentIndex];
+              const src   = img.currentSrc || img.src;
+              const title = img.alt || '';
+              openLightbox(src, title);
+            }
+          }, { passive: false });
+        }
 
-    if (targetDetails) {
-      targetDetails.setAttribute('open', '');
-      return targetDetails; // scroll to the card itself
-    }
+        // Close lightbox
+        if (closeBtn) {
+          closeBtn.addEventListener('click', () => closeLightbox(), { passive: true });
+        }
 
-    return section;
-  }
+        lb.addEventListener('click', (e) => {
+          if (e.target === lb) closeLightbox();
+        }, { passive: true });
 
-  // Central handler for any hash: #work, #about, #faq, #q-paper, etc.
-  function handleHash(hash) {
-  if (!hash || hash === '#') return;
-  const id = hash.charAt(0) === '#' ? hash.slice(1) : hash;
-  if (!id) return;
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && lb.classList.contains('open')) {
+            closeLightbox();
+          }
+        }, { passive: true });
 
-  const node = document.getElementById(id);
-  if (!node) return;
+        window.addEventListener('resize', fitLightbox, { passive: true });
+        window.addEventListener('orientationchange', fitLightbox, { passive: true });
 
-  const target = ensureSectionOpenFor(node) || node;
+        // =============== QUOTE MODAL ===============
+        const quoteModal      = document.getElementById('quoteModal');
+        const quoteForm       = document.getElementById('quoteForm');
+        const cancelQuote     = document.getElementById('cancelQuote');
+        const photoSrcInput   = document.getElementById('photo_src');
+        const photoTitleInput = document.getElementById('photo_title');
+        const photoLine       = document.getElementById('quote-photo');
 
-  // Android-friendly delayed scroll (wait for <details> to finish opening)
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      smoothScrollTo(target);
-    }, 60);
-  });
-}
-  function toggleDrawer(force) {
-    const willOpen =
-      typeof force === 'boolean'
-        ? force
-        : !drawer.classList.contains('open');
+        function openQuote() {
+          if (!quoteModal) return;
+          if (photoSrcInput)   photoSrcInput.value   = currentPhoto.src || '';
+          if (photoTitleInput) photoTitleInput.value = currentPhoto.title || '';
+          if (photoLine) {
+            photoLine.textContent = currentPhoto.title
+              ? `Photo: “${currentPhoto.title}”`
+              : '';
+          }
+          quoteModal.classList.add('open');
+          quoteModal.setAttribute('aria-hidden', 'false');
+          const emailField = document.getElementById('buyer_email');
+          if (emailField) emailField.focus();
+        }
 
-    drawer.classList.toggle('open', willOpen);
-    btn.setAttribute('aria-expanded', String(willOpen));
+        function closeQuote() {
+          if (!quoteModal) return;
+          quoteModal.classList.remove('open');
+          quoteModal.setAttribute('aria-hidden', 'true');
+        }
 
-    if (willOpen) {
-      const firstLink = drawer.querySelector('a[href^="#"]');
-      if (firstLink) firstLink.focus();
-    } else {
-      btn.focus();
-    }
-  }
+        if (buyBtn) {
+          buyBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openQuote();
+          }, { passive: false });
+        }
 
-  // ☰ button
-  btn.addEventListener('click', (e) => {
-    e.preventDefault();
-    toggleDrawer();
-  }, { passive: false });
+        if (cancelQuote) {
+          cancelQuote.addEventListener('click', () => closeQuote(), { passive: true });
+        }
 
-  // ESC closes drawer
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && drawer.classList.contains('open')) {
-      toggleDrawer(false);
-    }
-  }, { passive: true });
+        if (quoteModal) {
+          quoteModal.addEventListener('click', (e) => {
+            if (e.target === quoteModal) closeQuote();
+          }, { passive: true });
+        }
 
-  // Click inside drawer → open section, scroll, close
-  drawer.addEventListener('click', (e) => {
-    const a = e.target.closest('a[href^="#"]');
-    if (!a) return;
+        if (quoteForm) {
+          quoteForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fd = new FormData(quoteForm);
+            const v  = Object.fromEntries(fd.entries());
 
-    e.preventDefault();
-    const href = a.getAttribute('href');
-    toggleDrawer(false);
+            const title = (photoTitleInput?.value || '').trim();
+            const subj  = title
+              ? `Quote Request — “${title}”`
+              : 'Quote Request — bymajid.com';
 
-    handleHash(href);
+            const params = {
+              subject:    subj,
+              buyer_name: v.buyer_name || '',
+              buyer_email: v.buyer_email || '',
+              buyer_phone: v.buyer_phone || '',
+              buyer_city:  v.buyer_city || '',
+              buyer_size:  v.buyer_size || '',
+              buyer_frame: v.buyer_frame || '',
+              buyer_note:  v.buyer_note || '',
+              photo_title: photoTitleInput?.value || '',
+              photo_src:   photoSrcInput?.value || '',
+              from_email:  v.buyer_email || '',
+              reply_to:    v.buyer_email || '',
+              message:     v.buyer_note || '',
+              page_url:    location.href,
+              user_agent:  navigator.userAgent,
+              timestamp:   new Date().toISOString()
+            };
 
-    try {
-      history.pushState(null, '', href);
-    } catch (_) {
-      location.hash = href.slice(1);
-    }
-  }, { passive: false });
+            try {
+              await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', params);
+              closeQuote();
+              showToast('Your quote request has been received. We will reply soon. Thank you!');
+              quoteForm.reset();
+            } catch (err) {
+              showToast('Something went wrong. Please try again.');
+            }
+          });
+        }
 
-  // Click on any other internal link (#work, #consult, #q-paper, etc.)
-  document.addEventListener('click', (e) => {
-    const a = e.target.closest('a[href^="#"]');
-    if (!a) return;
+        // =============== SITE VISIT MODAL ===============
+        const visitModal  = document.getElementById('visitModal');
+        const visitForm   = document.getElementById('visitForm');
+        const cancelVisit = document.getElementById('cancelVisit');
 
-    // Ignore drawer links (handled above)
-    if (drawer.contains(a)) return;
+        function openVisit() {
+          if (!visitModal) return;
+          visitModal.classList.add('open');
+          visitModal.setAttribute('aria-hidden', 'false');
+          const f = document.getElementById('visit_name');
+          if (f) f.focus();
+        }
 
-    const href = a.getAttribute('href');
-    if (!href || href === '#') return;
+        function closeVisit() {
+          if (!visitModal) return;
+          visitModal.classList.remove('open');
+          visitModal.setAttribute('aria-hidden', 'true');
+        }
 
-    e.preventDefault();
-    handleHash(href);
+        document.querySelectorAll('.js-book-visit').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openVisit();
+          }, { passive: false });
+        });
 
-    try {
-      history.pushState(null, '', href);
-    } catch (_) {
-      location.hash = href.slice(1);
-    }
-  }, { passive: false });
+        if (cancelVisit) {
+          cancelVisit.addEventListener('click', () => closeVisit(), { passive: true });
+        }
 
-  // Handle direct loads with hash (#faq, #q-paper, etc.)
-  if (location.hash && location.hash.length > 1) {
-    // Give the page a moment to layout before scrolling + opening
-    window.addEventListener('load', () => {
-      handleHash(location.hash);
-    });
-  }
+        if (visitModal) {
+          visitModal.addEventListener('click', (e) => {
+            if (e.target === visitModal) closeVisit();
+          }, { passive: true });
+        }
 
-  // Also react to manual hash changes
-  window.addEventListener('hashchange', () => {
-    handleHash(location.hash);
-  });
+        if (visitForm) {
+          visitForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fd = new FormData(visitForm);
+            const v  = Object.fromEntries(fd.entries());
+            const params = {
+              subject:     'Site Visit Request — bymajid.com',
+              visit_name:  v.visit_name || '',
+              visit_email: v.visit_email || '',
+              visit_phone: v.visit_phone || '',
+              visit_city:  v.visit_city || '',
+              visit_date:  v.visit_date || '',
+              message:     v.note || '',
+              from_email:  v.visit_email || '',
+              reply_to:    v.visit_email || '',
+              page_url:    location.href,
+              user_agent:  navigator.userAgent,
+              timestamp:   new Date().toISOString()
+            };
+            try {
+              await emailjs.send('service_5n0g1j5', 'template_8d3cycb', params);
+              closeVisit();
+              showToast('Your site visit request has been received. We will reply within 24 hours. Thank you!');
+              visitForm.reset();
+            } catch (err) {
+              showToast('Something went wrong. Please try again.');
+            }
+          });
+        }
+      }
 
-    // === Daily hero image rotation (Option A: based on calendar day) ===
-(function () {
-  const heroImg = document.querySelector('.hero-card img');
-  if (!heroImg) return;
+      // ============================
+      // SECTIONS DRAWER + INTERNAL LINKS
+      // ============================
+      (function () {
+        const btn    = document.getElementById('sectionsBtn');
+        const drawer = document.getElementById('sectionsDrawer');
+        const header = document.getElementById('siteHeader');
 
-  // Pool of hero images (order doesn't matter)
-  const heroImages = [
-    {
-      src: '/images/how-earth-sees-the-leaves.png',
-      alt: 'How Earth Sees the Leaves',
-      width: 1200,
-      height: 900
-    },
-    {
-      src: '/images/A-soul-that-reflects-the-sky.png',
-      alt: 'A Soul That Reflects The Sky',
-      width: 1920,
-      height: 1280
-    },
-    {
-      src: '/images/a-journey-to-the-unknown.png',
-      alt: 'A Journey to The Unknown',
-      width: 1200,
-      height: 900
-    },
-    {
-      src: '/images/out-of-season.png',
-      alt: 'Out of Season',
-      width: 1920,
-      height: 1280
-    },
-    {
-      src: '/images/Convergence-Divergence.png',
-      alt: 'Convergence / Divergence',
-      width: 1920,
-      height: 1280
-    },
-    {
-      src: '/images/what-remains.png',
-      alt: 'What Remains',
-      width: 1920,
-      height: 1280
-    },
-    {
-      src: '/images/shaped-by-life.png',
-      alt: 'Shaped by Life',
-      width: 1920,
-      height: 1280
-    }
-  ];
+        if (!btn || !drawer) return;
 
-  if (!heroImages.length) return;
+        function getHeaderHeight() {
+          const rootStyles = getComputedStyle(document.documentElement);
+          const varVal = parseFloat(rootStyles.getPropertyValue('--headerH'));
+          if (!isNaN(varVal) && varVal > 0) return varVal;
+          return header ? (header.offsetHeight || 64) : 64;
+        }
 
-  const today = new Date();
-  const startOfYear = new Date(today.getFullYear(), 0, 1);
-  const dayOfYear = Math.floor((today - startOfYear) / 86400000); // ms → days
+        function smoothScrollTo(target) {
+          if (!target) return;
+          const headerOffset = getHeaderHeight() + 12;
+          const rect        = target.getBoundingClientRect();
+          const absoluteY   = window.pageYOffset + rect.top;
+          const y           = Math.max(absoluteY - headerOffset, 0);
 
-  const index = ((dayOfYear % heroImages.length) + heroImages.length) % heroImages.length;
-  const chosen = heroImages[index];
+          window.scrollTo({
+            top: y,
+            behavior: 'smooth'
+          });
+        }
 
-  heroImg.src = chosen.src;
-  heroImg.alt = chosen.alt || '';
-  if (chosen.width && chosen.height) {
-    heroImg.width = chosen.width;
-    heroImg.height = chosen.height;
-  }
-})();
-  // close Sections IIFE
-})();
+        function ensureSectionOpenFor(node) {
+          if (!node) return null;
+          const section = (node.tagName === 'SECTION')
+            ? node
+            : node.closest('section[id]');
+          if (!section) return node;
 
-// close outer Lightbox/Modals IIFE
-})();
+          const targetDetails = section.querySelector('details.collapsible');
+
+          // Close other open details
+          document.querySelectorAll('section details.collapsible[open]').forEach(d => {
+            if (d !== targetDetails) d.removeAttribute('open');
+          });
+
+          if (targetDetails) {
+            targetDetails.setAttribute('open', '');
+            return targetDetails;
+          }
+          return section;
+        }
+
+        function handleHash(hash) {
+          if (!hash || hash === '#') return;
+          const id = hash.charAt(0) === '#' ? hash.slice(1) : hash;
+          if (!id) return;
+
+          const node = document.getElementById(id);
+          if (!node) return;
+
+          const target = ensureSectionOpenFor(node) || node;
+
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              smoothScrollTo(target);
+            }, 60);
+          });
+        }
+
+        function toggleDrawer(force) {
+          const willOpen =
+            typeof force === 'boolean'
+              ? force
+              : !drawer.classList.contains('open');
+
+          drawer.classList.toggle('open', willOpen);
+          btn.setAttribute('aria-expanded', String(willOpen));
+
+          if (willOpen) {
+            const firstLink = drawer.querySelector('a[href^="#"]');
+            if (firstLink) firstLink.focus();
+          } else {
+            btn.focus();
+          }
+        }
+
+        // ☰ button
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          toggleDrawer();
+        }, { passive: false });
+
+        // ESC closes drawer
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && drawer.classList.contains('open')) {
+            toggleDrawer(false);
+          }
+        }, { passive: true });
+
+        // Drawer links
+        drawer.addEventListener('click', (e) => {
+          const a = e.target.closest('a[href^="#"]');
+          if (!a) return;
+          e.preventDefault();
+          const href = a.getAttribute('href');
+          toggleDrawer(false);
+          handleHash(href);
+          try {
+            history.pushState(null, '', href);
+          } catch (_) {
+            location.hash = href.slice(1);
+          }
+        }, { passive: false });
+
+        // Any other internal link (#work, #faq, #q-paper, etc.)
+        document.addEventListener('click', (e) => {
+          const a = e.target.closest('a[href^="#"]');
+          if (!a) return;
+
+          if (drawer.contains(a)) return; // already handled
+
+          const href = a.getAttribute('href');
+          if (!href || href === '#') return;
+
+          e.preventDefault();
+          handleHash(href);
+
+          try {
+            history.pushState(null, '', href);
+          } catch (_) {
+            location.hash = href.slice(1);
+          }
+        }, { passive: false });
+
+        // Direct load with hash
+        if (location.hash && location.hash.length > 1) {
+          window.addEventListener('load', () => {
+            handleHash(location.hash);
+          });
+        }
+
+        // Manual hash changes
+        window.addEventListener('hashchange', () => {
+          handleHash(location.hash);
+        });
+      })();
+
+      // ============================
+      // DAILY HERO IMAGE ROTATION
+      // ============================
+      (function () {
+        const heroImg = document.querySelector('.hero-card img');
+        if (!heroImg) return;
+
+        const heroImages = [
+          {
+            src: '/images/how-earth-sees-the-leaves.png',
+            alt: 'How Earth Sees the Leaves',
+            width: 1200,
+            height: 900
+          },
+          {
+            src: '/images/A-soul-that-reflects-the-sky.png',
+            alt: 'A Soul That Reflects The Sky',
+            width: 1920,
+            height: 1280
+          },
+          {
+            src: '/images/a-journey-to-the-unknown.png',
+            alt: 'A Journey to The Unknown',
+            width: 1200,
+            height: 900
+          },
+          {
+            src: '/images/out-of-season.png',
+            alt: 'Out of Season',
+            width: 1920,
+            height: 1280
+          },
+          {
+            src: '/images/Convergence-Divergence.png',
+            alt: 'Convergence / Divergence',
+            width: 1920,
+            height: 1280
+          },
+          {
+            src: '/images/what-remains.png',
+            alt: 'What Remains',
+            width: 1920,
+            height: 1280
+          },
+          {
+            src: '/images/shaped-by-life.png',
+            alt: 'Shaped by Life',
+            width: 1920,
+            height: 1280
+          }
+        ];
+
+        if (!heroImages.length) return;
+
+        const today       = new Date();
+        const startOfYear = new Date(today.getFullYear(), 0, 1);
+        const dayOfYear   = Math.floor((today - startOfYear) / 86400000);
+
+        const index  = ((dayOfYear % heroImages.length) + heroImages.length) % heroImages.length;
+        const chosen = heroImages[index];
+
+        heroImg.src    = chosen.src;
+        heroImg.alt    = chosen.alt || '';
+        if (chosen.width && chosen.height) {
+          heroImg.width  = chosen.width;
+          heroImg.height = chosen.height;
+        }
+      })();
+    })();
   </script>
 </body>
 </html>
+
 
 
 
