@@ -1187,7 +1187,7 @@ quoteForm.addEventListener('submit', async (e)=>{
         }
       }
             // Smooth scroll that accounts for sticky header (more reliable on iOS/Android)
-      function scrollToTarget(el) {
+    function scrollToTarget(el) {
         if (!el) return;
 
         const rootStyles = getComputedStyle(document.documentElement);
@@ -1200,7 +1200,7 @@ quoteForm.addEventListener('submit', async (e)=>{
           top: offset,
           behavior: 'smooth'
         });
-
+      }
            // Central helper for any hash link: #work, #consult, #faq, #q-paper, etc.
       function openForHash(href) {
         if (!href) return;
@@ -1328,6 +1328,7 @@ quoteForm.addEventListener('submit', async (e)=>{
   </script>
 </body>
 </html>
+
 
 
 
