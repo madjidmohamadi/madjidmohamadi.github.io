@@ -1145,8 +1145,7 @@ quoteForm.addEventListener('submit', async (e)=>{
         }catch(err){
           showToast('Something went wrong. Please try again.');
         }
-});
-          
+});     
 
             // Sections drawer + auto-open sections + internal link handling (clean version)
 (function () {
@@ -1362,9 +1361,15 @@ quoteForm.addEventListener('submit', async (e)=>{
     heroImg.height = chosen.height;
   }
 })();
+  // close Sections IIFE
+})();
+
+// close outer Lightbox/Modals IIFE
+})();
   </script>
 </body>
 </html>
+
 
 
 
