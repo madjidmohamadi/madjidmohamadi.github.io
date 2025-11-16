@@ -1163,27 +1163,19 @@ quoteForm.addEventListener('submit', async (e)=>{
     return header ? (header.offsetHeight || 64) : 64;
   }
 
-  function smoothScrollTo(target) {
-    if (!target) return;
+ function smoothScrollTo(target) {
+  if (!target) return;
 
-    // Prefer native smooth scrolling + CSS scroll-margin-top
-    if (typeof target.scrollIntoView === 'function') {
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-      return;
-    }
+  const headerOffset = getHeaderHeight() + 12;
+  const rect = target.getBoundingClientRect();
+  const absoluteY = window.pageYOffset + rect.top;
+  const y = Math.max(absoluteY - headerOffset, 0);
 
-    // Fallback (older browsers)
-    const rect   = target.getBoundingClientRect();
-    const offset = window.pageYOffset + rect.top - (getHeaderHeight() + 12);
-
-    window.scrollTo({
-      top: Math.max(offset, 0),
-      behavior: 'smooth'
-    });
-  }
+  window.scrollTo({
+    top: y,
+    behavior: 'smooth'
+  });
+}
 
   // Open the correct <details> for a node (section or FAQ item)
   function ensureSectionOpenFor(node) {
@@ -1383,6 +1375,7 @@ quoteForm.addEventListener('submit', async (e)=>{
   </script>
 </body>
 </html>
+
 
 
 
