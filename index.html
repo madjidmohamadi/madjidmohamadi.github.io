@@ -1237,8 +1237,32 @@ quoteForm.addEventListener('submit', async (e)=>{
       }
     })();
 </script>
+document.addEventListener("click", function(e) {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+
+  const id = a.getAttribute("href").slice(1);
+  if (!id) return;
+
+  const section = document.getElementById(id);
+  if (!section) return;
+
+  // Open the correct collapsible
+  const top = section.querySelector(':scope > details.collapsible');
+  if (top) {
+    // Close all other open details
+    document.querySelectorAll('section > details.collapsible[open]')
+      .forEach(d => d.removeAttribute('open'));
+
+    top.setAttribute('open', '');
+  }
+
+  // Allow normal browser scrolling (VERY important)
+}, { passive: true });
+</script>
 </body>
 </html>
+
 
 
 
