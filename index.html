@@ -1163,19 +1163,44 @@ quoteForm.addEventListener('submit', async (e)=>{
     return header ? (header.offsetHeight || 64) : 64;
   }
 
- function smoothScrollTo(target) {
-  if (!target) return;
+  // Detect Android Chrome (avoid SamsungBrowser etc.)
+  const isAndroidChrome =
+    /Android/i.test(navigator.userAgent) &&
+    /Chrome/i.test(navigator.userAgent) &&
+    !/SamsungBrowser/i.test(navigator.userAgent);
 
-  const headerOffset = getHeaderHeight() + 12;
-  const rect = target.getBoundingClientRect();
-  const absoluteY = window.pageYOffset + rect.top;
-  const y = Math.max(absoluteY - headerOffset, 0);
+  function smoothScrollTo(target) {
+    if (!target) return;
 
-  window.scrollTo({
-    top: y,
-    behavior: 'smooth'
-  });
-}
+    const headerOffset = getHeaderHeight() + 12;
+    const rect = target.getBoundingClientRect();
+    const absoluteY = window.pageYOffset + rect.top;
+    const y = Math.max(absoluteY - headerOffset, 0);
+
+    // On Android Chrome: always use manual scroll (scrollIntoView is flaky with sticky headers)
+    if (isAndroidChrome) {
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+      });
+      return;
+    }
+
+    // Everyone else: keep the original, working behavior
+    if (typeof target.scrollIntoView === 'function') {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+      return;
+    }
+
+    // Fallback (older / weird browsers)
+    window.scrollTo({
+      top: y,
+      behavior: 'smooth'
+    });
+  }
 
   // Open the correct <details> for a node (section or FAQ item)
   function ensureSectionOpenFor(node) {
@@ -1375,6 +1400,7 @@ quoteForm.addEventListener('submit', async (e)=>{
   </script>
 </body>
 </html>
+
 
 
 
