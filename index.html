@@ -1165,6 +1165,17 @@ quoteForm.addEventListener('submit', async (e)=>{
 
   function smoothScrollTo(target) {
     if (!target) return;
+
+    // Prefer native smooth scrolling + CSS scroll-margin-top
+    if (typeof target.scrollIntoView === 'function') {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+      return;
+    }
+
+    // Fallback (older browsers)
     const rect   = target.getBoundingClientRect();
     const offset = window.pageYOffset + rect.top - (getHeaderHeight() + 12);
 
@@ -1369,6 +1380,7 @@ quoteForm.addEventListener('submit', async (e)=>{
   </script>
 </body>
 </html>
+
 
 
 
