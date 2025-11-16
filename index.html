@@ -1463,10 +1463,54 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { passive: false });
   });
 })();
+    
+// Fix FAQ "#consult" links so they always open On-site Consultation
+(function () {
+  const consultLinks = document.querySelectorAll('#faq a[href="#consult"]');
+  if (!consultLinks.length) return;
+
+  consultLinks.forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      const consultSection = document.getElementById('consult');
+      if (!consultSection) return;
+
+      // Close any open sections first
+      document
+        .querySelectorAll('section details.collapsible[open]')
+        .forEach(d => d.removeAttribute('open'));
+
+      // Open the On-site Consultation block
+      const consultDetails = consultSection.querySelector('details.collapsible');
+      const target = consultDetails || consultSection;
+
+      if (consultDetails) {
+        consultDetails.setAttribute('open', '');
+      }
+
+      // Smooth scroll into view
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+
+      // Sync URL hash
+      if (location.hash !== '#consult') {
+        try {
+          history.pushState(null, '', '#consult');
+        } catch (_) {
+          location.hash = 'consult';
+        }
+      }
+    }, { passive: false });
+  });
+})();
 
   </script>
 </body>
 </html>
+
 
 
 
