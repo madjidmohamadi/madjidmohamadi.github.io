@@ -1278,13 +1278,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // When you click a link inside the drawer:
   // - close the drawer
-  // - let the browser change the hash normally (no preventDefault)
+  // - explicitly open the right section (even if hash doesn't change)
+  //   and let the browser handle the hash as well
   drawer.addEventListener('click', (e) => {
     const a = e.target.closest('a[href^="#"]');
     if (!a) return;
+
     toggleDrawer(false);
-    // DO NOT preventDefault here – the hash will update, and our
-    // hashchange handler below will do the scrolling.
+
+    const href = a.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      // Force section open + smooth scroll, even if hash is already the same
+      openForHash(href);
+    }
+    // No preventDefault → browser still updates/keeps hash normally
   }, { passive: true });
 
   // ===== Hash → open correct section + smooth scroll =====
@@ -1460,6 +1467,7 @@ document.addEventListener("DOMContentLoaded", () => {
   </script>
 </body>
 </html>
+
 
 
 
