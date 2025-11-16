@@ -1214,151 +1214,107 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // ============================
-      // SECTIONS DRAWER + INTERNAL LINKS
-      // ============================
-      (function () {
-        const btn    = document.getElementById('sectionsBtn');
-        const drawer = document.getElementById('sectionsDrawer');
-        const header = document.getElementById('siteHeader');
+     // Sections drawer + auto-open sections + internal links (simplified, all platforms)
+(function () {
+  const btn    = document.getElementById('sectionsBtn');
+  const drawer = document.getElementById('sectionsDrawer');
 
-        if (!btn || !drawer) return;
+  if (!btn || !drawer) return;
 
-        function getHeaderHeight() {
-          const rootStyles = getComputedStyle(document.documentElement);
-          const varVal = parseFloat(rootStyles.getPropertyValue('--headerH'));
-          if (!isNaN(varVal) && varVal > 0) return varVal;
-          return header ? (header.offsetHeight || 64) : 64;
-        }
+  function toggleDrawer(force) {
+    const willOpen =
+      typeof force === 'boolean'
+        ? force
+        : !drawer.classList.contains('open');
 
-        function smoothScrollTo(target) {
-          if (!target) return;
-          const headerOffset = getHeaderHeight() + 12;
-          const rect        = target.getBoundingClientRect();
-          const absoluteY   = window.pageYOffset + rect.top;
-          const y           = Math.max(absoluteY - headerOffset, 0);
+    drawer.classList.toggle('open', willOpen);
+    btn.setAttribute('aria-expanded', String(willOpen));
 
-          window.scrollTo({
-            top: y,
-            behavior: 'smooth'
-          });
-        }
+    if (willOpen) {
+      const firstLink = drawer.querySelector('a[href^="#"]');
+      if (firstLink) firstLink.focus();
+    } else {
+      btn.focus();
+    }
+  }
 
-        function ensureSectionOpenFor(node) {
-          if (!node) return null;
-          const section = (node.tagName === 'SECTION')
-            ? node
-            : node.closest('section[id]');
-          if (!section) return node;
+  // ☰ button
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleDrawer();
+  }, { passive: false });
 
-          const targetDetails = section.querySelector('details.collapsible');
+  // ESC closes drawer
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('open')) {
+      toggleDrawer(false);
+    }
+  }, { passive: true });
 
-          // Close other open details
-          document.querySelectorAll('section details.collapsible[open]').forEach(d => {
-            if (d !== targetDetails) d.removeAttribute('open');
-          });
+  // When you click a link inside the drawer:
+  // - close the drawer
+  // - let the browser change the hash normally (no preventDefault)
+  drawer.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    toggleDrawer(false);
+    // DO NOT preventDefault here – the hash will update, and our
+    // hashchange handler below will do the scrolling.
+  }, { passive: true });
 
-          if (targetDetails) {
-            targetDetails.setAttribute('open', '');
-            return targetDetails;
-          }
-          return section;
-        }
+  // ===== Hash → open correct section + smooth scroll =====
+  function openForHash(rawHash) {
+    const hash = rawHash || location.hash;
+    if (!hash || hash === '#') return;
 
-        function handleHash(hash) {
-          if (!hash || hash === '#') return;
-          const id = hash.charAt(0) === '#' ? hash.slice(1) : hash;
-          if (!id) return;
+    const id = hash.charAt(0) === '#' ? hash.slice(1) : hash;
+    if (!id) return;
 
-          const node = document.getElementById(id);
-          if (!node) return;
+    const node = document.getElementById(id);
+    if (!node) return;
 
-          const target = ensureSectionOpenFor(node) || node;
+    // If target is inside a <section id="...">, open that section's <details>
+    const section = (node.tagName === 'SECTION')
+      ? node
+      : node.closest('section[id]');
 
-          requestAnimationFrame(() => {
-            setTimeout(() => {
-              smoothScrollTo(target);
-            }, 60);
-          });
-        }
+    if (section) {
+      const targetDetails = section.querySelector('details.collapsible');
 
-        function toggleDrawer(force) {
-          const willOpen =
-            typeof force === 'boolean'
-              ? force
-              : !drawer.classList.contains('open');
+      // Close other open details, keep only target open
+      document.querySelectorAll('section details.collapsible[open]').forEach(d => {
+        if (d !== targetDetails) d.removeAttribute('open');
+      });
 
-          drawer.classList.toggle('open', willOpen);
-          btn.setAttribute('aria-expanded', String(willOpen));
+      if (targetDetails) {
+        targetDetails.setAttribute('open', '');
+      }
+    }
 
-          if (willOpen) {
-            const firstLink = drawer.querySelector('a[href^="#"]');
-            if (firstLink) firstLink.focus();
-          } else {
-            btn.focus();
-          }
-        }
-
-        // ☰ button
-        btn.addEventListener('click', (e) => {
-          e.preventDefault();
-          toggleDrawer();
-        }, { passive: false });
-
-        // ESC closes drawer
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && drawer.classList.contains('open')) {
-            toggleDrawer(false);
-          }
-        }, { passive: true });
-
-        // Drawer links
-        drawer.addEventListener('click', (e) => {
-          const a = e.target.closest('a[href^="#"]');
-          if (!a) return;
-          e.preventDefault();
-          const href = a.getAttribute('href');
-          toggleDrawer(false);
-          handleHash(href);
-          try {
-            history.pushState(null, '', href);
-          } catch (_) {
-            location.hash = href.slice(1);
-          }
-        }, { passive: false });
-
-        // Any other internal link (#work, #faq, #q-paper, etc.)
-        document.addEventListener('click', (e) => {
-          const a = e.target.closest('a[href^="#"]');
-          if (!a) return;
-
-          if (drawer.contains(a)) return; // already handled
-
-          const href = a.getAttribute('href');
-          if (!href || href === '#') return;
-
-          e.preventDefault();
-          handleHash(href);
-
-          try {
-            history.pushState(null, '', href);
-          } catch (_) {
-            location.hash = href.slice(1);
-          }
-        }, { passive: false });
-
-        // Direct load with hash
-        if (location.hash && location.hash.length > 1) {
-          window.addEventListener('load', () => {
-            handleHash(location.hash);
-          });
-        }
-
-        // Manual hash changes
-        window.addEventListener('hashchange', () => {
-          handleHash(location.hash);
+    // Give <details> a moment to open, then smooth scroll.
+    // CSS: section[id]{ scroll-margin-top: calc(var(--headerH)+12px); }
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        node.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
         });
-      })();
+      }, 60);
+    });
+  }
+
+  // On direct load with a hash (#faq, #work, #q-paper, etc.)
+  window.addEventListener('load', () => {
+    if (location.hash && location.hash.length > 1) {
+      openForHash(location.hash);
+    }
+  });
+
+  // On any hash change (clicking links, manual URL change)
+  window.addEventListener('hashchange', () => {
+    openForHash(location.hash);
+  });
+})();
 
       // ============================
       // DAILY HERO IMAGE ROTATION
@@ -1432,6 +1388,7 @@ document.addEventListener("DOMContentLoaded", () => {
   </script>
 </body>
 </html>
+
 
 
 
