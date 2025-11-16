@@ -1145,20 +1145,24 @@ quoteForm.addEventListener('submit', async (e)=>{
       });
     })();
 
-        <!-- Sections drawer + auto-open sections + internal link handling -->
     <script>
+    // Sections drawer + auto-open sections + internal link handling
     (function () {
-      const btn = document.getElementById('sectionsBtn');
+      const btn    = document.getElementById('sectionsBtn');
       const drawer = document.getElementById('sectionsDrawer');
       if (!btn || !drawer) return;
 
       function toggleDrawer(force) {
         const willOpen =
-          typeof force === "boolean" ? force : !drawer.classList.contains("open");
-        drawer.classList.toggle("open", willOpen);
-        btn.setAttribute("aria-expanded", String(willOpen));
+          typeof force === 'boolean'
+            ? force
+            : !drawer.classList.contains('open');
+
+        drawer.classList.toggle('open', willOpen);
+        btn.setAttribute('aria-expanded', String(willOpen));
+
         if (willOpen) {
-          const firstLink = drawer.querySelector("a");
+          const firstLink = drawer.querySelector('a');
           if (firstLink) firstLink.focus();
         } else {
           btn.focus();
@@ -1184,20 +1188,18 @@ quoteForm.addEventListener('submit', async (e)=>{
         }
       }
 
-      // Central helper that:
-      //  - opens the right section / FAQ item
-      //  - scrolls to it
-      function openForHash(hashOrHref) {
-        if (!hashOrHref) return;
+      // Central helper for any hash link: #work, #consult, #faq, #q-paper, etc.
+      function openForHash(href) {
+        if (!href) return;
 
-        const hash = hashOrHref.startsWith('#') ? hashOrHref : '#' + hashOrHref;
-        const id = hash.slice(1);
+        const hash = href.startsWith('#') ? href : '#' + href;
+        const id   = hash.slice(1);
         if (!id) return;
 
         const node = document.getElementById(id);
         if (!node) return;
 
-        // Case 1: targeting a full section (#work, #about, #consult, #faq, #contact, etc.)
+        // Case 1: whole section (#work, #about, #consult, #faq, #contact)
         if (node.tagName === 'SECTION') {
           openSectionForId(id);
           const details = node.querySelector(':scope > details.collapsible');
@@ -1205,24 +1207,23 @@ quoteForm.addEventListener('submit', async (e)=>{
           return;
         }
 
-        // Case 2: targeting an individual FAQ <details> (e.g., #q-paper)
+        // Case 2: individual FAQ <details> (e.g., #q-paper)
         if (node.tagName === 'DETAILS') {
-          openSectionForId('faq');      // open the main FAQ accordion
+          openSectionForId('faq'); // open FAQ block
           node.setAttribute('open', '');
           node.scrollIntoView({ behavior: 'smooth', block: 'start' });
           return;
         }
 
-        // Case 3: some element inside a section (e.g., a heading with an id)
+        // Case 3: any element inside a section
         const parentSection = node.closest('section');
         if (parentSection && parentSection.id) {
           openSectionForId(parentSection.id);
           parentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          return;
         }
       }
 
-      // Toggle drawer from ☰ button
+      // ☰ button toggles drawer
       btn.addEventListener(
         'click',
         (e) => {
@@ -1243,15 +1244,13 @@ quoteForm.addEventListener('submit', async (e)=>{
         { passive: true }
       );
 
-      // Clicking a link in the drawer:
-      //  - open the correct section
-      //  - scroll there
-      //  - close the drawer
+      // Click inside drawer → open section, scroll, close drawer
       drawer.addEventListener(
         'click',
         (e) => {
           const a = e.target.closest('a[href^="#"]');
           if (!a) return;
+
           e.preventDefault();
           const href = a.getAttribute('href');
           openForHash(href);
@@ -1266,7 +1265,7 @@ quoteForm.addEventListener('submit', async (e)=>{
         { passive: false }
       );
 
-      // Click outside closes drawer
+      // Click outside drawer → close it
       document.addEventListener(
         'click',
         (e) => {
@@ -1277,15 +1276,14 @@ quoteForm.addEventListener('submit', async (e)=>{
         { passive: true }
       );
 
-      // NEW: handle internal links anywhere on the page
-      // (SEO block, About, FAQ answers, Contact text, etc.)
+      // Global internal-link handler: SEO card, About, FAQ answers, Contact, etc.
       document.addEventListener(
         'click',
         (e) => {
           const a = e.target.closest('a[href^="#"]');
           if (!a) return;
 
-          // If the click was inside the drawer, the drawer handler above already handles it
+          // ignore drawer links (handled above)
           if (drawer.contains(a)) return;
 
           const href = a.getAttribute('href');
@@ -1303,8 +1301,7 @@ quoteForm.addEventListener('submit', async (e)=>{
         { passive: false }
       );
 
-      // If page loads with a hash already (e.g., https://.../#faq or #q-paper),
-      // open the proper section/item and scroll to it.
+      // On initial load with a hash (e.g., /#faq or /#q-paper)
       if (location.hash && location.hash.length > 1) {
         openForHash(location.hash);
       }
@@ -1312,6 +1309,7 @@ quoteForm.addEventListener('submit', async (e)=>{
     </script>
   </body>
 </html>
+
 
 
 
