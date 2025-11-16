@@ -1411,11 +1411,11 @@ document.addEventListener("DOMContentLoaded", () => {
       })();
     })();
     
-   // Fix inline "#work" links (SEO card + Contact + FAQ) so they always open Portfolio
+   // Fix inline "#work" links (SEO card + Contact + FAQ + About + Hero) so they always open Portfolio
 // and close any other open sections first
 (function () {
   const inlinePortfolioLinks = document.querySelectorAll(
-    '.seo-card a[href="#work"], #contact a[href="#work"], #faq a[href="#work"]'
+    '.seo-card a[href="#work"], #contact a[href="#work"], #faq a[href="#work"], #about a[href="#work"], .hero-copy a[href="#work"]'
   );
   if (!inlinePortfolioLinks.length) return;
 
@@ -1460,6 +1460,7 @@ document.addEventListener("DOMContentLoaded", () => {
   </script>
 </body>
 </html>
+
 
 
 
