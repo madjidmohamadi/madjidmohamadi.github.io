@@ -56,7 +56,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  filter: blur(12px);
+  filter: blur(10px);
   transform: scale(1.04);
   z-index: -1;
   opacity: 0;
@@ -1543,10 +1543,36 @@ if (bgLayer) {
     }, { passive: false });
   });
 })();
+    
+// Cinematic parallax effect for blurred hero background
+(function () {
+  const bg = document.querySelector('.hero-bg');
+  if (!bg) return;
 
+  const maxShift = 60; // max vertical movement in "percent-space"
+
+  function updateParallax() {
+    const scrollY = window.scrollY || window.pageYOffset || 0;
+    // Small factor so it stays subtle
+    const offset = scrollY * 0.04;
+    // Clamp so it never goes crazy on long pages
+    const clamped = Math.max(-maxShift, Math.min(maxShift, offset));
+
+    // Base 50% (center) + a bit of vertical shift
+    bg.style.backgroundPosition = `center ${50 + clamped}%`;
+  }
+
+  // Initial position
+  updateParallax();
+
+  // Update on scroll
+  window.addEventListener('scroll', updateParallax, { passive: true });
+})();
+    
   </script>
 </body>
 </html>
+
 
 
 
