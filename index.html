@@ -59,9 +59,18 @@
   filter: blur(12px);
   transform: scale(1.04);
   z-index: -1;
-  opacity: 0.35;
+  opacity: 0;
   pointer-events: none;
-  animation: heroZoom 40s ease-in-out infinite alternate;
+  
+  /* Animations */
+  animation:
+    heroFade 1.6s ease-out forwards,
+    heroZoom 40s ease-in-out infinite alternate;
+}
+
+@keyframes heroFade {
+  from { opacity: 0; }
+  to   { opacity: 0.35; }  /* same opacity value you chose */
 }
 
 @keyframes heroZoom {
@@ -1538,6 +1547,7 @@ if (bgLayer) {
   </script>
 </body>
 </html>
+
 
 
 
