@@ -130,6 +130,42 @@ section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
     footer{margin-top:clamp(28px,6vw,64px); padding:24px 0 40px; color:var(--muted); border-top:1px solid color-mix(in oklab, var(--fg) 10%, transparent)}
     .footer-grid{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px}
     .social a{color:var(--muted)}
+        .social-icons{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .social-icons a{
+      width:32px;
+      height:32px;
+      border-radius:999px;
+      border:1px solid color-mix(in oklab, var(--fg) 20%, transparent);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      color:var(--muted);
+    }
+    .social-icons svg{
+      width:18px;
+      height:18px;
+      display:block;
+      fill:currentColor;
+    }
+    .social-icons a:hover{
+      opacity:.9;
+      transform:translateY(-1px);
+    }
+    .sr-only{
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      border:0;
+    }
     .card a.zoom{display:block; touch-action:manipulation}
 
     /* Lightbox */
@@ -856,12 +892,47 @@ section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
   <footer>
     <div class="wrap footer-grid">
       <div class="social" aria-label="Social links">
-        <a href="https://www.instagram.com/madjidmohamadi" aria-label="Instagram" title="Instagram" target="_blank" rel="noopener">Instagram</a>
-        <span aria-hidden="true"> · </span>
-        <a href="mailto:madjid.mohamadi@gmail.com?subject=Prints%20Inquiry" aria-label="Prints" title="Prints">Prints</a>
+        <div class="social-icons">
+          <!-- Instagram -->
+          <a href="https://www.instagram.com/madjidmohamadi"
+             target="_blank" rel="noopener"
+             aria-label="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm5 4.4A4.6 4.6 0 1 0 16.6 12 4.61 4.61 0 0 0 12 7.4zm0 7.4A2.8 2.8 0 1 1 14.8 12 2.81 2.81 0 0 1 12 14.8zm5.4-8.9a1.1 1.1 0 1 0 1.1 1.1 1.1 1.1 0 0 0-1.1-1.1z"/>
+            </svg>
+          </a>
+
+          <!-- Facebook – replace href with your real page if you create one -->
+          <a href="https://www.facebook.com/Mjd.mohammadi"
+             target="_blank" rel="noopener"
+             aria-label="Facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M13 21v-7h3l.5-3H13V8.5A1.5 1.5 0 0 1 14.5 7H17V4h-2.5A4.5 4.5 0 0 0 10 8.5V11H7v3h3v7z"/>
+            </svg>
+          </a>
+
+          <!-- LinkedIn – replace href with your real profile -->
+          <a href="https://www.linkedin.com/in/mjmd/"
+             target="_blank" rel="noopener"
+             aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6a2 2 0 1 1-2-2 2 2 0 0 1 2 2zM4 8h4v12H4zm6.5 0H15v1.9h.1A3.4 3.4 0 0 1 18.3 8 3.6 3.6 0 0 1 22 11.8V20h-4v-6.1c0-1.5-.6-2.5-1.9-2.5s-2 .9-2 2.5V20h-4z"/>
+            </svg>
+          </a>
+
+          <!-- Trustpilot – replace href with your Trustpilot profile if/when you have it -->
+          <a href="https://ca.trustpilot.com/"
+             target="_blank" rel="noopener"
+             aria-label="Trustpilot">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3l2.1 6.4H21l-5.5 4 2.1 6.6L12 16.4 6.4 20l2.1-6.6L3 9.4h6.9z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
     </div>
-  </div>
   </footer>
+
 
     <!-- Lightbox -->
   <div class="lightbox">
@@ -1572,6 +1643,7 @@ if (bgLayer) {
   </script>
 </body>
 </html>
+
 
 
 
