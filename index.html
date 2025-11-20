@@ -94,7 +94,13 @@
     /* HERO */
     .hero{display:grid; grid-template-columns:1.2fr .8fr; gap:var(--gap); align-items:center; padding-block:clamp(28px,6vw,64px)}
     .hero-card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative}
-    .hero-card img{ display:block; width:100%; height:auto; }
+    .hero-card img{
+  display:block;
+  width:100%;
+  height:auto;
+  opacity:0;                 /* start hidden */
+  transition: opacity .6s ease;  /* nice fade-in */
+}
     .hero-copy{padding:clamp(16px,3vw,28px)}
     .hero-copy h2{font-family:"Playfair Display",serif; font-size:clamp(26px,4vw,46px); margin:0 0 6px}
     .hero-copy p{color:var(--muted); margin:0 0 14px}
@@ -1536,6 +1542,13 @@ const bgLayer = document.querySelector('.hero-bg');
 if (bgLayer) {
   bgLayer.style.backgroundImage = `url('${chosen.src}')`;
 }
+              heroImg.addEventListener('load', () => {
+          heroImg.style.opacity = '1';
+        }, { once: true });
+
+        if (heroImg.complete) {
+          heroImg.style.opacity = '1';
+        }
       })();
     })();
     
@@ -1656,6 +1669,7 @@ if (bgLayer) {
   </script>
 </body>
 </html>
+
 
 
 
