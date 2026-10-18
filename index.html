@@ -553,7 +553,125 @@ section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
     padding-block:24px;
   }
 }
+/* === EXHIBITION PILL, INVITATION MODAL & CHIPS === */
+.exhibit-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 14px;
+  margin-bottom: 14px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--fg) 8%, transparent);
+  border: 1px solid color-mix(in oklab, var(--fg) 18%, transparent);
+  color: var(--fg);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.exhibit-pill:hover {
+  background: color-mix(in oklab, var(--fg) 14%, transparent);
+  transform: translateY(-1px);
+  opacity: 1;
+}
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d4a373; /* Warm gallery-light gold */
+  box-shadow: 0 0 8px #d4a373;
+  flex-shrink: 0;
+  animation: softPulse 2.4s infinite ease-in-out;
+}
+@keyframes softPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.88); }
+}
 
+/* Formal Gallery Invitation Modal */
+.invite-card {
+  width: min(92vw, 460px);
+  text-align: center;
+  padding: 28px 24px 20px;
+}
+.invite-eyebrow {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #6b6b74;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.invite-card h3 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(22px, 3vw, 28px);
+  margin: 0 0 6px;
+  color: #111;
+}
+.invite-artists {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 16px !important;
+}
+.invite-divider {
+  width: 48px;
+  height: 1px;
+  background: #d0d0d4;
+  margin: 0 auto 16px;
+}
+.invite-details {
+  background: #f7f7f9;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  text-align: left;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #333;
+  border: 1px solid #e6e6eb;
+}
+.invite-details p {
+  margin: 0 0 6px !important;
+  color: #333 !important;
+  font-size: 0.9rem !important;
+}
+.invite-details p:last-child {
+  margin-bottom: 0 !important;
+}
+.invite-note {
+  font-size: 0.88rem !important;
+  color: #555 !important;
+  margin: 0 0 18px !important;
+  line-height: 1.6 !important;
+}
+
+/* Portfolio "On View" Chip refinement */
+.cap .chip {
+  display: inline-block;
+  padding: 0.18rem 0.55rem;
+  margin-right: 6px;
+  background: rgba(20, 20, 24, 0.75);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(212, 163, 115, 0.55);
+  color: #f3e5d8;
+  border-radius: 999px;
+  font-size: 0.72em;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  vertical-align: middle;
+}
+@media (max-width: 520px) {
+  /* Override the old display:none rule so exhibition chips show on mobile */
+  .cap .chip.exhibit-chip {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 6px;
+    margin-right: 4px;
+  }
+}
 </style>
 
   <script type="application/ld+json">
@@ -623,7 +741,16 @@ section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
              width="1600" height="1067" fetchpriority="high" decoding="async" loading="eager"
              sizes="(max-width: 900px) 100vw, 60vw" />
       </figure>
-      <div class="hero-copy">
+        <div class="hero-copy">
+        <!-- New: Hero Exhibition Pill -->
+        <a href="#exhibitModal" class="exhibit-pill js-open-exhibit" id="exhibitPill">
+          <span class="pulse-dot"></span>
+          <span id="exhibitPillText">Upcoming Exhibition • Kay Meek Arts Centre (Nov 3 – Dec 13)</span>
+        </a>
+        <h2>Quiet light. Honest places.</h2>
+        <p>A visual meditation on stillness, space, and the quiet presence of the natural world.</p>
+        <a href="#work" class="cta">View Portfolio →</a>
+      </div>
         <h2>Quiet light. Honest places.</h2>
         <p>A visual meditation on stillness, space, and the quiet presence of the natural world.</p>
         <a href="#work" class="cta">View Portfolio →</a>
@@ -1143,7 +1270,30 @@ section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
       </div>
     </form>
   </div>
+<!-- Exhibition Invitation Dialog -->
+  <div class="modal" id="exhibitModal" role="dialog" aria-modal="true" aria-labelledby="exhibit-title" aria-hidden="true">
+    <div class="modal-card invite-card">
+      <div class="invite-eyebrow" id="exhibitModalEyebrow">Upcoming Exhibition</div>
+      <h3 id="exhibit-title">Kay Meek Arts Centre</h3>
+      <p class="invite-artists">Majid Mohamadi &amp; Nikki Baxendale</p>
+      <div class="invite-divider"></div>
 
+      <div class="invite-details">
+        <p><strong>Dates:</strong> November 3 – December 13, 2026</p>
+        <p><strong>Spaces:</strong> Grosvenor &amp; McEwan Theatre Lobbies</p>
+        <p><strong>Location:</strong> 1700 Mathers Ave, West Vancouver, BC</p>
+      </div>
+
+      <p class="invite-note">
+        Experience a curated duo exhibition of quiet, minimalist landscapes in print. Open to the public during gallery and box office hours, as well as prior to theatre performances.
+      </p>
+
+      <div class="modal-actions" style="justify-content: center;">
+        <button type="button" class="btn cancel" id="closeExhibit">Close</button>
+        <a href="https://maps.google.com/?q=Kay+Meek+Arts+Centre+1700+Mathers+Ave+West+Vancouver+BC" target="_blank" rel="noopener noreferrer" class="btn submit" style="text-decoration:none;">Get Directions →</a>
+      </div>
+    </div>
+  </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
@@ -1768,7 +1918,100 @@ if (bgLayer) {
   // Update on scroll
   window.addEventListener('scroll', updateParallax, { passive: true });
 })();
-    
+    // ============================
+// EXHIBITION PILL, MODAL & AUTO-DATE SWITCHER
+// ============================
+(function () {
+  const pill         = document.getElementById('exhibitPill');
+  const pillText     = document.getElementById('exhibitPillText');
+  const modal        = document.getElementById('exhibitModal');
+  const modalEyebrow = document.getElementById('exhibitModalEyebrow');
+  const closeBtn     = document.getElementById('closeExhibit');
+
+  // 1. Smart Date Logic (Vancouver Time / Local Time)
+  const now       = new Date();
+  const showStart = new Date('2026-11-03T00:00:00');
+  const showEnd   = new Date('2026-12-13T23:59:59');
+
+  if (now > showEnd) {
+    // Automatically hide pill and exhibition chips after Dec 13, 2026
+    if (pill) pill.style.display = 'none';
+    document.querySelectorAll('.exhibit-chip').forEach(ch => ch.style.display = 'none');
+    document.querySelectorAll('img[data-exhibit]').forEach(img => img.removeAttribute('data-exhibit'));
+  } else if (now >= showStart && now <= showEnd) {
+    // Automatically switch to "Now on View" on Nov 3, 2026
+    if (pillText) pillText.textContent = 'Now on View • Kay Meek Arts Centre (Until Dec 13)';
+    if (modalEyebrow) modalEyebrow.textContent = 'Now on View • Nov 3 – Dec 13';
+  }
+
+  // 2. Open / Close Invitation Modal
+  function openExhibitModal(e) {
+    if (e) e.preventDefault();
+    if (!modal) return;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeExhibitModal() {
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    if (pill) pill.focus();
+  }
+
+  document.querySelectorAll('.js-open-exhibit').forEach(el => {
+    el.addEventListener('click', openExhibitModal, { passive: false });
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeExhibitModal, { passive: true });
+  }
+
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeExhibitModal();
+    }, { passive: true });
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && modal.classList.contains('open')) {
+      closeExhibitModal();
+    }
+  }, { passive: true });
+
+  // 3. Bonus: Show "On View • Kay Meek Arts Centre" in Lightbox Caption
+  const lbCaption = document.querySelector('.lightbox .lb-caption');
+  const thumbs = Array.from(document.querySelectorAll('.card img'));
+  const prevBtn = document.querySelector('.lightbox button.nav.prev');
+  const nextBtn = document.querySelector('.lightbox button.nav.next');
+
+  function appendExhibitNote(imgEl) {
+    if (!lbCaption || !imgEl) return;
+    const exhibitNote = imgEl.getAttribute('data-exhibit');
+    const baseTitle = imgEl.alt || '';
+    if (exhibitNote) {
+      lbCaption.innerHTML = `${baseTitle} <span style="display:block; font-size:0.78rem; color:#d4a373; margin-top:2px;">${exhibitNote}</span>`;
+    } else {
+      lbCaption.textContent = baseTitle;
+    }
+  }
+
+  thumbs.forEach(img => {
+    img.addEventListener('click', () => setTimeout(() => appendExhibitNote(img), 10));
+  });
+
+  if (prevBtn) prevBtn.addEventListener('click', () => {
+    const activeSrc = document.querySelector('.lightbox img')?.getAttribute('src');
+    const match = thumbs.find(t => (t.currentSrc || t.src).includes(activeSrc));
+    if (match) appendExhibitNote(match);
+  });
+  if (nextBtn) nextBtn.addEventListener('click', () => {
+    const activeSrc = document.querySelector('.lightbox img')?.getAttribute('src');
+    const match = thumbs.find(t => (t.currentSrc || t.src).includes(activeSrc));
+    if (match) appendExhibitNote(match);
+  });
+})();
   </script>
 </body>
 </html>
