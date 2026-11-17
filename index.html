@@ -1544,10 +1544,15 @@ document.addEventListener("DOMContentLoaded", () => {
               showToast('Your quote request has been received. We will reply soon. Thank you!');
               quoteForm.reset();
             } catch (err) {
-              showToast('Something went wrong. Please try again.');
-            }
-          });
-        }
+  console.error('Site visit submission failed:', err);
+
+  const detail =
+    err?.text ||
+    err?.message ||
+    'Unknown error';
+
+  showToast(`Site visit failed: ${detail}`);
+}
 
         // =============== SITE VISIT MODAL ===============
         const visitModal  = document.getElementById('visitModal');
