@@ -290,7 +290,8 @@ section[id]{scroll-margin-top: calc(var(--headerH) + 12px);
     header{ padding-top: max(0px, var(--safe-top)/2); }
     footer{ padding-bottom: max(24px, var(--safe-bottom)); }
     @media (max-width: 600px){ .wrap{ padding-inline: clamp(14px, 4vw, 22px); } }
-    html, body{ overflow-x: hidden; }
+    html { overflow-x: hidden; }
+    body { overflow-x: clip; }
 
     /* Header "☰" */
     .sections-btn{
@@ -1834,11 +1835,28 @@ if (bgLayer) {
         portfolioDetails.setAttribute('open', '');
       }
 
-      // Smooth scroll to the opened portfolio block
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
+// Wait for the opened portfolio layout before scrolling.
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    const header = document.querySelector('header');
+    const headerHeight = header
+      ? header.getBoundingClientRect().height
+      : 0;
+
+    const top =
+      workSection.getBoundingClientRect().top +
+      window.scrollY -
+      headerHeight -
+      12;
+
+    window.scrollTo({
+      top: Math.max(0, top),
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'instant'
+        : 'smooth'
+    });
+  });
+});
 
       // Keep URL hash in sync
       if (location.hash !== '#work') {
