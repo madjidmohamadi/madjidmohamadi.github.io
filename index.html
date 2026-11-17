@@ -1539,10 +1539,16 @@ document.addEventListener("DOMContentLoaded", () => {
             };
 
             try {
-              await emailjs.send('service_5n0g1j5', 'template_zhuv2cb', params);
+              } catch (err) {
+  console.error('Site visit submission failed:', err);
+  showToast(
+    `Site visit failed: ${err?.text || err?.message || 'Unknown error'}`
+  );
+}
               closeQuote();
               showToast('Your quote request has been received. We will reply soon. Thank you!');
               quoteForm.reset();
+              
             } catch (err) {
   console.error('Site visit submission failed:', err);
 
@@ -1553,7 +1559,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   showToast(`Site visit failed: ${detail}`);
 }
-
+          });
+        }
         // =============== SITE VISIT MODAL ===============
         const visitModal  = document.getElementById('visitModal');
         const visitForm   = document.getElementById('visitForm');
