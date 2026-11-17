@@ -1609,9 +1609,16 @@ document.addEventListener("DOMContentLoaded", () => {
               closeVisit();
               showToast('Your site visit request has been received. We will reply within 24 hours. Thank you!');
               visitForm.reset();
-            } catch (err) {
-              showToast('Something went wrong. Please try again.');
-            }
+           } catch (err) {
+  console.error('Site visit submission failed:', err);
+
+  const detail =
+    err?.text ||
+    err?.message ||
+    'Unknown error';
+
+  showToast(`Site visit failed: ${detail}`);
+}
           });
         }
       }
